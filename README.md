@@ -2,6 +2,8 @@
 
 A comprehensive 3-month intensive AI training program designed for CS underclassmen. This camp focuses on practical AI application development, modern coding tools, and building a portfolio of real-world projects.
 
+Visit course at: https://leapbase.com/aicamp
+
 ## Program Overview
 
 **Duration:** 12 weeks  
