@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 12 Quiz: Resume & Interview Prep - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 12 Quiz: Resume & Interview Prep</h1>
+            <p class="quiz-info">Test your understanding of resume optimization, LinkedIn profiles, technical interviews, and career preparation</p>
+        </header>
+
+        <a href="week12.html" class="back-link">← Back to Week 12 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What is the most important section on a resume for AI/ML internship applications?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Education</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Projects (with 3-4 best projects showing specific accomplishments)</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Skills</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Certifications</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">How should you write project bullets on your resume?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">List all the technologies you used</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">Start with action verbs, include metrics, highlight technical decisions, and explain challenges solved</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">Keep them vague so you can explain in the interview</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">Focus on team collaboration and soft skills</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">What is a better LinkedIn headline than just "Student at [University]"?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">Looking for internship opportunities</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">CS Student | AI/ML | Building with Claude, OpenAI APIs | 10 Anthropic Certifications</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">Aspiring Software Engineer</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">Computer Science Major</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">What is the STAR framework used for in interviews?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">A method for solving coding problems</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">Situation, Task, Action, Result - a framework for answering behavioral questions</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">A rating system for interview performance</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">A technique for negotiating salary</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">What should you pin on your GitHub profile?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">All your repositories</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Your best 6 repositories with clean READMEs</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">Only your capstone project</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Your fork of popular open-source projects</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">When answering "Tell me about your capstone project" in an interview, what should you cover?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">Only the technical implementation details</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">Just explain why you're proud of it</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">Problem, architecture, tech choices, challenges solved, results, and what you'd improve</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">Focus on how much time you spent on it</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">What is recommended for staying sharp after the AI Camp ends?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">Take a break from coding to avoid burnout</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">Focus only on academic coursework</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">Build one project per month, contribute to OSS, write technical content, and keep learning</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">Only apply to internships without building new projects</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">What should you include in your 5-minute capstone demo presentation?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">Detailed code walkthrough of every file</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">Introduction, problem & motivation, demo, technical highlights, and lessons & future plans</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Only the demo without any explanation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">A list of all challenges you faced during development</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'c',
+            q7: 'c',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "The Projects section is the most important for AI/ML internship applications. This is where you demonstrate your practical capabilities through 3-4 well-documented projects with specific accomplishments, metrics, and technical details. Projects prove you can actually build things.",
+            q2: "Project bullets should start with action verbs (Built, Implemented, Designed), include quantifiable metrics where possible (e.g., 'reduced latency by 200ms'), highlight technical decisions made, and explain specific challenges you solved. This shows impact and technical capability.",
+            q3: "A strong LinkedIn headline communicates your focus, skills, and credentials clearly. 'CS Student | AI/ML | Building with Claude, OpenAI APIs | 10 Anthropic Certifications' immediately tells recruiters what you do and what differentiates you from other students.",
+            q4: "The STAR framework (Situation, Task, Action, Result) is used for answering behavioral interview questions. It provides a structured way to tell stories about your experiences, ensuring you cover context, your specific role, what you did, and the outcomes achieved.",
+            q5: "You should pin your best 6 repositories on GitHub with clean, professional READMEs. This is what recruiters will see first when they visit your profile, so choose projects that best demonstrate your capabilities and have good documentation.",
+            q6: "When discussing your capstone, cover: the problem and why it matters, your architecture and technology choices, challenges you solved, results or metrics, and what you'd improve given more time. This comprehensive answer demonstrates both technical skills and engineering judgment.",
+            q7: "To stay sharp, build one focused project per month, make at least one open-source contribution monthly, write technical blog posts to teach others, and continuously learn about new AI developments. This maintains and grows your skills while building your portfolio and network.",
+            q8: "A 5-minute capstone demo should include: introduction (name, project name, description), problem & motivation (30-45 sec), live demo of features (2-3 min), technical highlights (architecture, key decisions), and lessons learned plus future plans. This structure tells a complete story efficiently."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Excellent! You understand how to present yourself professionally and prepare for internship opportunities.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

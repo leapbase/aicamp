@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 8: Agents and OpenClaw - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .warning-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box h4 {
+            color: #dc2626;
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 8: Agents and OpenClaw</h1>
+            <p class="week-meta">Month 2: Build Real Apps | Final Week of Month 2</p>
+            <a href="week8-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete AI Capabilities and Limitations course</li>
+                <li>Understand what agents are and how they work</li>
+                <li>Learn the think-act-observe loop</li>
+                <li>Build a simple agent from scratch (50 lines of code)</li>
+                <li>Deploy OpenClaw (production agent framework)</li>
+                <li>Connect OpenClaw to Telegram or Discord</li>
+                <li>Write a custom skill for OpenClaw</li>
+                <li>Understand agent security, permissions, and blast radius</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Course: AI Capabilities and Limitations</h3>
+        <p>Before building agents, you need to understand what AI can and can't do reliably. This course provides crucial grounding.</p>
+
+        <h4>What You'll Learn:</h4>
+        <ul>
+            <li><strong>What AI Excels At:</strong> Pattern recognition, text generation, coding assistance</li>
+            <li><strong>Where AI Struggles:</strong> Math, reasoning, consistency, novel problems</li>
+            <li><strong>Failure Modes:</strong> Hallucination, bias, prompt injection</li>
+            <li><strong>Evaluation:</strong> How to test AI systems</li>
+            <li><strong>Design Implications:</strong> Building systems that account for limitations</li>
+        </ul>
+
+        <p><strong>Time commitment:</strong> 60-90 minutes</p>
+
+        <div class="highlight-box">
+            <h3>Why This Course Matters for Agents</h3>
+            <p>Agents are autonomous—they make decisions without constant human oversight. Understanding AI's limitations is critical for designing safe, reliable agent systems. You need to know when to trust an agent and when to add guardrails.</p>
+        </div>
+
+        <h2>Session 1: Agent Fundamentals & Build from Scratch</h2>
+
+        <div class="session-card">
+            <h3>Part 1: What Is an Agent? (30 minutes)</h3>
+
+            <h4>Definition:</h4>
+            <p>An <strong>agent</strong> is an AI system that can perceive its environment, make decisions, and take actions to achieve goals—autonomously and iteratively.</p>
+
+            <h4>The Think-Act-Observe Loop:</h4>
+            <ol>
+                <li><strong>Think:</strong> Analyze the current state and decide what to do next</li>
+                <li><strong>Act:</strong> Execute an action (call an API, run a command, write a file)</li>
+                <li><strong>Observe:</strong> See the results of the action</li>
+                <li><strong>Repeat:</strong> Continue until the goal is achieved or a stopping condition is met</li>
+            </ol>
+
+            <h4>Agents vs. Tools:</h4>
+            <ul>
+                <li><strong>Tool (e.g., Claude Code):</strong> Human-in-the-loop, step-by-step, requires approval</li>
+                <li><strong>Agent:</strong> Autonomous, multi-step, minimal human intervention</li>
+            </ul>
+
+            <h4>Types of Agents:</h4>
+            <ul>
+                <li><strong>ReAct (Reason + Act):</strong> Explains reasoning before each action</li>
+                <li><strong>Plan-and-Execute:</strong> Creates full plan upfront, then executes</li>
+                <li><strong>Reflexive:</strong> Reacts to environment without explicit planning</li>
+                <li><strong>Hierarchical:</strong> Multiple agents with different roles</li>
+            </ul>
+
+            <h4>Real-World Agent Examples:</h4>
+            <ul>
+                <li>Code generation and debugging bots</li>
+                <li>Customer support automation</li>
+                <li>Research assistants (search + summarize + synthesize)</li>
+                <li>DevOps automation (monitoring + response)</li>
+                <li>Personal assistants (calendar + email + tasks)</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Build a Minimal Agent (90 minutes)</h3>
+
+            <p>Let's build a simple but functional agent from scratch to understand the internals.</p>
+
+            <h4>Project: Web Search Research Agent</h4>
+            <p>An agent that answers questions by searching the web and synthesizing results.</p>
+
+            <h4>Required Capabilities:</h4>
+            <ul>
+                <li><strong>Tool 1: Web Search</strong> - Search DuckDuckGo or similar</li>
+                <li><strong>Tool 2: Scrape URL</strong> - Fetch and extract text from a webpage</li>
+                <li><strong>Tool 3: Answer</strong> - Return final answer to user</li>
+            </ul>
+
+            <h4>Implementation (in ~50 lines):</h4>
+            <ol>
+                <li><strong>Define Tools:</strong> Write functions for search, scrape, and answer</li>
+                <li><strong>Agent Loop:</strong>
+                    <ul>
+                        <li>Call LLM with available tools and conversation history</li>
+                        <li>Parse LLM's response (which tool to use + arguments)</li>
+                        <li>Execute the tool</li>
+                        <li>Add result to conversation history</li>
+                        <li>Repeat until LLM calls "answer" tool</li>
+                    </ul>
+                </li>
+                <li><strong>Safety Limits:</strong>
+                    <ul>
+                        <li>Max 10 iterations (prevent infinite loops)</li>
+                        <li>Timeout after 60 seconds</li>
+                        <li>Log all actions</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>System Prompt for Agent:</h4>
+            <div class="example-box" style="background: #fef3c7; border: 2px solid #fbbf24; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                <p>"You are a research agent. Your goal is to answer the user's question accurately using web search.</p>
+                <p>Available tools:</p>
+                <ul>
+                    <li><strong>search(query)</strong> - Search the web, returns titles and snippets</li>
+                    <li><strong>scrape(url)</strong> - Fetch full text of a webpage</li>
+                    <li><strong>answer(text)</strong> - Return final answer to user</li>
+                </ul>
+                <p>Process:</p>
+                <ol>
+                    <li>Search for relevant information</li>
+                    <li>Scrape promising URLs for details</li>
+                    <li>Synthesize findings into a clear answer</li>
+                    <li>Call answer() with your response</li>
+                </ol>
+                <p>Be thorough but efficient. Cite sources."</p>
+            </div>
+
+            <h4>Test Your Agent:</h4>
+            <p>Ask questions like:</p>
+            <ul>
+                <li>"What are the latest features in Python 3.12?"</li>
+                <li>"Who won the 2025 Nobel Prize in Physics and why?"</li>
+                <li>"Compare the performance of React vs. Vue in 2026"</li>
+            </ul>
+
+            <p>Observe the agent's process:</p>
+            <ul>
+                <li>Does it search effectively?</li>
+                <li>Does it scrape the right URLs?</li>
+                <li>Are the answers accurate and well-cited?</li>
+                <li>How many steps does it take?</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Agent Debugging & Improvement (30 minutes)</h3>
+
+            <h4>Common Agent Failure Modes:</h4>
+            <ul>
+                <li><strong>Looping:</strong> Agent repeats the same action endlessly</li>
+                <li><strong>Hallucination:</strong> Agent claims to have taken actions it didn't</li>
+                <li><strong>Tool Misuse:</strong> Wrong tool or malformed arguments</li>
+                <li><strong>Premature Completion:</strong> Answers before gathering enough info</li>
+                <li><strong>Excessive Steps:</strong> Overthinks simple questions</li>
+            </ul>
+
+            <h4>Debugging Techniques:</h4>
+            <ul>
+                <li>Log every LLM call and tool invocation</li>
+                <li>Add step numbers to track progress</li>
+                <li>Print the agent's reasoning at each step</li>
+                <li>Manually inspect failing cases</li>
+                <li>Add assertions (e.g., "scrape must receive valid URL")</li>
+            </ul>
+
+            <h4>Improvement Ideas:</h4>
+            <ul>
+                <li>Add a "reflect" step where agent critiques its own plan</li>
+                <li>Implement memory (save past searches to avoid redundant work)</li>
+                <li>Add cost tracking (tokens used)</li>
+                <li>Create a better stopping condition</li>
+            </ul>
+        </div>
+
+        <h2>Session 2: OpenClaw and Production Agents</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Introduction to OpenClaw (30 minutes)</h3>
+
+            <h4>What Is OpenClaw?</h4>
+            <p>OpenClaw is a production-ready agent framework. It handles the infrastructure so you can focus on defining agent behavior.</p>
+
+            <h4>Key Features:</h4>
+            <ul>
+                <li><strong>Multi-Platform:</strong> Telegram, Discord, Slack, web interface</li>
+                <li><strong>Skill System:</strong> Modular, reusable capabilities</li>
+                <li><strong>Memory Management:</strong> Conversation history, user preferences</li>
+                <li><strong>Security:</strong> Permissions, sandboxing, audit logs</li>
+                <li><strong>Monitoring:</strong> Metrics, alerts, cost tracking</li>
+            </ul>
+
+            <h4>OpenClaw vs. Your Scratch Agent:</h4>
+            <ul>
+                <li><strong>Your Agent:</strong> Educational, simple, 50 lines</li>
+                <li><strong>OpenClaw:</strong> Production-grade, scalable, thousands of lines</li>
+            </ul>
+
+            <p>Both use the same think-act-observe loop, but OpenClaw adds robustness, security, and integrations.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Deploy OpenClaw (60 minutes)</h3>
+
+            <h4>Deployment Options:</h4>
+            <ul>
+                <li><strong>Local:</strong> Run on your laptop (easiest for testing)</li>
+                <li><strong>Free-Tier VPS:</strong> Oracle Cloud, Google Cloud free tier</li>
+                <li><strong>Docker:</strong> Containerized deployment</li>
+            </ul>
+
+            <h4>Setup Steps:</h4>
+            <ol>
+                <li><strong>Clone and Install:</strong>
+                    <ul>
+                        <li>Clone OpenClaw repository</li>
+                        <li>Install dependencies</li>
+                        <li>Configure environment variables</li>
+                    </ul>
+                </li>
+                <li><strong>Connect to Telegram or Discord:</strong>
+                    <ul>
+                        <li>Create a bot account</li>
+                        <li>Get API token</li>
+                        <li>Configure OpenClaw to use it</li>
+                    </ul>
+                </li>
+                <li><strong>Configure Permissions:</strong>
+                    <ul>
+                        <li>What can the agent do?</li>
+                        <li>What requires approval?</li>
+                        <li>What's forbidden?</li>
+                    </ul>
+                </li>
+                <li><strong>Test Basic Functionality:</strong>
+                    <ul>
+                        <li>Send a message to your bot</li>
+                        <li>Ask it simple questions</li>
+                        <li>Verify it responds</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Initial Testing:</h4>
+            <p>Try these commands with your OpenClaw bot:</p>
+            <ul>
+                <li>"What can you do?"</li>
+                <li>"Search for news about AI in 2026"</li>
+                <li>"Remind me in 30 minutes to take a break"</li>
+                <li>"What's the weather in San Francisco?"</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Write a Custom OpenClaw Skill (60 minutes)</h3>
+
+            <h4>Skill Ideas:</h4>
+            <ul>
+                <li><strong>GitHub Integration:</strong> Create issues, check PR status</li>
+                <li><strong>Note Taker:</strong> Save snippets of conversation to a file</li>
+                <li><strong>Daily Briefing:</strong> Aggregate news, weather, calendar</li>
+                <li><strong>Code Runner:</strong> Execute safe code snippets</li>
+                <li><strong>Flashcards:</strong> Quiz user from a deck</li>
+            </ul>
+
+            <h4>Implementation:</h4>
+            <ol>
+                <li>Create a new skill file in OpenClaw's skills directory</li>
+                <li>Define the skill's capabilities (tools and resources)</li>
+                <li>Write the tool handler functions</li>
+                <li>Register the skill in OpenClaw's config</li>
+                <li>Test thoroughly</li>
+            </ol>
+
+            <h4>Example: GitHub Issue Creator Skill</h4>
+            <p>Lets the agent create GitHub issues on command.</p>
+            <ul>
+                <li><strong>Tool:</strong> <code>create_github_issue(repo, title, body)</code></li>
+                <li><strong>Implementation:</strong> Use GitHub API or PyGithub library</li>
+                <li><strong>Permission:</strong> Requires user approval before creating</li>
+                <li><strong>Usage:</strong> "Create an issue in my-repo for adding tests to the API"</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 4: Agent Security Discussion (45 minutes)</h3>
+
+            <p>Agents can take actions autonomously. This is powerful but risky. Let's think through the security implications.</p>
+
+            <h4>Key Questions:</h4>
+            <ul>
+                <li><strong>What could go wrong?</strong> What's the worst an agent could do?</li>
+                <li><strong>Blast radius:</strong> If compromised, what's the damage?</li>
+                <li><strong>Permissions:</strong> What should require approval vs. be automatic?</li>
+                <li><strong>Prompt injection:</strong> Can a user trick the agent into unauthorized actions?</li>
+                <li><strong>API keys:</strong> How do you store secrets safely?</li>
+            </ul>
+
+            <h4>Security Best Practices:</h4>
+
+            <div class="warning-box">
+                <h4>Critical Security Principles</h4>
+                <ul>
+                    <li><strong>Least Privilege:</strong> Grant minimal permissions needed</li>
+                    <li><strong>Human-in-the-Loop:</strong> Require approval for destructive actions</li>
+                    <li><strong>Audit Logging:</strong> Log every action for accountability</li>
+                    <li><strong>Rate Limiting:</strong> Prevent runaway loops from burning money</li>
+                    <li><strong>Sandboxing:</strong> Isolate agent execution environment</li>
+                    <li><strong>Input Validation:</strong> Sanitize all user input</li>
+                </ul>
+            </div>
+
+            <h4>Permission Levels:</h4>
+            <ul>
+                <li><strong>Auto-approve:</strong> Safe, read-only operations (search, read files)</li>
+                <li><strong>Require approval:</strong> Write operations (create files, send messages)</li>
+                <li><strong>Forbidden:</strong> Destructive operations (delete, deploy to production)</li>
+            </ul>
+
+            <h4>Threat Modeling Exercise:</h4>
+            <p>For your OpenClaw deployment:</p>
+            <ol>
+                <li>List all capabilities your agent has</li>
+                <li>For each, describe a misuse scenario</li>
+                <li>Propose a mitigation (permission, approval, logging)</li>
+                <li>Determine appropriate permission level</li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>Thinking About Blast Radius</h3>
+                <p>Blast radius is the maximum damage an agent could cause. Always ask: "If this agent were fully compromised, what's the worst that could happen?" Design your permissions accordingly.</p>
+            </div>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Improve Your Scratch Agent:</strong>
+                    <ul>
+                        <li>Add error handling and retry logic</li>
+                        <li>Implement better stopping conditions</li>
+                        <li>Add cost tracking (tokens used)</li>
+                        <li>Create a simple web UI (optional)</li>
+                    </ul>
+                </li>
+                <li><strong>Deploy OpenClaw to a Server:</strong>
+                    <ul>
+                        <li>Get it running on a VPS or cloud instance</li>
+                        <li>Ensure it stays running (use systemd or similar)</li>
+                        <li>Configure proper permissions</li>
+                        <li>Test reliability over 24+ hours</li>
+                    </ul>
+                </li>
+                <li><strong>Complete Your Custom Skill:</strong>
+                    <ul>
+                        <li>Fully implement and test</li>
+                        <li>Add documentation</li>
+                        <li>Use it in real scenarios</li>
+                        <li>Share with others (if appropriate)</li>
+                    </ul>
+                </li>
+                <li><strong>Security Audit:</strong>
+                    <ul>
+                        <li>Document all permissions your agent has</li>
+                        <li>Test for prompt injection vulnerabilities</li>
+                        <li>Verify secrets are properly secured</li>
+                        <li>Create a security checklist for agent deployment</li>
+                    </ul>
+                </li>
+                <li><strong>Reflection Essay:</strong>
+                    <ul>
+                        <li>Title: "What I Learned Building AI Agents"</li>
+                        <li>Discuss: autonomy vs. control trade-offs</li>
+                        <li>What surprised you about agent behavior?</li>
+                        <li>How would you design agents for production?</li>
+                        <li>What are the ethical implications?</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Agents are autonomous AI systems</strong> - They think, act, and observe in loops</li>
+            <li><strong>The think-act-observe loop is fundamental</strong> - Applies to all agent architectures</li>
+            <li><strong>Agents are powerful but risky</strong> - Security and permissions are critical</li>
+            <li><strong>Building from scratch teaches internals</strong> - But production frameworks like OpenClaw are better for real use</li>
+            <li><strong>Blast radius thinking is essential</strong> - Always consider worst-case scenarios</li>
+            <li><strong>Human-in-the-loop is often wise</strong> - Especially for destructive actions</li>
+            <li><strong>Agent design is about trade-offs</strong> - Autonomy vs. safety, speed vs. accuracy, cost vs. thoroughness</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Month 3: Capstone & Portfolio</h3>
+            <p>Congratulations on completing Month 2! You've built RAG apps, MCP servers, and agents. You understand modern AI architecture at a level most students don't reach until graduate school or industry work.</p>
+            <p>Month 3 is about synthesis: choosing a capstone project, building it with all the skills you've learned, contributing to open source, writing about your work, and preparing for interviews. The pace shifts from learning new tools to building impressive projects that showcase your abilities.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week8-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 8 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 8 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

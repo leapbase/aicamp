@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 3: Claude Code (Part 1) - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 3: Claude Code (Part 1)</h1>
+            <p class="week-meta">Month 1: Get Fluent with AI Tools</p>
+            <a href="week3-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete Claude Code 101 and begin Claude Code in Action courses</li>
+                <li>Set up Claude Code with your own projects</li>
+                <li>Master CLAUDE.md project documentation</li>
+                <li>Learn slash commands and plan mode</li>
+                <li>Contribute to an open-source repository using Claude Code</li>
+                <li>Build a complete application from scratch with AI assistance</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Course 1: Claude Code 101</h3>
+        <p>Your introduction to Claude's powerful coding assistant. This course covers the fundamentals of working with an AI pair programmer.</p>
+
+        <h4>What You'll Learn:</h4>
+        <ul>
+            <li><strong>Installation and Setup:</strong> Getting Claude Code running on your machine</li>
+            <li><strong>Basic Workflow:</strong> How to interact with Claude Code effectively</li>
+            <li><strong>File Navigation:</strong> How Claude Code understands and navigates your codebase</li>
+            <li><strong>Common Commands:</strong> Essential slash commands for daily work</li>
+            <li><strong>Best Practices:</strong> When to use Claude Code vs. writing code manually</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 45-60 minutes</p>
+
+        <h3>Course 2: Claude Code in Action (Start)</h3>
+        <p>This course shows real-world examples of Claude Code solving actual problems. You'll begin it this week and complete it by Week 4.</p>
+
+        <h4>Focus Areas for This Week:</h4>
+        <ul>
+            <li>Watch the first 3-4 chapters covering setup and basic workflows</li>
+            <li>See how experienced developers prompt Claude Code</li>
+            <li>Learn common patterns for adding features to existing code</li>
+            <li>Understand when and how to intervene in Claude's work</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 1-1.5 hours this week (continue next week)</p>
+
+        <div class="highlight-box">
+            <h3>The Shift from APIs to Agents</h3>
+            <p>Weeks 1-2 taught you to call AI APIs directly. Now you're moving to an agentic tool—Claude Code can read files, edit code, run commands, and iterate on its own work. This is your first exposure to AI as a collaborator, not just a function you call.</p>
+        </div>
+
+        <h2>Session 1: Claude Code Setup & Contributing to Open Source</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Claude Code Environment Setup (45 minutes)</h3>
+
+            <h4>Installation Process:</h4>
+            <ol>
+                <li><strong>Install Claude Code CLI:</strong>
+                    <ul>
+                        <li>Download from Anthropic's website</li>
+                        <li>Configure with your API key</li>
+                        <li>Test basic commands</li>
+                    </ul>
+                </li>
+                <li><strong>VS Code Integration:</strong>
+                    <ul>
+                        <li>Install the Claude Code extension</li>
+                        <li>Learn keyboard shortcuts</li>
+                        <li>Configure settings for your workflow</li>
+                    </ul>
+                </li>
+                <li><strong>Git Integration:</strong>
+                    <ul>
+                        <li>Understand how Claude Code uses Git</li>
+                        <li>Best practices for commits with AI assistance</li>
+                        <li>How to review AI-generated diffs</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Create Your First CLAUDE.md:</h4>
+            <p>CLAUDE.md is a project documentation file that tells Claude Code about your project. Think of it as a system prompt for your codebase.</p>
+
+            <div class="example-box">
+                <p><strong>What to include in CLAUDE.md:</strong></p>
+                <ul>
+                    <li>Project overview and purpose</li>
+                    <li>Architecture and key components</li>
+                    <li>Coding conventions and style guide</li>
+                    <li>Common commands and setup instructions</li>
+                    <li>Areas where Claude should be cautious</li>
+                    <li>Testing requirements</li>
+                </ul>
+            </div>
+
+            <p>Create a CLAUDE.md for your Week 1 chatbot project as practice.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Essential Slash Commands & Plan Mode (30 minutes)</h3>
+
+            <h4>Core Slash Commands:</h4>
+            <ul>
+                <li><code>/edit</code> - Make targeted changes to files</li>
+                <li><code>/add</code> - Create new files or add features</li>
+                <li><code>/ask</code> - Ask questions about the codebase</li>
+                <li><code>/debug</code> - Help diagnose and fix issues</li>
+                <li><code>/test</code> - Generate or run tests</li>
+                <li><code>/plan</code> - Create a multi-step plan before executing</li>
+            </ul>
+
+            <h4>Understanding Plan Mode:</h4>
+            <p>Plan mode is one of Claude Code's most powerful features. Instead of diving straight into changes, Claude:</p>
+            <ol>
+                <li>Analyzes the request and codebase</li>
+                <li>Proposes a multi-step plan</li>
+                <li>Waits for your approval</li>
+                <li>Executes the plan step by step</li>
+                <li>Checks with you before major changes</li>
+            </ol>
+
+            <p><strong>When to use plan mode:</strong> Complex features, refactoring, anything that touches multiple files</p>
+            <p><strong>When to skip it:</strong> Small bug fixes, single-file changes, simple additions</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Contributing to Open Source (60-75 minutes)</h3>
+
+            <p>Now let's use Claude Code on a real open-source project. This is a milestone—you'll make a genuine contribution to a real codebase.</p>
+
+            <h4>Step 1: Find a Good First Issue</h4>
+            <p>Look for repositories with "good first issue" or "beginner-friendly" labels. Ideal projects:</p>
+            <ul>
+                <li>Active maintenance (recent commits)</li>
+                <li>Clear contribution guidelines</li>
+                <li>Small, focused tools or libraries</li>
+                <li>Written in Python or JavaScript</li>
+            </ul>
+
+            <p><strong>Suggested repos to explore:</strong></p>
+            <ul>
+                <li>VS Code extensions with small feature requests</li>
+                <li>CLI tools that need documentation or bug fixes</li>
+                <li>Python libraries with feature requests tagged "help wanted"</li>
+            </ul>
+
+            <h4>Step 2: Set Up the Project</h4>
+            <ol>
+                <li>Fork the repository</li>
+                <li>Clone your fork locally</li>
+                <li>Read CONTRIBUTING.md (if it exists)</li>
+                <li>Create a CLAUDE.md based on the project README</li>
+                <li>Run tests to ensure everything works</li>
+            </ol>
+
+            <h4>Step 3: Use Claude Code to Add a Feature</h4>
+            <p>Prompt Claude Code to implement the feature or fix the bug. Example workflow:</p>
+            <div class="example-box">
+                <p><strong>Your prompt:</strong> "I want to add a feature that [describe feature]. This addresses issue #123. Please create a plan first."</p>
+                <p><strong>Claude creates plan:</strong> Review it carefully. Does it make sense? Are there edge cases?</p>
+                <p><strong>Approve and execute:</strong> Let Claude implement the changes</p>
+                <p><strong>Test manually:</strong> Run the code yourself, try edge cases</p>
+                <p><strong>Run automated tests:</strong> Make sure nothing broke</p>
+                <p><strong>Review the diff:</strong> Read every line Claude changed</p>
+            </div>
+
+            <h4>Step 4: Submit a Pull Request</h4>
+            <ul>
+                <li>Commit with a clear message</li>
+                <li>Push to your fork</li>
+                <li>Open a PR against the upstream repo</li>
+                <li>Write a description explaining what you changed and why</li>
+                <li>Link to the original issue</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Important: You're Still Responsible</h3>
+                <p>Claude Code wrote the code, but you're the one submitting the PR. You must understand every change and be ready to defend it in code review. This is Discernment from the 4 D's in action.</p>
+            </div>
+        </div>
+
+        <h2>Session 2: Build Something from Scratch</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Project Selection & Planning (20 minutes)</h3>
+
+            <p>You'll build a complete small application from scratch using Claude Code. Choose one:</p>
+
+            <h4>Option 1: Personal Dashboard CLI</h4>
+            <p>A command-line tool that shows you daily information:</p>
+            <ul>
+                <li>Weather for your location</li>
+                <li>Top Hacker News stories</li>
+                <li>GitHub activity from repos you follow</li>
+                <li>Calendar events (from a CSV or JSON file)</li>
+            </ul>
+
+            <h4>Option 2: Markdown Blog Generator</h4>
+            <p>A static site generator that turns Markdown files into a blog:</p>
+            <ul>
+                <li>Parses Markdown files with frontmatter (title, date, tags)</li>
+                <li>Generates HTML pages with a template</li>
+                <li>Creates an index page and tag pages</li>
+                <li>Includes basic CSS styling</li>
+            </ul>
+
+            <h4>Option 3: Code Snippet Manager</h4>
+            <p>A CLI tool for saving and retrieving code snippets:</p>
+            <ul>
+                <li>Save snippets with tags and descriptions</li>
+                <li>Search by tag or keyword</li>
+                <li>Copy snippets to clipboard</li>
+                <li>Store in SQLite database</li>
+            </ul>
+
+            <p>Or propose your own idea of similar scope—something you'd actually use.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Initial Setup with Claude Code (30 minutes)</h3>
+
+            <h4>Start with a Plan:</h4>
+            <p>Use plan mode to scope the project. Prompt Claude Code:</p>
+            <div class="example-box">
+                <p>"I want to build a [project description]. It should have these features: [list features]. Create a detailed plan including file structure, key functions, and implementation steps."</p>
+            </div>
+
+            <h4>Review and Refine the Plan:</h4>
+            <ul>
+                <li>Is the scope reasonable? (Can you finish in one week?)</li>
+                <li>Are there missing edge cases?</li>
+                <li>Does the file structure make sense?</li>
+                <li>Are dependencies reasonable?</li>
+            </ul>
+
+            <h4>Create the Project Structure:</h4>
+            <p>Let Claude Code set up:</p>
+            <ul>
+                <li>Directory structure</li>
+                <li>README.md with project description</li>
+                <li>requirements.txt or package.json</li>
+                <li>CLAUDE.md with project context</li>
+                <li>.gitignore</li>
+                <li>Basic entry point file</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Iterative Development (90 minutes)</h3>
+
+            <p>Now build the application feature by feature. This is where you learn how to work effectively with an AI coding partner.</p>
+
+            <h4>Feature-by-Feature Approach:</h4>
+            <ol>
+                <li><strong>Start with Core Functionality:</strong> Get the minimal viable version working first</li>
+                <li><strong>Test Immediately:</strong> After each feature, run it manually. Does it work?</li>
+                <li><strong>Iterate on Prompts:</strong> If Claude's first attempt fails, don't start over—refine your prompt</li>
+                <li><strong>Add Error Handling:</strong> Once features work, make them robust</li>
+                <li><strong>Improve UX:</strong> Add helpful messages, colors, formatting</li>
+            </ol>
+
+            <h4>Prompting Techniques for This Phase:</h4>
+            <div class="example-box">
+                <p><strong>Good prompts:</strong></p>
+                <ul>
+                    <li>"Implement the weather fetching feature. Use the OpenWeather API. Handle network errors gracefully."</li>
+                    <li>"The current output is messy. Add color-coded formatting using the rich library."</li>
+                    <li>"Add command-line arguments using argparse. Support --help, --verbose, and --config flags."</li>
+                </ul>
+                <p><strong>Less effective prompts:</strong></p>
+                <ul>
+                    <li>"Make it better" (too vague)</li>
+                    <li>"Fix everything" (no direction)</li>
+                    <li>"Add all the features at once" (too much at once)</li>
+                </ul>
+            </div>
+
+            <h4>When to Intervene:</h4>
+            <p>Know when to step in manually:</p>
+            <ul>
+                <li><strong>Debugging:</strong> If Claude keeps making the same mistake, fix it yourself</li>
+                <li><strong>Critical Logic:</strong> Security-sensitive code deserves manual review</li>
+                <li><strong>Performance:</strong> If code works but is slow, profile it yourself</li>
+                <li><strong>Dependencies:</strong> Verify that suggested libraries are maintained and trustworthy</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Complete Your Application:</strong> Finish the project you started in Session 2. It should be fully functional with error handling.</li>
+                <li><strong>Write Comprehensive Documentation:</strong>
+                    <ul>
+                        <li>README with installation and usage instructions</li>
+                        <li>Screenshots or demo GIF showing it in action</li>
+                        <li>CLAUDE.md explaining the architecture</li>
+                        <li>Code comments for complex functions</li>
+                    </ul>
+                </li>
+                <li><strong>Follow Up on Your Open Source PR:</strong> Respond to any code review feedback. If maintainers suggest changes, use Claude Code to implement them.</li>
+                <li><strong>Continue Claude Code in Action:</strong> Watch at least 2 more chapters of the course.</li>
+                <li><strong>Push Everything to GitHub:</strong> Both your new app and your open-source contribution fork.</li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Claude Code is a collaborator, not a magic button</strong> - You still need to guide it, review its work, and intervene when needed</li>
+            <li><strong>CLAUDE.md is your project's system prompt</strong> - Good context leads to better suggestions</li>
+            <li><strong>Plan mode prevents chaos</strong> - For complex tasks, always review the plan before execution</li>
+            <li><strong>Open-source contribution is valuable</strong> - Even small PRs show you can work with real codebases</li>
+            <li><strong>Testing is still your job</strong> - AI can write tests, but you must verify the code actually works</li>
+            <li><strong>Iteration is normal</strong> - Your first prompt won't be perfect; refining is part of the process</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 4</h3>
+            <p>Next week, you'll explore OpenAI's Codex (both CLI and cloud versions) and compare them to Claude Code. You'll also finish your first major project: a useful CLI tool or web app. Make sure your Week 3 app is working—you'll present it alongside your Week 4 project.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week3-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 3 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 3 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 7: MCP - Connecting Claude to Everything - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 7: MCP - Connecting Claude to Everything</h1>
+            <p class="week-meta">Month 2: Build Real Apps | Model Context Protocol</p>
+            <a href="week7-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete Introduction to Model Context Protocol course</li>
+                <li>Understand MCP architecture and its role in AI systems</li>
+                <li>Connect Claude Code to existing MCP servers</li>
+                <li>Use filesystem, GitHub, and database MCP servers</li>
+                <li>Build a custom MCP server in Python</li>
+                <li>Integrate your MCP server with Claude Code</li>
+                <li>Brainstorm innovative MCP server ideas</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Course: Introduction to Model Context Protocol</h3>
+        <p>MCP is one of the most important technologies you'll learn at camp. It's a major 2026 focus area for Anthropic and a differentiator on your resume.</p>
+
+        <h4>What MCP Is:</h4>
+        <p>A standardized protocol for connecting AI models to external data sources and tools. Think of it as USB for AI—a universal interface that lets Claude connect to anything.</p>
+
+        <h4>What You'll Learn:</h4>
+        <ul>
+            <li><strong>MCP Architecture:</strong> Servers, clients, resources, tools</li>
+            <li><strong>Why MCP Exists:</strong> Solving the integration problem at scale</li>
+            <li><strong>Server Capabilities:</strong> What MCP servers can expose</li>
+            <li><strong>Security Model:</strong> Permissions, sandboxing, trust</li>
+            <li><strong>Real-World Applications:</strong> CRM integration, database access, API connections</li>
+        </ul>
+
+        <p><strong>Time commitment:</strong> 90-120 minutes</p>
+
+        <div class="highlight-box">
+            <h3>Why MCP Is Resume Gold</h3>
+            <p>MCP is new (2025) and strategically important to Anthropic. Most developers don't know it yet, which makes you an early adopter. In interviews, being able to say "I built custom MCP servers" signals that you're ahead of the curve and understand modern AI architecture.</p>
+        </div>
+
+        <h2>Session 1: Using Existing MCP Servers</h2>
+
+        <div class="session-card">
+            <h3>Part 1: MCP Fundamentals (30 minutes)</h3>
+
+            <h4>The MCP Model:</h4>
+            <ul>
+                <li><strong>MCP Server:</strong> Exposes resources (data) and tools (actions)</li>
+                <li><strong>MCP Client:</strong> Connects to servers (e.g., Claude Code)</li>
+                <li><strong>Resources:</strong> Read-only data (files, database records, API responses)</li>
+                <li><strong>Tools:</strong> Actions the AI can perform (create file, send email, run query)</li>
+                <li><strong>Prompts:</strong> Pre-defined interaction templates</li>
+            </ul>
+
+            <h4>How It Works:</h4>
+            <ol>
+                <li>You configure Claude Code to connect to MCP servers</li>
+                <li>Claude discovers available resources and tools</li>
+                <li>When relevant to a task, Claude can:
+                    <ul>
+                        <li>Read resources (e.g., fetch a file)</li>
+                        <li>Invoke tools (e.g., commit to git)</li>
+                    </ul>
+                </li>
+                <li>Results flow back to Claude, which continues the task</li>
+            </ol>
+
+            <h4>Comparison to Function Calling:</h4>
+            <p>Function calling (Week 2) and MCP serve similar purposes, but:</p>
+            <ul>
+                <li><strong>Function Calling:</strong> One-off, custom implementations per app</li>
+                <li><strong>MCP:</strong> Standardized, reusable, discoverable, composable</li>
+            </ul>
+            <p>MCP is function calling + a universal protocol.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Connect to Built-In MCP Servers (60 minutes)</h3>
+
+            <p>Anthropic provides several official MCP servers. Let's connect Claude Code to them.</p>
+
+            <h4>Filesystem MCP Server:</h4>
+            <p>Gives Claude access to your filesystem with permissions.</p>
+
+            <p><strong>Capabilities:</strong></p>
+            <ul>
+                <li>Read files and directories</li>
+                <li>Search for files by name or content</li>
+                <li>Watch for file changes</li>
+                <li>Create, edit, delete files (with permission)</li>
+            </ul>
+
+            <p><strong>Hands-On Exercise:</strong></p>
+            <ol>
+                <li>Configure the filesystem MCP server in Claude Code</li>
+                <li>Set permissions (read-only for now)</li>
+                <li>Ask Claude: "Find all Python files in this project that import 'requests'"</li>
+                <li>Ask Claude: "What's the total line count of my codebase?"</li>
+            </ol>
+
+            <h4>GitHub MCP Server:</h4>
+            <p>Connects Claude to GitHub repositories.</p>
+
+            <p><strong>Capabilities:</strong></p>
+            <ul>
+                <li>List repositories, issues, pull requests</li>
+                <li>Read file contents from any branch</li>
+                <li>Create issues and PRs</li>
+                <li>Comment on PRs</li>
+                <li>Search code across repos</li>
+            </ul>
+
+            <p><strong>Hands-On Exercise:</strong></p>
+            <ol>
+                <li>Connect the GitHub MCP server with a personal access token</li>
+                <li>Ask Claude: "List all open issues in my AI Camp repos"</li>
+                <li>Ask Claude: "Create a GitHub issue for adding tests to my Week 6 chatbot"</li>
+                <li>Ask Claude: "Show me the README from my most recent project"</li>
+            </ol>
+
+            <h4>Database MCP Server (Optional):</h4>
+            <p>Connects to PostgreSQL, MySQL, or SQLite.</p>
+
+            <p><strong>Capabilities:</strong></p>
+            <ul>
+                <li>Run SELECT queries</li>
+                <li>Describe schema</li>
+                <li>Execute CREATE, UPDATE, DELETE (with permission)</li>
+            </ul>
+
+            <p><strong>Hands-On Exercise:</strong></p>
+            <ul>
+                <li>Connect to a SQLite database from one of your projects</li>
+                <li>Ask Claude: "What tables exist in this database?"</li>
+                <li>Ask Claude: "Show me the 10 most recent records"</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Practical MCP Use Cases (45 minutes)</h3>
+
+            <p>Now that you have MCP servers connected, use them to accomplish real tasks.</p>
+
+            <h4>Project: Automated Code Review Bot</h4>
+            <p>Use Claude Code + GitHub MCP to review open pull requests.</p>
+
+            <p><strong>Task:</strong></p>
+            <ol>
+                <li>Ask Claude to list all open PRs in your repos</li>
+                <li>Pick one PR</li>
+                <li>Ask Claude to review the PR:
+                    <ul>
+                        <li>Check for security issues</li>
+                        <li>Verify tests exist</li>
+                        <li>Assess code quality</li>
+                        <li>Suggest improvements</li>
+                    </ul>
+                </li>
+                <li>Ask Claude to post the review as a PR comment</li>
+            </ol>
+
+            <p>Observe how Claude uses MCP tools behind the scenes.</p>
+
+            <h4>Project: Codebase Documentation Generator</h4>
+            <p>Use Filesystem MCP to analyze your codebase and generate docs.</p>
+
+            <p><strong>Task:</strong></p>
+            <ul>
+                <li>Ask Claude: "Analyze my Week 5 multi-agent system and write comprehensive documentation"</li>
+                <li>Claude should:
+                    <ul>
+                        <li>Read all relevant files</li>
+                        <li>Understand the architecture</li>
+                        <li>Generate a detailed README</li>
+                        <li>Create an architecture diagram (ASCII or Markdown)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>The Power of MCP</h3>
+                <p>Notice how you didn't write integration code—you just connected servers. MCP handles the plumbing, letting you focus on what you want Claude to do, not how to wire everything together.</p>
+            </div>
+        </div>
+
+        <h2>Session 2: Build Your Own MCP Server</h2>
+
+        <div class="session-card">
+            <h3>Part 1: MCP Server Architecture (30 minutes)</h3>
+
+            <h4>Server Components:</h4>
+            <ul>
+                <li><strong>Server Manifest:</strong> Declares capabilities (resources, tools, prompts)</li>
+                <li><strong>Resource Handlers:</strong> Functions that return data</li>
+                <li><strong>Tool Handlers:</strong> Functions that perform actions</li>
+                <li><strong>Initialization:</strong> Setup, authentication, configuration</li>
+            </ul>
+
+            <h4>MCP Server Lifecycle:</h4>
+            <ol>
+                <li>Client (Claude Code) discovers server</li>
+                <li>Server sends manifest (list of capabilities)</li>
+                <li>Client invokes resources/tools as needed</li>
+                <li>Server executes and returns results</li>
+                <li>Client presents results to Claude</li>
+            </ol>
+
+            <h4>Development Environment:</h4>
+            <p>Install the MCP Python SDK:</p>
+            <ul>
+                <li><code>pip install mcp</code></li>
+                <li>Review the SDK documentation</li>
+                <li>Examine example servers from Anthropic</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Brainstorm Your MCP Server (20 minutes)</h3>
+
+            <p>What data or capabilities should you expose to Claude?</p>
+
+            <h4>MCP Server Ideas:</h4>
+
+            <p><strong>Personal Productivity:</strong></p>
+            <ul>
+                <li>Todo list integration (Todoist, Notion)</li>
+                <li>Calendar management</li>
+                <li>Note-taking system connector</li>
+                <li>Personal knowledge base search</li>
+            </ul>
+
+            <p><strong>Development Tools:</strong></p>
+            <ul>
+                <li>Test runner and results analyzer</li>
+                <li>Code metrics and quality analyzer</li>
+                <li>Dependency vulnerability scanner</li>
+                <li>Docker container manager</li>
+            </ul>
+
+            <p><strong>Data Sources:</strong></p>
+            <ul>
+                <li>RSS feed aggregator</li>
+                <li>Weather API connector</li>
+                <li>Stock/crypto price tracker</li>
+                <li>News API integration</li>
+            </ul>
+
+            <p><strong>APIs and Services:</strong></p>
+            <ul>
+                <li>Slack message sender/reader</li>
+                <li>Email (send, search, read)</li>
+                <li>Cloud storage (Dropbox, Google Drive)</li>
+                <li>Social media poster</li>
+            </ul>
+
+            <p><strong>Academic/Learning:</strong></p>
+            <ul>
+                <li>Flashcard system (Anki) connector</li>
+                <li>Academic paper search (arXiv)</li>
+                <li>Course materials organizer</li>
+                <li>Study session tracker</li>
+            </ul>
+
+            <h4>Choose One to Build:</h4>
+            <p>Pick something that:</p>
+            <ul>
+                <li>You'll actually use</li>
+                <li>Has a clear API or data source</li>
+                <li>Isn't too complex for a first server</li>
+                <li>Demonstrates your skills well</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Implement Your MCP Server (90-120 minutes)</h3>
+
+            <h4>Step 1: Define the Manifest</h4>
+            <p>What will your server expose?</p>
+
+            <div class="example-box">
+                <p><strong>Example: Weather MCP Server</strong></p>
+                <p><strong>Resources:</strong></p>
+                <ul>
+                    <li><code>weather/current/{location}</code> - Current weather</li>
+                    <li><code>weather/forecast/{location}</code> - 5-day forecast</li>
+                </ul>
+                <p><strong>Tools:</strong></p>
+                <ul>
+                    <li><code>get_weather</code> - Fetch weather for any location</li>
+                    <li><code>compare_weather</code> - Compare weather between cities</li>
+                </ul>
+            </div>
+
+            <h4>Step 2: Implement Resource Handlers</h4>
+            <p>Write functions that return data:</p>
+            <ul>
+                <li>Fetch from APIs or databases</li>
+                <li>Format as JSON or structured text</li>
+                <li>Handle errors gracefully</li>
+                <li>Cache when appropriate</li>
+            </ul>
+
+            <h4>Step 3: Implement Tool Handlers</h4>
+            <p>Write functions that perform actions:</p>
+            <ul>
+                <li>Validate parameters</li>
+                <li>Execute the action</li>
+                <li>Return success/failure status</li>
+                <li>Log operations</li>
+            </ul>
+
+            <h4>Step 4: Add Configuration</h4>
+            <ul>
+                <li>API keys (from environment variables)</li>
+                <li>Rate limiting settings</li>
+                <li>Default parameters</li>
+                <li>Logging configuration</li>
+            </ul>
+
+            <h4>Step 5: Test Independently</h4>
+            <p>Before connecting to Claude Code:</p>
+            <ul>
+                <li>Use the MCP inspector tool to test your server</li>
+                <li>Verify all resources return valid data</li>
+                <li>Test all tools with various inputs</li>
+                <li>Handle edge cases and errors</li>
+            </ul>
+
+            <h4>Step 6: Connect to Claude Code</h4>
+            <ul>
+                <li>Configure Claude Code to use your local MCP server</li>
+                <li>Verify Claude can discover your resources and tools</li>
+                <li>Give Claude a task that requires your server</li>
+                <li>Debug any issues</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Development Tips</h3>
+                <ul>
+                    <li>Start with one resource and one tool—expand later</li>
+                    <li>Use print statements or logging to debug</li>
+                    <li>Test each component independently before integration</li>
+                    <li>Read the MCP SDK docs carefully—they're well-written</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Complete Your MCP Server:</strong>
+                    <ul>
+                        <li>Implement all planned resources and tools</li>
+                        <li>Add comprehensive error handling</li>
+                        <li>Write unit tests for key functions</li>
+                        <li>Document your server's API</li>
+                    </ul>
+                </li>
+                <li><strong>Create a Demo Video:</strong>
+                    <ul>
+                        <li>Show your MCP server in action with Claude Code</li>
+                        <li>Demonstrate 3-5 useful tasks</li>
+                        <li>Explain what your server does and why it's useful</li>
+                        <li>2-3 minutes, narrated</li>
+                    </ul>
+                </li>
+                <li><strong>Write a Technical Blog Post:</strong>
+                    <ul>
+                        <li>Title: "Building a Custom MCP Server: [Your Server Name]"</li>
+                        <li>Explain what MCP is and why it matters</li>
+                        <li>Walk through your implementation</li>
+                        <li>Share code snippets and architecture</li>
+                        <li>Discuss challenges and solutions</li>
+                        <li>Publish on dev.to, Medium, or your blog</li>
+                    </ul>
+                </li>
+                <li><strong>Brainstorm Advanced MCP Ideas:</strong>
+                    <ul>
+                        <li>List 5 MCP servers you wish existed</li>
+                        <li>For each, describe:
+                            <ul>
+                                <li>What it would do</li>
+                                <li>Who would use it</li>
+                                <li>What resources/tools it would expose</li>
+                                <li>What makes it challenging/interesting</li>
+                            </ul>
+                        </li>
+                        <li>Keep this list—one might become your capstone project</li>
+                    </ul>
+                </li>
+                <li><strong>Share Your Work:</strong>
+                    <ul>
+                        <li>Push your MCP server to GitHub</li>
+                        <li>Add to your camp portfolio</li>
+                        <li>Share blog post on social media</li>
+                        <li>Consider publishing your server for others to use</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>MCP is a universal integration layer</strong> - Standardized, reusable, composable</li>
+            <li><strong>Servers expose resources and tools</strong> - Data (read) and actions (write)</li>
+            <li><strong>MCP eliminates integration boilerplate</strong> - Focus on what, not how</li>
+            <li><strong>Security is built-in</strong> - Permissions, sandboxing, user control</li>
+            <li><strong>Building MCP servers is high-leverage</strong> - One server = reusable across many contexts</li>
+            <li><strong>This knowledge is rare and valuable</strong> - Most developers haven't heard of MCP yet</li>
+            <li><strong>MCP is the future of AI integration</strong> - Understanding it puts you ahead of the curve</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 8</h3>
+            <p>Next week, you'll dive into agents—autonomous systems that think, act, and observe in loops. You'll build an agent from scratch and then deploy OpenClaw, a production-ready agent framework. You'll also explore agent security and permissions—critical for real-world deployment.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week7-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 7 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 7 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 1: Setup & First API Calls - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 1: Setup & First API Calls</h1>
+            <p class="week-meta">Month 1: Get Fluent with AI Tools</p>
+            <a href="week1-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Set up a complete AI development environment</li>
+                <li>Complete foundational courses: Claude 101 and AI Fluency for Students</li>
+                <li>Make your first API calls to both OpenAI and Anthropic</li>
+                <li>Build and customize a CLI chatbot</li>
+                <li>Understand the AI Fluency framework (4 D's: Delegation, Description, Discernment, Diligence)</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+        <p>Complete these two foundational courses before your first session. Both are short and specifically designed for students at your level.</p>
+
+        <h3>Course 1: Claude 101</h3>
+        <p>A quick introduction to Claude and its capabilities. This course covers:</p>
+        <ul>
+            <li>What Claude is and how it differs from other AI models</li>
+            <li>Basic interaction patterns and best practices</li>
+            <li>Understanding Claude's strengths and limitations</li>
+            <li>Safety and responsible AI use</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 30-45 minutes</p>
+
+        <h3>Course 2: AI Fluency for Students</h3>
+        <p>This course introduces the <strong>4 D's framework</strong> that will guide your work all summer:</p>
+        <ul>
+            <li><strong>Delegation:</strong> Knowing what tasks to give to AI and what to do yourself</li>
+            <li><strong>Description:</strong> Writing clear prompts and instructions</li>
+            <li><strong>Discernment:</strong> Evaluating AI output critically</li>
+            <li><strong>Diligence:</strong> Iterating and refining your approach</li>
+        </ul>
+        <p>This framework becomes a shared vocabulary you'll use throughout the camp to discuss your AI interactions.</p>
+        <p><strong>Time commitment:</strong> 45-60 minutes</p>
+
+        <div class="highlight-box">
+            <h3>Why These Courses Matter</h3>
+            <p>These aren't just checkboxes—they establish a mental model for how to work with AI effectively. The 4 D's framework from AI Fluency for Students will come up repeatedly as you learn to delegate coding tasks, describe features clearly, discern good code from bad, and diligently iterate on your projects.</p>
+        </div>
+
+        <h2>Session 1: Environment Setup & AI Fluency Discussion</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Development Environment Setup (60-90 minutes)</h3>
+
+            <p>We'll build a complete AI development environment from scratch. By the end, you'll have everything needed to call APIs and build AI applications.</p>
+
+            <h4>Tools to Install:</h4>
+            <ol>
+                <li><strong>Python 3.10+</strong> - The primary language for AI development
+                    <ul>
+                        <li>Install via python.org or Homebrew (Mac) / Chocolatey (Windows)</li>
+                        <li>Verify: <code>python --version</code></li>
+                    </ul>
+                </li>
+                <li><strong>VS Code</strong> - Your code editor
+                    <ul>
+                        <li>Install from code.visualstudio.com</li>
+                        <li>Key extensions: Python, Pylance, Jupyter</li>
+                    </ul>
+                </li>
+                <li><strong>Git</strong> - Version control (essential for collaboration)
+                    <ul>
+                        <li>Install from git-scm.com</li>
+                        <li>Configure: <code>git config --global user.name "Your Name"</code></li>
+                        <li>Create a GitHub account if you don't have one</li>
+                    </ul>
+                </li>
+                <li><strong>pip & virtual environments</strong>
+                    <ul>
+                        <li>Learn to create isolated Python environments</li>
+                        <li>Practice: <code>python -m venv myenv</code></li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>API Setup:</h4>
+            <ol>
+                <li><strong>OpenAI API Access</strong>
+                    <ul>
+                        <li>Create account at platform.openai.com</li>
+                        <li>Add payment method (set billing cap at $10 to start)</li>
+                        <li>Generate API key</li>
+                        <li>Store securely using environment variables</li>
+                    </ul>
+                </li>
+                <li><strong>Anthropic API Access</strong>
+                    <ul>
+                        <li>Create account at console.anthropic.com</li>
+                        <li>Add payment method (set billing cap)</li>
+                        <li>Generate API key</li>
+                        <li>Store in environment variables</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>Security Best Practice: Environment Variables</h3>
+                <p>Never hardcode API keys in your code! Learn to use <code>.env</code> files and the <code>python-dotenv</code> package. Add <code>.env</code> to your <code>.gitignore</code> immediately—this prevents accidentally committing secrets to GitHub.</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: AI Fluency Framework Discussion (30-45 minutes)</h3>
+
+            <p>Now that you've completed the AI Fluency for Students course, let's apply the 4 D's to your camp work:</p>
+
+            <h4>Discussion Questions:</h4>
+            <ul>
+                <li><strong>Delegation:</strong> What programming tasks do you think AI can handle? Which ones should you always do yourself?</li>
+                <li><strong>Description:</strong> How is writing a prompt similar to writing a function docstring? What makes a good description?</li>
+                <li><strong>Discernment:</strong> How will you verify that AI-generated code actually works and is secure?</li>
+                <li><strong>Diligence:</strong> When AI gives you wrong code, what's your debugging process?</li>
+            </ul>
+
+            <p>These questions have no single right answer—they're frameworks for thinking about your work. You'll develop your own answers through practice.</p>
+        </div>
+
+        <h2>Session 2: First API Calls & Build a Chatbot</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Making Your First API Calls (45-60 minutes)</h3>
+
+            <p>Let's make our first calls to both OpenAI and Anthropic APIs. You'll see the similarities and differences.</p>
+
+            <h4>OpenAI SDK Example:</h4>
+            <p>Install the SDK: <code>pip install openai</code></p>
+            <p>Simple chat completion:</p>
+            <ul>
+                <li>Import the library and set up authentication</li>
+                <li>Create a chat completion with GPT-4</li>
+                <li>Parse and display the response</li>
+                <li>Understand tokens and pricing</li>
+            </ul>
+
+            <h4>Anthropic SDK Example:</h4>
+            <p>Install the SDK: <code>pip install anthropic</code></p>
+            <p>Equivalent call with Claude:</p>
+            <ul>
+                <li>Compare API structure to OpenAI</li>
+                <li>Use Claude Sonnet or Opus</li>
+                <li>Note differences in parameters (system prompts, max_tokens)</li>
+                <li>Compare response formats</li>
+            </ul>
+
+            <h4>Hands-On Exercise:</h4>
+            <p>Write a script that:</p>
+            <ol>
+                <li>Prompts the user for input</li>
+                <li>Sends it to both OpenAI and Anthropic</li>
+                <li>Displays both responses side-by-side</li>
+                <li>Counts tokens used by each</li>
+            </ol>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Build a CLI Chatbot (60-90 minutes)</h3>
+
+            <p>Now let's build something more substantial: a command-line chatbot with conversation history.</p>
+
+            <h4>Required Features:</h4>
+            <ul>
+                <li><strong>Conversation Loop:</strong> Accept user input continuously until they type "exit"</li>
+                <li><strong>Message History:</strong> Maintain context across multiple turns</li>
+                <li><strong>Model Selection:</strong> Let user choose OpenAI or Anthropic at startup</li>
+                <li><strong>Basic Error Handling:</strong> Handle API errors gracefully</li>
+                <li><strong>Token Counter:</strong> Display tokens used per conversation</li>
+            </ul>
+
+            <h4>Stretch Goals:</h4>
+            <ul>
+                <li>Add system prompt customization</li>
+                <li>Implement conversation saving/loading</li>
+                <li>Add color-coded output (user vs. AI)</li>
+                <li>Show streaming responses character-by-character</li>
+            </ul>
+
+            <p>Build this together in session, then customize it for homework.</p>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Customize Your Chatbot:</strong> Add at least two features from the stretch goals list, or invent your own improvements.</li>
+                <li><strong>Test Both APIs:</strong> Have at least 3 conversations with your chatbot using each API. Note which responses you prefer and why.</li>
+                <li><strong>Create a GitHub Repo:</strong> Initialize a Git repository for your chatbot, add a README with setup instructions, and push to GitHub.</li>
+                <li><strong>Write a Reflection:</strong> In your README, write 2-3 paragraphs applying the 4 D's framework:
+                    <ul>
+                        <li>What did you delegate to AI vs. write yourself?</li>
+                        <li>How did you describe what you wanted to the APIs?</li>
+                        <li>How did you discern good responses from bad?</li>
+                        <li>What diligence/iteration did your project require?</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Environment setup is foundational</strong> - You now have a professional AI development environment that you'll use all summer</li>
+            <li><strong>Both OpenAI and Anthropic have strengths</strong> - Understanding both APIs makes you flexible</li>
+            <li><strong>The 4 D's are a mental model, not rules</strong> - Use them to reflect on your work, not as rigid constraints</li>
+            <li><strong>API costs are real</strong> - Always set billing caps and monitor usage</li>
+            <li><strong>Version control from day 1</strong> - Git isn't optional in modern development</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 2</h3>
+            <p>Next week, you'll dive deep into prompting techniques and learn about structured output, including tool use and function calling. Make sure your environment is fully set up and your chatbot is working—we'll build on this foundation.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week1-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 1 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 1 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 10: Build - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .tip-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .tip-box h4 {
+            color: #15803d;
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 10: Build</h1>
+            <p class="week-meta">Month 3: Capstone & Portfolio | Intensive Development Week</p>
+            <a href="week10-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete all core features of your capstone</li>
+                <li>Use Claude Code with your custom Skills and Subagents from Week 5</li>
+                <li>Make a meaningful open-source contribution to an AI tooling repository</li>
+                <li>Reach 80%+ feature completeness by end of week</li>
+                <li>Begin comprehensive testing</li>
+                <li>Update documentation as you build</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work</h2>
+        <p><strong>None.</strong> This week is pure building. All your focus should be on implementation.</p>
+
+        <div class="highlight-box">
+            <h3>Build Week Philosophy</h3>
+            <p>This is a working week, not a learning week. You have the skills—now apply them intensively. Expect to code 20-30 hours this week. Use Claude Code heavily, but stay in control. Your goal: by Sunday, your capstone should be substantially complete with all core features working.</p>
+        </div>
+
+        <h2>Session 1: Working Session - Core Feature Implementation</h2>
+
+        <div class="session-card">
+            <h3>Structure of Working Sessions</h3>
+
+            <p>This week's "sessions" are focused build times with check-ins and guidance, not lectures.</p>
+
+            <h4>Session Format (3-4 hours):</h4>
+            <ol>
+                <li><strong>Check-in (15 min):</strong> What are you working on today? Any blockers?</li>
+                <li><strong>Deep Work (2-3 hours):</strong> Focused implementation</li>
+                <li><strong>Demo & Review (30 min):</strong> Show progress, get feedback</li>
+                <li><strong>Planning (15 min):</strong> Set tasks for next session</li>
+            </ol>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 1: Leverage Your Week 5 Skills</h3>
+
+            <p>Remember the custom Skills and Subagents you built in Week 5? Now's when they pay off.</p>
+
+            <h4>Use Your Custom Skill:</h4>
+            <ul>
+                <li>If you built a code review skill, use it on your capstone code</li>
+                <li>If you built a documentation generator, use it for your README</li>
+                <li>If you built a test generator, use it to create test cases</li>
+            </ul>
+
+            <h4>Apply Multi-Agent Patterns:</h4>
+            <p>For complex tasks, orchestrate subagents:</p>
+            <ul>
+                <li><strong>Implementer Agent:</strong> Writes the feature code</li>
+                <li><strong>Tester Agent:</strong> Creates test cases</li>
+                <li><strong>Reviewer Agent:</strong> Critiques the implementation</li>
+                <li><strong>Documenter Agent:</strong> Writes docs for the feature</li>
+            </ul>
+
+            <div class="tip-box">
+                <h4>Prompt Strategy for Complex Features</h4>
+                <p>"I need to implement [feature]. Use plan mode to:</p>
+                <ol>
+                    <li>Design the implementation approach</li>
+                    <li>Identify edge cases</li>
+                    <li>Write the code with comprehensive error handling</li>
+                    <li>Create unit tests</li>
+                    <li>Update relevant documentation</li>
+                </ol>
+                <p>Present the plan for approval before executing."</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Implementation Strategy</h3>
+
+            <h4>Feature-by-Feature Approach:</h4>
+            <ol>
+                <li><strong>Implement:</strong> Write the feature code</li>
+                <li><strong>Test Manually:</strong> Does it work in the happy path?</li>
+                <li><strong>Handle Errors:</strong> What breaks it? Add error handling</li>
+                <li><strong>Test Edge Cases:</strong> Try unusual inputs</li>
+                <li><strong>Write Tests:</strong> Automate your manual tests</li>
+                <li><strong>Document:</strong> Update README and docstrings</li>
+                <li><strong>Commit:</strong> Clear message, push to GitHub</li>
+            </ol>
+
+            <h4>When to Ask for Help:</h4>
+            <ul>
+                <li>Stuck for more than 30 minutes? Ask</li>
+                <li>Uncertain about architecture decision? Discuss</li>
+                <li>Claude giving unhelpful suggestions repeatedly? Get human input</li>
+                <li>Security-sensitive code? Get a review</li>
+            </ul>
+
+            <h4>Maintaining Momentum:</h4>
+            <ul>
+                <li><strong>Pomodoro Technique:</strong> 50 minutes focused work, 10 minute break</li>
+                <li><strong>Small Wins:</strong> Break features into tasks you can finish in 1-2 hours</li>
+                <li><strong>Visible Progress:</strong> Update your GitHub issues/project board frequently</li>
+                <li><strong>Avoid Rabbit Holes:</strong> If something is taking 3x longer than expected, reassess</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Quality Over Speed</h3>
+
+            <p>It's tempting to rush. Don't. A polished 80% is better than a sloppy 100%.</p>
+
+            <h4>Code Quality Checklist (for each feature):</h4>
+            <ul>
+                <li>Does it handle errors gracefully?</li>
+                <li>Are variable and function names clear?</li>
+                <li>Is complex logic commented?</li>
+                <li>Could another developer understand this?</li>
+                <li>Are there obvious bugs or security issues?</li>
+                <li>Is it tested?</li>
+            </ul>
+
+            <h4>When to Refactor:</h4>
+            <ul>
+                <li>If you're copy-pasting code, extract a function</li>
+                <li>If a function is > 50 lines, consider splitting it</li>
+                <li>If you find yourself confused by your own code, refactor now</li>
+                <li>If tests are hard to write, your code might be too complex</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Technical Debt Is Real</h3>
+                <p>Every shortcut you take now, you'll pay back with interest later. For a 3-week project, some debt is okay—but track it. Create GitHub issues for "known issues" and "future improvements" so interviewers see you understand the trade-offs.</p>
+            </div>
+        </div>
+
+        <h2>Session 2: Open Source Contribution</h2>
+
+        <div class="session-card">
+            <h3>Why Contribute Now?</h3>
+
+            <p>You've been using AI tools all summer. Now give back. Contributing to the tools you use is both good karma and great for your resume.</p>
+
+            <h4>Target Repositories:</h4>
+            <ul>
+                <li><strong>AI Tooling:</strong> Claude Code, MCP servers, RAG frameworks, agent libraries</li>
+                <li><strong>Type of Contributions:</strong>
+                    <ul>
+                        <li>Bug fixes (high impact, often easier than features)</li>
+                        <li>Documentation improvements</li>
+                        <li>Example code or tutorials</li>
+                        <li>New features (if there's a clear need)</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Finding an Issue to Work On (30 minutes)</h3>
+
+            <h4>Strategies:</h4>
+            <ol>
+                <li><strong>Check repos you've used:</strong> Have you hit bugs or limitations?</li>
+                <li><strong>Look for "good first issue" or "help wanted" labels</strong></li>
+                <li><strong>Browse recent issues:</strong> Something from the last week might not be taken yet</li>
+                <li><strong>Documentation is always needed:</strong> Add missing examples, clarify confusing sections</li>
+            </ol>
+
+            <h4>Vetting an Issue:</h4>
+            <ul>
+                <li>Is the repo actively maintained? (recent commits, responsive maintainers)</li>
+                <li>Is the issue clearly described?</li>
+                <li>Can you reproduce the problem (for bugs)?</li>
+                <li>Is the scope reasonable (can you complete it this week)?</li>
+            </ul>
+
+            <h4>Claim the Issue:</h4>
+            <ul>
+                <li>Comment: "I'd like to work on this. My approach would be [brief description]. Does that sound right?"</li>
+                <li>Wait for maintainer response before investing significant time</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Implementation (90-120 minutes)</h3>
+
+            <h4>Contribution Workflow:</h4>
+            <ol>
+                <li><strong>Fork the repo</strong></li>
+                <li><strong>Create a branch:</strong> <code>git checkout -b fix-issue-123</code></li>
+                <li><strong>Understand the codebase:</strong> Find relevant files, understand architecture</li>
+                <li><strong>Implement your fix/feature:</strong> Use Claude Code, but understand every change</li>
+                <li><strong>Test thoroughly:</strong> Run existing tests, add new ones if needed</li>
+                <li><strong>Follow style guide:</strong> Match the project's code style</li>
+                <li><strong>Commit with clear messages:</strong> Reference the issue number</li>
+                <li><strong>Push and create PR</strong></li>
+            </ol>
+
+            <h4>PR Description Template:</h4>
+            <div class="tip-box">
+                <h4>Example PR Description</h4>
+                <p><strong>Title:</strong> Fix: Handle null values in data parser</p>
+                <p><strong>Description:</strong></p>
+                <p>"Fixes #123</p>
+                <p><strong>Problem:</strong> The data parser crashed when encountering null values in the JSON response.</p>
+                <p><strong>Solution:</strong> Added null checks before accessing nested properties. Falls back to default values.</p>
+                <p><strong>Testing:</strong> Added unit tests for null, undefined, and missing properties. All existing tests pass.</p>
+                <p><strong>Breaking Changes:</strong> None</p>
+                <p>Happy to make changes based on feedback!"</p>
+            </div>
+
+            <h4>After Submitting:</h4>
+            <ul>
+                <li>Respond promptly to review feedback</li>
+                <li>Make requested changes quickly</li>
+                <li>Be gracious even if the PR isn't merged (it's their project, their call)</li>
+                <li>Learn from the review process</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Implement All Core Features:</strong>
+                    <ul>
+                        <li>Every feature from your Week 9 spec should work</li>
+                        <li>End-to-end testing of all major workflows</li>
+                        <li>Error handling for common failure modes</li>
+                        <li>No critical bugs</li>
+                    </ul>
+                </li>
+                <li><strong>Write Tests:</strong>
+                    <ul>
+                        <li>Unit tests for core functions</li>
+                        <li>Integration tests for key workflows</li>
+                        <li>Aim for >70% code coverage</li>
+                        <li>Document how to run tests</li>
+                    </ul>
+                </li>
+                <li><strong>Complete Your OSS Contribution:</strong>
+                    <ul>
+                        <li>Submit your PR</li>
+                        <li>Respond to any review feedback</li>
+                        <li>Update your resume/LinkedIn with the contribution</li>
+                    </ul>
+                </li>
+                <li><strong>Update Documentation:</strong>
+                    <ul>
+                        <li>README reflects actual current state</li>
+                        <li>Installation instructions work</li>
+                        <li>Usage examples are accurate</li>
+                        <li>Architecture doc is up-to-date</li>
+                    </ul>
+                </li>
+                <li><strong>Code Review with AI:</strong>
+                    <ul>
+                        <li>Use Claude Code to review your entire codebase</li>
+                        <li>Fix any obvious issues it identifies</li>
+                        <li>Document remaining known issues</li>
+                    </ul>
+                </li>
+                <li><strong>Daily Commits:</strong>
+                    <ul>
+                        <li>Commit at least once per day</li>
+                        <li>Clear, descriptive commit messages</li>
+                        <li>Push to GitHub regularly (backup!)</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Productivity & Workflow Tips</h2>
+
+        <div class="session-card">
+            <h3>Staying Focused During Build Week</h3>
+
+            <h4>Environment:</h4>
+            <ul>
+                <li>Remove distractions (close social media, turn off notifications)</li>
+                <li>Dedicated workspace</li>
+                <li>Good music or silence</li>
+                <li>Stay hydrated, eat well, sleep enough</li>
+            </ul>
+
+            <h4>Time Management:</h4>
+            <ul>
+                <li><strong>Time-box features:</strong> "I'll spend 3 hours on this, then move on"</li>
+                <li><strong>Track your time:</strong> Helps estimate remaining work</li>
+                <li><strong>Schedule breaks:</strong> Your brain needs rest</li>
+                <li><strong>End-of-day review:</strong> What did you accomplish? What's tomorrow's priority?</li>
+            </ul>
+
+            <h4>When You're Stuck:</h4>
+            <ol>
+                <li><strong>First 10 minutes:</strong> Read error messages carefully, Google the error</li>
+                <li><strong>Next 20 minutes:</strong> Try different approaches, add debugging prints</li>
+                <li><strong>After 30 minutes:</strong> Ask Claude Code / Claude for help</li>
+                <li><strong>After 60 minutes:</strong> Ask a human (mentor, peer, Stack Overflow)</li>
+                <li><strong>After 90 minutes:</strong> Take a break. Come back with fresh eyes.</li>
+            </ol>
+
+            <h4>Celebrating Progress:</h4>
+            <ul>
+                <li>Close an issue? Take a 5-minute break</li>
+                <li>Finish a major feature? Share a screenshot</li>
+                <li>Hit a milestone? Post on Twitter/LinkedIn</li>
+                <li>Momentum builds on visible progress</li>
+            </ul>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>This is a marathon sprint</strong> - Intense but sustainable. Pace yourself.</li>
+            <li><strong>AI tools are force multipliers</strong> - Use your Week 5 skills and subagents liberally</li>
+            <li><strong>Quality compounds</strong> - Each well-built feature makes the next easier</li>
+            <li><strong>OSS contributions are valuable</strong> - Even small PRs show you can work with real codebases</li>
+            <li><strong>Testing isn't optional</strong> - Broken code is worse than missing features</li>
+            <li><strong>Document as you go</strong> - You'll forget how things work by next week</li>
+            <li><strong>Stay in control</strong> - Claude Code is your copilot, but you're the pilot</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 11</h3>
+            <p>Next week is polish, deploy, and write. You'll finish any remaining features, deploy your capstone (if applicable), create a demo video, and write a comprehensive blog post about your project. By the end of Week 11, your capstone will be complete and ready to showcase.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week10-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 10 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 10 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

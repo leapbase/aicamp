@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 11: Finish + Write - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 11: Finish + Write</h1>
+            <p class="week-meta">Month 3: Capstone & Portfolio | Polish & Documentation</p>
+            <a href="week11-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete all remaining capstone features</li>
+                <li>Deploy your project (if applicable)</li>
+                <li>Create a professional demo video</li>
+                <li>Write and publish a comprehensive blog post</li>
+                <li>Polish all documentation</li>
+                <li>Prepare your capstone for showcase</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work</h2>
+        <p><strong>None.</strong> Focus entirely on finishing and documenting your capstone.</p>
+
+        <div class="highlight-box">
+            <h3>The Final Push</h3>
+            <p>This week transforms your working prototype into a portfolio piece. The difference between "it works" and "it's showcase-ready" is polish, documentation, and presentation. These final touches are what make your project interview-worthy.</p>
+        </div>
+
+        <h2>Session 1: Final Features & Deployment</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Feature Completion (60-90 minutes)</h3>
+
+            <h4>Prioritize Ruthlessly:</h4>
+            <p>You have limited time. Focus on what matters most.</p>
+
+            <p><strong>Must Finish:</strong></p>
+            <ul>
+                <li>Core features that define your project</li>
+                <li>Critical bug fixes</li>
+                <li>Error handling for common failures</li>
+                <li>Basic UX polish (loading states, error messages)</li>
+            </ul>
+
+            <p><strong>Can Skip:</strong></p>
+            <ul>
+                <li>Nice-to-have features</li>
+                <li>Advanced optimizations</li>
+                <li>Features you can't finish in one day</li>
+                <li>Anything not essential to the demo</li>
+            </ul>
+
+            <h4>The 80/20 Rule:</h4>
+            <p>20% of polish gives 80% of the "wow factor":</p>
+            <ul>
+                <li><strong>First Launch Experience:</strong> Make it smooth. Clear instructions, no crashes.</li>
+                <li><strong>Error Messages:</strong> Friendly, actionable, not technical stack traces.</li>
+                <li><strong>Visual Polish:</strong> Consistent styling, proper spacing, no broken UI.</li>
+                <li><strong>Performance:</strong> Fast enough not to be annoying. Perfection not required.</li>
+            </ul>
+
+            <h4>Creating "Known Issues" Documentation:</h4>
+            <p>Can't finish everything? Document what's missing:</p>
+            <ul>
+                <li>Create a "Known Issues" section in your README</li>
+                <li>List limitations honestly</li>
+                <li>Explain why they're not fixed (time, scope, complexity)</li>
+                <li>Describe how you'd fix them given more time</li>
+            </ul>
+            <p>This shows maturity—you understand trade-offs.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Deployment (60-90 minutes)</h3>
+
+            <p>If your project is deployable (web app, API, bot), get it live.</p>
+
+            <h4>Deployment Checklist:</h4>
+            <ol>
+                <li><strong>Choose Hosting:</strong>
+                    <ul>
+                        <li>Streamlit Cloud (for Streamlit apps)</li>
+                        <li>Vercel (for Next.js, static sites)</li>
+                        <li>Render (for Python backends, Docker)</li>
+                        <li>Railway (for full-stack apps)</li>
+                        <li>Fly.io (for flexible deployments)</li>
+                    </ul>
+                </li>
+                <li><strong>Environment Variables:</strong>
+                    <ul>
+                        <li>Never commit secrets!</li>
+                        <li>Use platform's env var settings</li>
+                        <li>Document required env vars in README</li>
+                    </ul>
+                </li>
+                <li><strong>Dependencies:</strong>
+                    <ul>
+                        <li>Freeze requirements: <code>pip freeze > requirements.txt</code></li>
+                        <li>Specify Python/Node version</li>
+                        <li>Test locally with fresh install</li>
+                    </ul>
+                </li>
+                <li><strong>Health Check:</strong>
+                    <ul>
+                        <li>Does it start without errors?</li>
+                        <li>Can users access the main functionality?</li>
+                        <li>Are errors logged for debugging?</li>
+                    </ul>
+                </li>
+                <li><strong>Domain (Optional):</strong>
+                    <ul>
+                        <li>Most platforms give you a free subdomain</li>
+                        <li>Custom domain is nice but not essential</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Post-Deployment Testing:</h4>
+            <ul>
+                <li>Test from a different device/network</li>
+                <li>Try all major features</li>
+                <li>Verify error handling works in production</li>
+                <li>Check logs for unexpected issues</li>
+                <li>Ask a friend to test (fresh eyes catch more)</li>
+            </ul>
+
+            <h4>If Deployment Isn't Applicable:</h4>
+            <p>For CLI tools, libraries, or local apps:</p>
+            <ul>
+                <li>Create clear installation instructions</li>
+                <li>Test the install process on a fresh machine</li>
+                <li>Record a video demo showing usage</li>
+                <li>Provide example commands and expected output</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Documentation Polish (45 minutes)</h3>
+
+            <h4>README Excellence:</h4>
+            <p>Your README is often the first thing people see. Make it great.</p>
+
+            <p><strong>Essential Sections:</strong></p>
+            <ol>
+                <li><strong>Project Title & Tagline:</strong> What is it? (1 sentence)</li>
+                <li><strong>Demo:</strong> Screenshot, GIF, or video link at the top</li>
+                <li><strong>Features:</strong> Bulleted list of key capabilities</li>
+                <li><strong>Quick Start:</strong> Installation and basic usage (copy-paste friendly)</li>
+                <li><strong>Architecture:</strong> High-level overview (link to ARCHITECTURE.md for details)</li>
+                <li><strong>Usage Examples:</strong> Real scenarios with code samples</li>
+                <li><strong>Configuration:</strong> Environment variables, settings, options</li>
+                <li><strong>Development:</strong> How to contribute, run tests, set up dev environment</li>
+                <li><strong>Known Issues:</strong> Honest about limitations</li>
+                <li><strong>License:</strong> MIT is standard for open source</li>
+                <li><strong>Acknowledgments:</strong> Tools, libraries, courses that helped</li>
+            </ol>
+
+            <h4>Code Documentation:</h4>
+            <ul>
+                <li>Docstrings for all public functions and classes</li>
+                <li>Comments for complex logic</li>
+                <li>Type hints (Python) or TypeScript for clarity</li>
+                <li>README in subdirectories if needed</li>
+            </ul>
+
+            <h4>Visual Enhancements:</h4>
+            <ul>
+                <li>Add badges (build status, version, license)</li>
+                <li>Use formatting (headers, code blocks, lists)</li>
+                <li>Include a table of contents for long READMEs</li>
+                <li>Make it scannable (people skim, not read)</li>
+            </ul>
+        </div>
+
+        <h2>Session 2: Demo Video & Blog Post</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Create a Demo Video (60-90 minutes)</h3>
+
+            <p>A good demo video is worth 1000 words. It proves your project works and shows your communication skills.</p>
+
+            <h4>Demo Video Structure (3-5 minutes):</h4>
+            <ol>
+                <li><strong>Introduction (30 sec):</strong>
+                    <ul>
+                        <li>Your name</li>
+                        <li>Project name and tagline</li>
+                        <li>What problem it solves</li>
+                    </ul>
+                </li>
+                <li><strong>Quick Tour (30 sec):</strong>
+                    <ul>
+                        <li>Show the UI or interface</li>
+                        <li>Point out key components</li>
+                    </ul>
+                </li>
+                <li><strong>Feature Demonstrations (2-3 min):</strong>
+                    <ul>
+                        <li>Show 3-5 core features</li>
+                        <li>Use real, interesting examples</li>
+                        <li>Narrate what you're doing and why</li>
+                    </ul>
+                </li>
+                <li><strong>Technical Highlight (30 sec):</strong>
+                    <ul>
+                        <li>Briefly show code or architecture</li>
+                        <li>Mention interesting technical decisions</li>
+                    </ul>
+                </li>
+                <li><strong>Conclusion (30 sec):</strong>
+                    <ul>
+                        <li>Summarize key features</li>
+                        <li>Mention future improvements</li>
+                        <li>Provide GitHub link</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Recording Tips:</h4>
+            <ul>
+                <li><strong>Tools:</strong> Loom, OBS Studio, QuickTime (Mac), or any screen recorder</li>
+                <li><strong>Audio:</strong> Quiet environment, decent microphone (built-in is okay)</li>
+                <li><strong>Preparation:</strong> Script your narration, practice once before recording</li>
+                <li><strong>Editing:</strong> Cut mistakes, add captions if needed. ScreenToGif for GIFs.</li>
+                <li><strong>Background:</strong> Close unnecessary tabs/apps, clean desktop</li>
+                <li><strong>Pacing:</strong> Speak clearly, not too fast. Pause between sections.</li>
+            </ul>
+
+            <h4>What to Show:</h4>
+            <ul>
+                <li>Happy path (things working smoothly)</li>
+                <li>Interesting edge cases handled well</li>
+                <li>Performance (if impressive)</li>
+                <li>Any "wow" moments</li>
+            </ul>
+
+            <h4>What to Avoid:</h4>
+            <ul>
+                <li>Long setup or installation (mention it exists, don't show it all)</li>
+                <li>Bugs or broken features</li>
+                <li>Rambling or going off-script</li>
+                <li>Apologizing ("sorry this is rough...")</li>
+            </ul>
+
+            <h4>Publishing:</h4>
+            <ul>
+                <li>Upload to YouTube (unlisted if you're shy, public for more reach)</li>
+                <li>Add to LinkedIn post and GitHub README</li>
+                <li>Embed in your blog post</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Write Your Blog Post (2-3 hours)</h3>
+
+            <p>This is your capstone's story. It demonstrates your technical communication skills—crucial for internships and jobs.</p>
+
+            <h4>Blog Post Structure:</h4>
+
+            <p><strong>Title Ideas:</strong></p>
+            <ul>
+                <li>"Building [Project Name]: A Deep Dive into [Technology]"</li>
+                <li>"What I Learned Building an AI-Powered [Tool]"</li>
+                <li>"From Idea to Deployment: Creating [Project]"</li>
+                <li>"How I Used [Technology] to Solve [Problem]"</li>
+            </ul>
+
+            <p><strong>Outline:</strong></p>
+            <ol>
+                <li><strong>Introduction (1-2 paragraphs):</strong>
+                    <ul>
+                        <li>Hook: Why did you build this?</li>
+                        <li>Problem statement</li>
+                        <li>Brief overview of solution</li>
+                    </ul>
+                </li>
+                <li><strong>Architecture & Design (2-3 paragraphs):</strong>
+                    <ul>
+                        <li>High-level architecture diagram</li>
+                        <li>Key technologies and why you chose them</li>
+                        <li>Design decisions and trade-offs</li>
+                    </ul>
+                </li>
+                <li><strong>Implementation Highlights (3-4 paragraphs):</strong>
+                    <ul>
+                        <li>Walk through 2-3 interesting features</li>
+                        <li>Include code snippets (not too much)</li>
+                        <li>Explain challenges and how you solved them</li>
+                    </ul>
+                </li>
+                <li><strong>Results & Demo (1 paragraph + video):</strong>
+                    <ul>
+                        <li>Embed your demo video</li>
+                        <li>Screenshots of key features</li>
+                        <li>Metrics if relevant (speed, accuracy, etc.)</li>
+                    </ul>
+                </li>
+                <li><strong>Lessons Learned (2-3 paragraphs):</strong>
+                    <ul>
+                        <li>Technical lessons (what worked, what didn't)</li>
+                        <li>Process lessons (planning, time management)</li>
+                        <li>What you'd do differently next time</li>
+                    </ul>
+                </li>
+                <li><strong>Future Improvements (1 paragraph):</strong>
+                    <ul>
+                        <li>Features you'd add given more time</li>
+                        <li>Scalability considerations</li>
+                        <li>How others could contribute</li>
+                    </ul>
+                </li>
+                <li><strong>Conclusion (1 paragraph):</strong>
+                    <ul>
+                        <li>Summarize what you built</li>
+                        <li>Link to GitHub, live demo, video</li>
+                        <li>Call to action (try it, contribute, provide feedback)</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Writing Tips:</h4>
+            <ul>
+                <li><strong>Show, don't just tell:</strong> Use code snippets, diagrams, screenshots</li>
+                <li><strong>Be specific:</strong> "Reduced latency by 200ms" > "Made it faster"</li>
+                <li><strong>Be honest:</strong> Discuss failures and pivots, not just successes</li>
+                <li><strong>Target audience:</strong> Write for other developers at your level</li>
+                <li><strong>Edit ruthlessly:</strong> Cut fluff, keep it tight and engaging</li>
+                <li><strong>Format well:</strong> Use headers, lists, code blocks, images</li>
+            </ul>
+
+            <h4>Where to Publish:</h4>
+            <ul>
+                <li><strong>Dev.to:</strong> Developer-focused, good community, easy to use</li>
+                <li><strong>Medium:</strong> Broader audience, clean design</li>
+                <li><strong>Hashnode:</strong> Blogging platform for developers</li>
+                <li><strong>Personal blog:</strong> If you have one (bonus points!)</li>
+            </ul>
+
+            <p>Publish on at least one platform, share on LinkedIn and Twitter.</p>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Finalize Your Capstone:</strong>
+                    <ul>
+                        <li>All core features working</li>
+                        <li>Deployed or installable</li>
+                        <li>No critical bugs</li>
+                        <li>Documentation complete</li>
+                    </ul>
+                </li>
+                <li><strong>Publish Your Demo Video:</strong>
+                    <ul>
+                        <li>Record, edit, and upload</li>
+                        <li>Add to README and LinkedIn</li>
+                        <li>Verify it's accessible and watchable</li>
+                    </ul>
+                </li>
+                <li><strong>Publish Your Blog Post:</strong>
+                    <ul>
+                        <li>Write, edit, and publish</li>
+                        <li>Include code, diagrams, video</li>
+                        <li>Share on social media</li>
+                        <li>Engage with comments/feedback</li>
+                    </ul>
+                </li>
+                <li><strong>Update Your Portfolio:</strong>
+                    <ul>
+                        <li>Add capstone to your personal website or GitHub profile</li>
+                        <li>Pin the repo on GitHub</li>
+                        <li>Update LinkedIn "Projects" section</li>
+                        <li>Add to resume</li>
+                    </ul>
+                </li>
+                <li><strong>Collect Your Anthropic Certificates:</strong>
+                    <ul>
+                        <li>Verify you have all 9-10 course certificates</li>
+                        <li>Add "Certifications" section to LinkedIn</li>
+                        <li>List all certificates with completion dates</li>
+                        <li>This is real evidence of your skills</li>
+                    </ul>
+                </li>
+                <li><strong>Prepare Your Capstone Presentation:</strong>
+                    <ul>
+                        <li>5-minute presentation for next week</li>
+                        <li>Slides or demo (your choice)</li>
+                        <li>Practice out loud at least twice</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Polish makes the difference</strong> - Working code + good docs + demo = portfolio piece</li>
+            <li><strong>Documentation is a skill</strong> - Technical writing is as important as coding</li>
+            <li><strong>Demo videos prove it works</strong> - Show, don't just tell</li>
+            <li><strong>Blog posts demonstrate communication</strong> - Employers value clear technical communication</li>
+            <li><strong>Deployment shows follow-through</strong> - Anyone can build locally; shipping is harder</li>
+            <li><strong>Certificates are credentials</strong> - Don't underestimate their value on LinkedIn</li>
+            <li><strong>Known issues are okay</strong> - Honesty about limitations shows maturity</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 12</h3>
+            <p>Final week! You'll review and polish your resume, prepare for technical interviews, practice your capstone demo, and have a demo day where you present your work. This week is about taking everything you've built and learned and packaging it for internship applications and interviews. You're almost there!</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week11-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 11 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 11 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

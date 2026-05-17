@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 8: Agents and OpenClaw - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .warning-box {
+            background: rgba(220, 38, 38, 0.15);
+            border: 2px solid #dc2626;
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+        }
+
+        .warning-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ef4444;
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 8</h1>
+            <p class="subtitle">Agents and OpenClaw</p>
+            <p class="meta">Month 2: Build Real Apps</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 8 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete AI Capabilities and Limitations course</li>
+                <li>Understand what agents are and how they work</li>
+                <li>Learn the think-act-observe loop</li>
+                <li>Build a simple agent from scratch (50 lines)</li>
+                <li>Deploy OpenClaw production agent framework</li>
+                <li>Connect OpenClaw to Telegram or Discord</li>
+                <li>Write a custom skill for OpenClaw</li>
+                <li>Understand agent security and permissions</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: What Is an Agent? -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>What Is an Agent?</h2>
+            <div class="highlight">
+                <h3>Definition</h3>
+                <p>An agent is an AI system that can perceive its environment, make decisions, and take actions to achieve goals - autonomously and iteratively.</p>
+            </div>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Agents vs. Tools</h3>
+                    <ul>
+                        <li><strong>Tool:</strong> Human-in-the-loop</li>
+                        <li>Step-by-step guidance</li>
+                        <li>Requires approval</li>
+                        <li>Example: Claude Code</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Agent Characteristics</h3>
+                    <ul>
+                        <li><strong>Agent:</strong> Autonomous</li>
+                        <li>Multi-step execution</li>
+                        <li>Minimal human intervention</li>
+                        <li>Goal-driven behavior</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Think-Act-Observe Loop -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>The Think-Act-Observe Loop</h2>
+            <div class="framework">
+                <div class="framework-item">
+                    <div class="icon">🧠</div>
+                    <h4>Think</h4>
+                    <p>Analyze current state and decide what to do next</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">⚡</div>
+                    <h4>Act</h4>
+                    <p>Execute an action: call API, run command, write file</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">👁️</div>
+                    <h4>Observe</h4>
+                    <p>See the results and update understanding</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>The Loop Continues</h3>
+                <p>Repeat the cycle until the goal is achieved or a stopping condition is met. This pattern is fundamental to all agent architectures.</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Agent Types -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Types of Agents</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>ReAct (Reason + Act)</h3>
+                    <p>Explains reasoning before each action. Transparent decision-making.</p>
+                </div>
+                <div class="card">
+                    <h3>Plan-and-Execute</h3>
+                    <p>Creates full plan upfront, then executes step-by-step.</p>
+                </div>
+                <div class="card">
+                    <h3>Reflexive</h3>
+                    <p>Reacts to environment without explicit planning. Fast responses.</p>
+                </div>
+                <div class="card">
+                    <h3>Hierarchical</h3>
+                    <p>Multiple agents with different roles working together.</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Real-world examples: Code debugging bots, customer support automation, research assistants, DevOps automation, personal assistants</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Build a Minimal Agent -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Project: Web Search Research Agent</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Required Tools</h3>
+                    <ul>
+                        <li><code>search()</code> - Web search</li>
+                        <li><code>scrape()</code> - Fetch webpage</li>
+                        <li><code>answer()</code> - Return result</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Agent Loop</h3>
+                    <ul>
+                        <li>Call LLM with tools</li>
+                        <li>Parse tool choice</li>
+                        <li>Execute tool</li>
+                        <li>Add result to history</li>
+                        <li>Repeat until done</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Implementation: ~50 Lines of Code</h3>
+                <p>Define tools, implement agent loop, add safety limits (max iterations, timeout), log all actions. Simple but functional!</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Agent Failure Modes -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Common Agent Failures & Debugging</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Failure Modes</h3>
+                    <ul>
+                        <li>Looping: Repeats same action</li>
+                        <li>Hallucination: Claims false actions</li>
+                        <li>Tool Misuse: Wrong tool/args</li>
+                        <li>Premature Completion</li>
+                        <li>Excessive Steps</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Debugging Techniques</h3>
+                    <ul>
+                        <li>Log every LLM call</li>
+                        <li>Add step numbers</li>
+                        <li>Print agent reasoning</li>
+                        <li>Inspect failing cases</li>
+                        <li>Add assertions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Improvement Ideas</h3>
+                <p>Add reflection step, implement memory, track costs, better stopping conditions</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Introduction to OpenClaw -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>OpenClaw: Production Agent Framework</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>Multi-platform support</li>
+                        <li>Modular skill system</li>
+                        <li>Memory management</li>
+                        <li>Security & sandboxing</li>
+                        <li>Monitoring & alerts</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Platforms</h3>
+                    <ul>
+                        <li>Telegram</li>
+                        <li>Discord</li>
+                        <li>Slack</li>
+                        <li>Web interface</li>
+                        <li>API access</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Your Agent vs OpenClaw</h3>
+                <p>Both use the same think-act-observe loop. Your agent: educational, simple, 50 lines. OpenClaw: production-grade, scalable, thousands of lines with robustness.</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: OpenClaw Deployment -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Deploying OpenClaw</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Clone and Install</h4>
+                    <p>Clone repository, install dependencies, configure environment variables</p>
+                </div>
+                <div class="step">
+                    <h4>2. Connect to Platform</h4>
+                    <p>Create bot account (Telegram/Discord), get API token, configure OpenClaw</p>
+                </div>
+                <div class="step">
+                    <h4>3. Configure Permissions</h4>
+                    <p>Define what the agent can do, what requires approval, what's forbidden</p>
+                </div>
+                <div class="step">
+                    <h4>4. Test Basic Functionality</h4>
+                    <p>Send messages, verify responses, test simple commands and skills</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Custom OpenClaw Skills -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Writing Custom Skills</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Skill Ideas</h3>
+                    <ul>
+                        <li>GitHub integration</li>
+                        <li>Note taker</li>
+                        <li>Daily briefing</li>
+                        <li>Code runner</li>
+                        <li>Flashcard quiz</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Implementation</h3>
+                    <ul>
+                        <li>Create skill file</li>
+                        <li>Define capabilities</li>
+                        <li>Write tool handlers</li>
+                        <li>Register in config</li>
+                        <li>Test thoroughly</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Example: GitHub Issue Creator</h3>
+                <p>Tool: <code>create_github_issue(repo, title, body)</code><br>Usage: "Create an issue in my-repo for adding tests to the API"</p>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Agent Security -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Agent Security & Blast Radius</h2>
+            <div class="warning-box">
+                <h3>Critical Security Principles</h3>
+                <ul class="big-list">
+                    <li><strong>Least Privilege:</strong> Grant minimal permissions needed</li>
+                    <li><strong>Human-in-the-Loop:</strong> Require approval for destructive actions</li>
+                    <li><strong>Audit Logging:</strong> Log every action for accountability</li>
+                    <li><strong>Rate Limiting:</strong> Prevent runaway loops</li>
+                    <li><strong>Sandboxing:</strong> Isolate agent execution</li>
+                </ul>
+            </div>
+            <div class="highlight">
+                <h3>Think About Blast Radius</h3>
+                <p>Always ask: "If this agent were fully compromised, what's the worst that could happen?" Design permissions accordingly.</p>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 8 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Agents Are Autonomous AI Systems</h4>
+                    <p>They think, act, and observe in loops without constant human oversight</p>
+                </div>
+                <div class="step">
+                    <h4>Think-Act-Observe Is Fundamental</h4>
+                    <p>This loop applies to all agent architectures from simple to complex</p>
+                </div>
+                <div class="step">
+                    <h4>Agents Are Powerful But Risky</h4>
+                    <p>Security, permissions, and blast radius thinking are critical</p>
+                </div>
+                <div class="step">
+                    <h4>Building from Scratch Teaches Internals</h4>
+                    <p>But production frameworks like OpenClaw are better for real use</p>
+                </div>
+                <div class="step">
+                    <h4>Agent Design Is About Trade-Offs</h4>
+                    <p>Autonomy vs. safety, speed vs. accuracy, cost vs. thoroughness</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Congratulations on completing Month 2! Next: Month 3 - Capstone & Portfolio</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

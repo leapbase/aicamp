@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 2 Quiz: Prompting & API Fundamentals - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 2 Quiz: Prompting & API Fundamentals</h1>
+            <p class="quiz-info">Test your knowledge of prompting techniques, system prompts, and structured output</p>
+        </header>
+
+        <a href="week2.html" class="back-link">← Back to Week 2 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What is "few-shot prompting"?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Using as few words as possible in your prompt</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Providing examples in your prompt to show the format and handle edge cases</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Making only a few API calls to save money</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Using multiple AI models simultaneously</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">What is the main purpose of a system prompt?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">To test if the API is working</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">To set rules, personality, and behavior that influence all responses in a conversation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">To authenticate with the API</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">To specify which model version to use</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">Why is structured output (JSON mode or function calling) better than free-form text for production applications?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">It's faster to generate</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">It's easier to parse reliably, has consistent format, and integrates well with applications</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">It uses fewer tokens</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">It's required by all AI APIs</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">In the chain-of-thought prompting technique, what do you ask the AI to do?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">Give the answer as quickly as possible</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">Think through the problem step-by-step and show reasoning before giving the final answer</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">Connect to external databases</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">Use multiple AI models in a chain</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">What is the main advantage of function calling (tool use) in AI applications?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">It makes the AI run faster</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">It gives LLMs the ability to invoke external functions and APIs, extending their capabilities beyond text generation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">It reduces token costs</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">It eliminates the need for prompts</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">When writing an effective prompt, which approach is generally better?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">Vague instructions to let the AI be creative</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">Specific, direct instructions with clear requirements and constraints</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">Using technical jargon to sound professional</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">Asking multiple questions at once</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">In the job posting parser project, what is the main benefit of using JSON mode or function calling?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">The AI can parse longer job postings</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">You get reliable, structured data that can be directly inserted into a database</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">It's free to use</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">It automatically validates the job posting</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">What does "role prompting" mean in the context of AI prompts?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">Assigning the AI a specific role or expertise (e.g., "You are an expert Python developer") to activate relevant training data</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">Defining user roles and permissions in your application</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Using role-based access control for API keys</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Switching between different AI models based on the task</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'a'
+        };
+
+        const explanations = {
+            q1: "Few-shot prompting involves providing examples in your prompt to demonstrate the desired format and handle edge cases. This helps the AI understand exactly what you want.",
+            q2: "System prompts are set once at the conversation start and control the AI's personality, tone, expertise level, output format, and safety guardrails throughout the conversation.",
+            q3: "Structured output like JSON mode and function calling provides reliable, parseable data with consistent formatting, making it much easier to integrate AI outputs into production applications.",
+            q4: "Chain-of-thought prompting asks the AI to 'think out loud' by showing its reasoning step-by-step before giving the final answer. This improves accuracy on complex reasoning tasks.",
+            q5: "Function calling is foundational to advanced AI applications because it allows LLMs to invoke external functions, APIs, and tools, extending their capabilities far beyond text generation. This is how you build AI agents.",
+            q6: "Specific, direct instructions with clear requirements eliminate ambiguity and produce better results. Vague prompts lead to vague outputs.",
+            q7: "Using JSON mode or function calling for the job posting parser ensures you get structured data in a predictable format that can be easily validated and inserted into databases.",
+            q8: "Role prompting assigns the AI a specific expertise or role (like 'expert Python developer') which helps activate relevant training data and sets appropriate tone and depth for responses."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You have a solid understanding of Week 2 concepts.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

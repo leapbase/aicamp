@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 4: OpenAI Codex - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        /* Content slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Big list */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Code style */
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        /* Framework box */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 4</h1>
+            <p class="subtitle">OpenAI Codex (CLI + Cloud)</p>
+            <p class="meta">Month 1: Get Fluent with AI Tools</p>
+            <p class="meta" style="margin-top: 50px;">Final Week of Foundation Phase</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 4 Objectives</h2>
+            <ul class="big-list">
+                <li>Finish Claude Code in Action course</li>
+                <li>Learn OpenAI's Codex CLI tool and cloud-based coding assistant</li>
+                <li>Build a comparison matrix of AI coding tools</li>
+                <li>Delegate a complex, multi-hour task to an AI agent</li>
+                <li>Complete and present Project 1: a polished CLI tool or web app</li>
+                <li>Understand when to use each AI coding tool</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: End of Month 1 -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>End of Month 1 Milestone</h2>
+            <div class="highlight">
+                <h3>From Zero to Building Real Applications</h3>
+                <p style="margin-top: 30px;">This week marks the end of your first month. You've gone from zero to building real applications with AI. You can call APIs, write effective prompts, use Claude Code, and contribute to open source. Next month, you'll build increasingly complex systems.</p>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>Skills Acquired</h3>
+                    <ul>
+                        <li>API integration mastery</li>
+                        <li>Effective prompting techniques</li>
+                        <li>AI coding tool proficiency</li>
+                        <li>Open-source contribution</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>What's Next</h3>
+                    <ul>
+                        <li>Multi-agent systems</li>
+                        <li>RAG chatbots</li>
+                        <li>MCP servers</li>
+                        <li>Production deployment</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: OpenAI Codex CLI -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 1: OpenAI Codex CLI</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Installation & Configuration</h4>
+                    <p>Follow OpenAI's installation instructions, configure with API key, test basic functionality</p>
+                </div>
+                <div class="step">
+                    <h4>2. Learn Core Commands</h4>
+                    <p>Code generation and editing, project context management, file navigation and search</p>
+                </div>
+                <div class="step">
+                    <h4>3. Try Common Workflows</h4>
+                    <p>Adding features, debugging errors, refactoring for readability, writing tests</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Hands-On Exercise</h3>
+                <p>Use Codex CLI to accomplish the same tasks you did with Claude Code in Week 3. Take notes on differences in UX, quality, speed, and context handling.</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Comparison Matrix -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Build a Comparison Matrix</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Tools to Compare</h3>
+                    <ul>
+                        <li>Claude Code</li>
+                        <li>OpenAI Codex CLI</li>
+                        <li>GitHub Copilot</li>
+                        <li>Raw API calls</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Evaluation Dimensions</h3>
+                    <ul>
+                        <li>Setup complexity</li>
+                        <li>Code quality</li>
+                        <li>Context awareness</li>
+                        <li>Speed and cost</li>
+                        <li>Best use cases</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 50px;">
+                <h3>Why This Matters</h3>
+                <p>In interviews, you'll be asked "What AI tools do you use?" A nuanced answer with specific examples shows depth. This comparison matrix is your cheat sheet for thoughtful responses.</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Deliverable -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Comparison Matrix Deliverable</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Format</h3>
+                    <p>Create a Markdown document or spreadsheet with your findings</p>
+                    <ul>
+                        <li>Ratings (1-5 stars) for each dimension</li>
+                        <li>Specific examples supporting your ratings</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Content</h3>
+                    <p>Include detailed analysis and recommendations</p>
+                    <ul>
+                        <li>Recommendations for when to use each tool</li>
+                        <li>Personal preferences and why</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 40px;">
+                <h3>Professional Differentiation</h3>
+                <p>Generic answers like "I use ChatGPT" don't differentiate you. Comparing tools with specific examples shows depth and experience.</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Codex Cloud -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 2: OpenAI Codex Cloud</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Key Differences from CLI</h3>
+                    <ul>
+                        <li>Longer context windows</li>
+                        <li>Persistent sessions</li>
+                        <li>Async execution</li>
+                        <li>Collaboration features</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Use Cases</h3>
+                    <ul>
+                        <li>CLI: Quick edits, tight feedback loop</li>
+                        <li>Cloud: Large refactors, research tasks, complex features</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="steps" style="margin-top: 40px;">
+                <div class="step">
+                    <h4>Setting Up a Cloud Session</h4>
+                    <p>Create project in web interface, upload or connect repository, configure context and guidelines, test with simple task</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Complex Task Delegation -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Delegate a Complex Task</h2>
+            <div class="highlight">
+                <h3>Your First True Task Delegation</h3>
+                <p>Give the AI a substantial task and let it work relatively independently. This might take 30-60 minutes of AI work.</p>
+            </div>
+            <div class="card-grid" style="margin-top: 40px;">
+                <div class="card">
+                    <h3>Option 1: Full-Stack Web App</h3>
+                    <ul>
+                        <li>Simple todo app</li>
+                        <li>React or Vue frontend</li>
+                        <li>Flask or Express backend</li>
+                        <li>SQLite or MongoDB</li>
+                        <li>Basic authentication</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Option 2: Data Analysis Pipeline</h3>
+                    <ul>
+                        <li>Fetch from public API</li>
+                        <li>Clean and transform data</li>
+                        <li>Generate visualizations</li>
+                        <li>Create daily report</li>
+                        <li>Schedule with cron</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Delegation Strategy -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Effective Delegation Strategy</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Write a Detailed Spec</h4>
+                    <p>Describe the project in 2-3 paragraphs: features, tech stack preferences, edge cases, testing requirements</p>
+                </div>
+                <div class="step">
+                    <h4>2. Set Checkpoints</h4>
+                    <p>"After completing the basic structure, show me the code for review before proceeding"</p>
+                </div>
+                <div class="step">
+                    <h4>3. Let It Work</h4>
+                    <p>Give the AI time to generate code without constant intervention</p>
+                </div>
+                <div class="step">
+                    <h4>4. Review & Iterate</h4>
+                    <p>Test the result. What works? What doesn't? Provide feedback and iterate</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Tool Selection Framework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>When to Use Each Tool</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>For Quick Tasks</h3>
+                    <p>Under 30 minutes</p>
+                    <ul>
+                        <li>What's the fastest tool?</li>
+                        <li>Does quality matter, or is speed paramount?</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>For Learning</h3>
+                    <p>Understanding code better</p>
+                    <ul>
+                        <li>Which tool explains reasoning most clearly?</li>
+                        <li>Which helps you learn?</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>For Production Code</h3>
+                    <p>Maintainable and secure</p>
+                    <ul>
+                        <li>Which produces the most maintainable code?</li>
+                        <li>Best for security-critical code?</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>For Collaboration</h3>
+                    <p>Team settings</p>
+                    <ul>
+                        <li>Which tools work best in teams?</li>
+                        <li>How to share AI-generated code?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Project 1 Due: Portfolio Quality</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Functionality & Code</h3>
+                    <ul>
+                        <li>All features work without errors</li>
+                        <li>Edge cases handled gracefully</li>
+                        <li>Clean, readable code</li>
+                        <li>Consistent style and formatting</li>
+                        <li>No obvious bugs or security issues</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Documentation & Testing</h3>
+                    <ul>
+                        <li>Comprehensive README with screenshots</li>
+                        <li>Installation and setup instructions</li>
+                        <li>Architecture overview</li>
+                        <li>Manual and automated testing</li>
+                        <li>Reflection on development process</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 40px;">
+                <h3>Additional Tasks</h3>
+                <p>Finalize comparison matrix, prepare 5-minute presentation, update GitHub profile</p>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Looking Ahead -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>No Single Tool is Best</h4>
+                    <p>Each AI coding tool has strengths and ideal use cases</p>
+                </div>
+                <div class="step">
+                    <h4>Delegation Requires Clear Specs</h4>
+                    <p>The better your initial description, the better the AI's output</p>
+                </div>
+                <div class="step">
+                    <h4>Comparison Builds Expertise</h4>
+                    <p>Using multiple tools makes you fluent in AI-assisted development</p>
+                </div>
+                <div class="step">
+                    <h4>Polish Matters for Portfolios</h4>
+                    <p>A working prototype isn't enough; make it presentable with good documentation</p>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 30px;">
+                <h3>Looking Ahead to Month 2</h3>
+                <p>You're now fluent with AI tools and have built real applications. Month 2 focuses on complex systems: Skills & Subagents, RAG chatbots, MCP servers, and agents. The pace accelerates—you're ready for it.</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

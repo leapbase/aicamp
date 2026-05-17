@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 9: Capstone Kickoff - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .project-card {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .project-card h4 {
+            color: #15803d;
+            margin-top: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 9: Capstone Kickoff</h1>
+            <p class="week-meta">Month 3: Capstone & Portfolio | Project Planning</p>
+            <a href="week9-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Choose your capstone project direction</li>
+                <li>Define clear, achievable scope</li>
+                <li>Create detailed architecture design</li>
+                <li>Set up project repository and structure</li>
+                <li>Establish weekly milestones</li>
+                <li>Begin implementation of core functionality</li>
+                <li>Optional: Complete Model Context Protocol: Advanced Topics course</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Optional, Based on Project)</h2>
+
+        <h3>Course: Model Context Protocol: Advanced Topics</h3>
+        <p>Only complete this if your capstone involves MCP. Otherwise, focus on building.</p>
+
+        <h4>What's Covered:</h4>
+        <ul>
+            <li>Advanced MCP patterns and architectures</li>
+            <li>Performance optimization</li>
+            <li>Security hardening</li>
+            <li>Multi-server coordination</li>
+            <li>Production deployment strategies</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 90-120 minutes</p>
+
+        <div class="highlight-box">
+            <h3>Capstone Philosophy</h3>
+            <p>Your capstone should demonstrate mastery of what you've learned. It should be impressive enough to discuss in interviews, polished enough to put on your resume, and useful enough that you (or others) would actually use it. Quality over quantity—a well-executed, focused project beats an ambitious, half-finished one.</p>
+        </div>
+
+        <h2>Session 1: Finalize Capstone Scope</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Project Direction Brainstorm (45 minutes)</h3>
+
+            <h4>Suggested Directions (Based on Camp Skills):</h4>
+
+            <div class="project-card">
+                <h4>Direction 1: Custom MCP Server</h4>
+                <p>Build a production-ready MCP server that solves a real problem.</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Academic paper search and summarization (arXiv + PDF processing)</li>
+                    <li>Personal knowledge management (Notion/Obsidian connector)</li>
+                    <li>Development environment manager (Docker + package managers)</li>
+                    <li>Cloud resource manager (AWS/GCP connector with safe operations)</li>
+                </ul>
+                <p><strong>Why this direction:</strong> MCP is new and resume-valuable. A well-built server could be used by others.</p>
+            </div>
+
+            <div class="project-card">
+                <h4>Direction 2: Claude Code Skills Pack</h4>
+                <p>Create a cohesive set of Skills for a specific domain.</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Frontend development pack (component generator, style optimizer, a11y checker)</li>
+                    <li>Data science pack (EDA generator, visualization creator, model evaluator)</li>
+                    <li>DevOps pack (deployment checker, config validator, monitoring setup)</li>
+                    <li>Technical writing pack (documentation generator, style guide enforcer, example creator)</li>
+                </ul>
+                <p><strong>Why this direction:</strong> Shows deep understanding of a domain. Immediately useful to other developers.</p>
+            </div>
+
+            <div class="project-card">
+                <h4>Direction 3: Polished RAG Application</h4>
+                <p>Build a production-grade RAG app with advanced features.</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Course material study assistant (upload syllabi, textbooks, notes)</li>
+                    <li>Codebase documentation chat (index an OSS repo, answer architecture questions)</li>
+                    <li>Research paper analyzer (upload papers, chat about methodology, findings)</li>
+                    <li>Company knowledge base (internal docs, policies, FAQs)</li>
+                </ul>
+                <p><strong>Why this direction:</strong> RAG is highly practical. Good opportunity for thoughtful UX.</p>
+            </div>
+
+            <div class="project-card">
+                <h4>Direction 4: OpenClaw Skill Suite</h4>
+                <p>Create a collection of powerful, integrated skills for OpenClaw.</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Personal productivity suite (calendar, tasks, email, notes)</li>
+                    <li>Developer workflow automation (GitHub, CI/CD, documentation)</li>
+                    <li>Content creation suite (research, draft, edit, publish)</li>
+                    <li>Learning companion (flashcards, quizzes, spaced repetition)</li>
+                </ul>
+                <p><strong>Why this direction:</strong> Shows agent orchestration skills. Practical daily-use tool.</p>
+            </div>
+
+            <div class="project-card">
+                <h4>Direction 5: AI Feature for Open Source Project</h4>
+                <p>Add substantial AI capability to an existing OSS project.</p>
+                <p><strong>Examples:</strong></p>
+                <ul>
+                    <li>Add AI-powered search to a docs site</li>
+                    <li>Build an AI code review bot for a repo</li>
+                    <li>Create AI-assisted issue triage system</li>
+                    <li>Add natural language query to a data tool</li>
+                </ul>
+                <p><strong>Why this direction:</strong> Shows collaboration skills. Real-world impact if merged.</p>
+            </div>
+
+            <h4>Choosing Your Direction:</h4>
+            <p>Consider:</p>
+            <ul>
+                <li><strong>Your interests:</strong> What are you most excited about?</li>
+                <li><strong>Skills showcase:</strong> What demonstrates your breadth best?</li>
+                <li><strong>Usefulness:</strong> Would you or others actually use this?</li>
+                <li><strong>Uniqueness:</strong> Does this differentiate you?</li>
+                <li><strong>Feasibility:</strong> Can you complete it in 3 weeks?</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Scope Definition (60 minutes)</h3>
+
+            <p>Once you've chosen a direction, define exactly what you'll build.</p>
+
+            <h4>Project Specification Template:</h4>
+            <ol>
+                <li><strong>Project Name & Tagline:</strong> What is it in one sentence?</li>
+                <li><strong>Problem Statement:</strong> What problem does this solve? Who has this problem?</li>
+                <li><strong>Core Features (Must-Have):</strong> List 3-5 essential features. These define the MVP.</li>
+                <li><strong>Nice-to-Have Features:</strong> Additional features if time permits.</li>
+                <li><strong>Tech Stack:</strong> Languages, frameworks, APIs, databases.</li>
+                <li><strong>Success Criteria:</strong> How do you know it works? What does "done" look like?</li>
+                <li><strong>Non-Goals:</strong> Explicitly state what you won't build (prevents scope creep).</li>
+            </ol>
+
+            <h4>Example Specification:</h4>
+            <div class="example-box">
+                <p><strong>Project:</strong> ArXiv Research Assistant MCP Server</p>
+                <p><strong>Problem:</strong> Researchers spend hours manually searching arXiv for relevant papers and extracting key information.</p>
+                <p><strong>Core Features:</strong></p>
+                <ul>
+                    <li>Search arXiv by keywords, authors, categories</li>
+                    <li>Download and parse PDF papers</li>
+                    <li>Extract abstract, methodology, key findings</li>
+                    <li>Summarize papers in plain language</li>
+                    <li>Compare multiple papers on same topic</li>
+                </ul>
+                <p><strong>Nice-to-Have:</strong></p>
+                <ul>
+                    <li>Citation network visualization</li>
+                    <li>Save research collections</li>
+                    <li>Alert on new papers matching criteria</li>
+                </ul>
+                <p><strong>Tech Stack:</strong> Python, MCP SDK, arXiv API, PyPDF2, Claude API</p>
+                <p><strong>Success Criteria:</strong> Can find and summarize relevant papers 5x faster than manual search.</p>
+                <p><strong>Non-Goals:</strong> Not building a paper recommendation system, not analyzing paper quality, not handling non-arXiv sources.</p>
+            </div>
+
+            <h4>Validate Your Scope:</h4>
+            <p>Ask yourself:</p>
+            <ul>
+                <li>Can I describe this to someone in 30 seconds?</li>
+                <li>Can I realistically build this in 3 weeks?</li>
+                <li>Would I use this myself?</li>
+                <li>Does this showcase what I learned at camp?</li>
+                <li>Is this impressive but not overwhelming?</li>
+            </ul>
+        </div>
+
+        <h2>Session 2: Architecture & Setup</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Architecture Design (60 minutes)</h3>
+
+            <h4>Create Your Architecture Document:</h4>
+
+            <p><strong>1. System Overview Diagram:</strong></p>
+            <ul>
+                <li>Draw the major components</li>
+                <li>Show data flow</li>
+                <li>Identify external dependencies</li>
+            </ul>
+
+            <p><strong>2. Component Breakdown:</strong></p>
+            <p>For each major component, document:</p>
+            <ul>
+                <li>Purpose and responsibilities</li>
+                <li>Input and output</li>
+                <li>Dependencies</li>
+                <li>Key functions or classes</li>
+            </ul>
+
+            <p><strong>3. Data Models:</strong></p>
+            <ul>
+                <li>What data structures will you use?</li>
+                <li>Database schema (if applicable)</li>
+                <li>API contracts</li>
+            </ul>
+
+            <p><strong>4. External Integrations:</strong></p>
+            <ul>
+                <li>List all APIs you'll call</li>
+                <li>Authentication methods</li>
+                <li>Rate limits and costs</li>
+                <li>Fallback strategies</li>
+            </ul>
+
+            <p><strong>5. Error Handling Strategy:</strong></p>
+            <ul>
+                <li>What can go wrong?</li>
+                <li>How will you handle failures?</li>
+                <li>Retry logic</li>
+                <li>User-facing error messages</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Why Architecture Matters</h3>
+                <p>In interviews, you'll be asked to explain your capstone's design. A clear architecture shows engineering maturity. It also prevents you from getting stuck mid-build because you didn't think through a critical integration.</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Repository Setup (45 minutes)</h3>
+
+            <h4>Create Professional Project Structure:</h4>
+
+            <p><strong>Essential Files:</strong></p>
+            <ul>
+                <li><code>README.md</code> - Comprehensive overview (start early, update often)</li>
+                <li><code>ARCHITECTURE.md</code> - Your design document</li>
+                <li><code>requirements.txt</code> or <code>package.json</code> - Dependencies</li>
+                <li><code>.gitignore</code> - Don't commit secrets or build artifacts</li>
+                <li><code>.env.example</code> - Template for environment variables</li>
+                <li><code>LICENSE</code> - Choose an open source license (MIT is simple)</li>
+                <li><code>CONTRIBUTING.md</code> (optional) - If you want contributions</li>
+            </ul>
+
+            <p><strong>Directory Structure Example:</strong></p>
+            <div class="example-box">
+                <code>
+                my-capstone/<br>
+                ├── src/ (or lib/)<br>
+                │   ├── core/ (main logic)<br>
+                │   ├── api/ (external integrations)<br>
+                │   ├── utils/ (helpers)<br>
+                │   └── config/ (configuration)<br>
+                ├── tests/<br>
+                ├── docs/ (additional documentation)<br>
+                ├── examples/ (usage examples)<br>
+                ├── scripts/ (setup, deployment)<br>
+                ├── .github/workflows/ (CI/CD)<br>
+                └── README.md<br>
+                </code>
+            </div>
+
+            <h4>Set Up Development Workflow:</h4>
+            <ul>
+                <li><strong>Version Control:</strong> Initialize git, create GitHub repo</li>
+                <li><strong>Branches:</strong> Work on feature branches, merge to main</li>
+                <li><strong>Commits:</strong> Write clear commit messages</li>
+                <li><strong>Issues:</strong> Create GitHub issues for each major task</li>
+                <li><strong>CI/CD:</strong> Set up basic GitHub Actions (linting, tests)</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Milestone Planning (30 minutes)</h3>
+
+            <h4>Define Weekly Milestones:</h4>
+
+            <p><strong>Week 9 (This Week):</strong></p>
+            <ul>
+                <li>Complete architecture and setup</li>
+                <li>Implement core data structures</li>
+                <li>Get one end-to-end flow working (minimal but functional)</li>
+            </ul>
+
+            <p><strong>Week 10:</strong></p>
+            <ul>
+                <li>Implement all core features</li>
+                <li>Add error handling</li>
+                <li>Begin testing</li>
+                <li>Start documentation</li>
+            </ul>
+
+            <p><strong>Week 11:</strong></p>
+            <ul>
+                <li>Polish features</li>
+                <li>Complete testing</li>
+                <li>Finish documentation</li>
+                <li>Deploy (if applicable)</li>
+                <li>Create demo video</li>
+            </ul>
+
+            <h4>Break Down Week 9 Tasks:</h4>
+            <p>Create specific, actionable tasks for the next 7 days:</p>
+            <ol>
+                <li>Set up project structure</li>
+                <li>Implement [specific component]</li>
+                <li>Integrate [specific API]</li>
+                <li>Build minimal UI/CLI</li>
+                <li>Get one use case working end-to-end</li>
+            </ol>
+
+            <p>Estimate hours for each task. Be realistic.</p>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Finalize and Document Your Spec:</strong>
+                    <ul>
+                        <li>Complete project specification</li>
+                        <li>Create architecture document with diagrams</li>
+                        <li>Get feedback from mentor/peer</li>
+                        <li>Refine based on feedback</li>
+                    </ul>
+                </li>
+                <li><strong>Set Up Repository:</strong>
+                    <ul>
+                        <li>Create GitHub repo with proper structure</li>
+                        <li>Add all essential files</li>
+                        <li>Write initial README (overview, setup, roadmap)</li>
+                        <li>Create GitHub issues for all major tasks</li>
+                    </ul>
+                </li>
+                <li><strong>Build Core Foundation:</strong>
+                    <ul>
+                        <li>Implement basic project structure</li>
+                        <li>Set up configuration and dependencies</li>
+                        <li>Create core data models</li>
+                        <li>Get one simple flow working (even if incomplete)</li>
+                    </ul>
+                </li>
+                <li><strong>Test Key Integration:</strong>
+                    <ul>
+                        <li>If using an external API, test it works</li>
+                        <li>Verify authentication</li>
+                        <li>Check rate limits and costs</li>
+                        <li>Implement basic error handling</li>
+                    </ul>
+                </li>
+                <li><strong>Daily Progress Updates:</strong>
+                    <ul>
+                        <li>Commit daily with clear messages</li>
+                        <li>Close GitHub issues as you complete tasks</li>
+                        <li>Update project board or milestones</li>
+                        <li>Document blockers immediately</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Scope is critical</strong> - Better to nail a focused project than half-finish an ambitious one</li>
+            <li><strong>Architecture prevents chaos</strong> - An hour of planning saves days of refactoring</li>
+            <li><strong>Start simple, iterate</strong> - Get one thing working end-to-end, then expand</li>
+            <li><strong>Documentation isn't optional</strong> - Start README and architecture docs now, not at the end</li>
+            <li><strong>Milestones create momentum</strong> - Clear weekly goals keep you on track</li>
+            <li><strong>Tools amplify, don't replace</strong> - Use Claude Code heavily, but understand what you're building</li>
+            <li><strong>This is your portfolio piece</strong> - Quality and polish matter. Make it showcase-worthy.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 10</h3>
+            <p>Next week is pure build time. You'll have working sessions and focused development. You'll also make your first open-source contribution during the camp (beyond Week 3). The goal: by end of Week 10, your capstone should be 80% feature-complete.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week9-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 9 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 9 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

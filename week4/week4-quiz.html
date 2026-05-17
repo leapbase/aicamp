@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 4 Quiz: OpenAI Codex (CLI + Cloud) - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 4 Quiz: OpenAI Codex (CLI + Cloud)</h1>
+            <p class="quiz-info">Test your understanding of AI coding tools comparison, CLI vs Cloud, tool selection, and effective delegation</p>
+        </header>
+
+        <a href="week4.html" class="back-link">← Back to Week 4 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What is the end-of-month-1 milestone achievement by Week 4?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Learning only one AI tool</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Building simple scripts only</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Going from zero to building real applications with AI—calling APIs, writing effective prompts, using Claude Code, and contributing to open source</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Completing a college degree</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">Why should you build a comparison matrix of AI coding tools?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">It's required for certification</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">In interviews, a nuanced answer comparing tools with specific examples shows depth; generic answers like "I use ChatGPT" don't differentiate you</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">To prove one tool is always superior</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">Just for personal record keeping</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">What are key evaluation dimensions when comparing AI coding tools?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">Only the price</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">Setup complexity, code quality, context awareness, speed, cost, iteration ease, and best use cases</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">Just the user interface design</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">Only which company made it</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">When should you use OpenAI Codex Cloud vs. CLI?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">Always use Cloud for everything</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">Use CLI for quick edits and local development with tight feedback loops; use Cloud for large refactors, research tasks, and complex features spanning multiple files</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">Never use Cloud, CLI is always better</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">It doesn't matter; they're identical</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">What is a critical step when delegating a complex task to an AI agent?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">Give vague instructions and let AI figure it out</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Write a detailed spec with features, tech stack preferences, edge cases, and testing requirements; set checkpoints for review</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">Never review the output until it's completely done</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Just say "make it work" and walk away</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">What does OpenAI Codex Cloud offer that CLI doesn't?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">Faster execution speed</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">Longer context windows, persistent sessions, async execution, and collaboration features</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">Lower cost</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">Better code quality</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">What is a key requirement for Project 1 (polished CLI tool or web app)?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">It just needs to run once without errors</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">Comprehensive README with screenshots/demo, installation instructions, architecture overview, automated tests, and a reflection on the development process</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">Only the code files, no documentation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">Just upload to GitHub without testing</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">What's a key takeaway about AI tool selection from Week 4?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">One tool is always best for everything</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">No single tool is best for everything—each AI coding tool has strengths and ideal use cases</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Always use the most expensive tool</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Tools don't matter; only the developer matters</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'c',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "By Week 4, you've completed Month 1 and gone from zero to building real applications with AI. You can call APIs, write effective prompts, use Claude Code, and contribute to open source. Next month, you'll build increasingly complex systems.",
+            q2: "In interviews, you'll be asked 'What AI tools do you use?' A nuanced answer comparing tools with specific examples shows depth and differentiation. Generic answers like 'I use ChatGPT' don't stand out. Your comparison matrix becomes your cheat sheet for thoughtful responses.",
+            q3: "When comparing AI coding tools, evaluate: setup complexity (ease of getting started), code quality (suggestion quality), context awareness (project understanding), speed (response latency), cost (pricing/subscriptions), iteration (ease of refinement), and best use cases (when to use each tool).",
+            q4: "Use CLI when you need quick edits, local development, and a tight feedback loop. Use Cloud when handling large refactors, research tasks, complex features spanning multiple files, or when you need longer context windows and persistent sessions.",
+            q5: "Effective delegation requires a detailed spec (2-3 paragraphs) describing features, tech stack preferences, edge cases, and testing requirements. Set checkpoints like 'After completing the basic structure, show me the code for review before proceeding.' Don't let AI work for hours without review.",
+            q6: "OpenAI Codex Cloud offers longer context windows (can handle larger codebases), persistent sessions (maintains state), async execution (work on tasks while you do other things), and collaboration features (share sessions with team members).",
+            q7: "Project 1 requires portfolio-quality work: all features working without errors, clean readable code, comprehensive README with screenshots/demo, installation and setup instructions, architecture overview, automated tests, and a reflection section describing which AI tools you used and your development process.",
+            q8: "No single tool is best for everything. Each AI coding tool has strengths and ideal use cases. Understanding when to use which tool—based on task complexity, speed requirements, quality needs, and context—makes you fluent in AI-assisted development."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You have a solid understanding of Week 4 concepts.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

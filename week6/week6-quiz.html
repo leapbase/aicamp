@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 6 Quiz: Chatbot + RAG - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 6 Quiz: Chatbot + RAG</h1>
+            <p class="quiz-info">Test your understanding of RAG architecture, embeddings, vector databases, Chroma, and building chat-with-docs applications</p>
+        </header>
+
+        <a href="week6.html" class="back-link">← Back to Week 6 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What does RAG stand for and what is its purpose?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Random AI Generation for creating random content</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Retrieval-Augmented Generation, which solves LLM limitations by retrieving relevant documents, augmenting prompts with context, and generating grounded responses</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Rapid Application Generator for faster coding</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Real-time AI Gateway for API management</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">What problems does RAG solve with LLMs?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">Only speed issues</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">Static knowledge (training cutoff date), no access to private data (your documents/company data), and hallucination (making up facts)</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">Just memory limitations</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">Only cost problems</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">What are embeddings in the context of RAG?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">Images embedded in documents</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">Vector representations of text where similar concepts are close together in vector space</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">Database tables</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">CSS styles for text</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">What is the typical RAG implementation process?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">Just send documents directly to LLM</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">Split docs into chunks → Generate embeddings → Store in vector DB → When user asks: embed question, find similar chunks, include in prompt</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">Store everything in SQL database</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">No processing needed</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">Why is streaming important for chatbot UX?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">It's not important; users prefer waiting</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Streaming improves perceived performance—users prefer seeing incremental progress over waiting for complete responses</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">It only reduces costs</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Streaming has no real benefit</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">What is Chroma in the context of Week 6?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">A color scheme for UIs</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">A vector database that's easy to use with no server needed, perfect for storing and querying embeddings</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">A web browser</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">A CSS framework</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">Why is chunk size important in RAG?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">Chunk size doesn't matter at all</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">Too small loses context; too large wastes tokens and dilutes relevance. Finding the right balance (500-1000 tokens) is crucial</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">Always use the largest chunks possible</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">Always use 1-word chunks</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">What's a key principle when building purpose-driven chatbots?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">Make it as generic as possible</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">Purpose-driven chatbots are more valuable—specialized tools stand out while generic assistants are commoditized</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Copy ChatGPT exactly</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Don't focus on specific use cases</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "RAG stands for Retrieval-Augmented Generation. It solves LLM limitations through a three-step process: (1) Retrieve relevant documents or passages, (2) Augment the prompt by adding that context, (3) Generate responses with grounded, factual information.",
+            q2: "RAG solves three major LLM problems: Static knowledge (training data has a cutoff date), No private data access (can't know about your documents, codebase, or company data), and Hallucination (will confidently make up facts when it doesn't know).",
+            q3: "Embeddings are vector representations of text. Similar concepts are close together in vector space—'dog' and 'puppy' have similar embeddings, while 'dog' and 'blockchain' have very different embeddings. This enables semantic search.",
+            q4: "The RAG process: Split documents into chunks → Generate embeddings for each chunk → Store embeddings in a vector database → When user asks a question: embed the question, find chunks with similar embeddings (cosine similarity), include those chunks in the prompt.",
+            q5: "Streaming displays tokens as they arrive (not all at once), providing better perceived performance. Users prefer seeing incremental progress over waiting for complete responses. Users can also stop generation mid-stream if needed.",
+            q6: "Chroma is a vector database that's easy to use with no server needed, making it perfect for RAG applications. It stores embeddings with metadata and enables efficient similarity search to retrieve relevant document chunks.",
+            q7: "Chunk size significantly impacts RAG performance. Too small chunks lose context and coherence. Too large chunks waste tokens and dilute relevance. The typical sweet spot is 500-1000 tokens with some overlap to maintain context continuity.",
+            q8: "Purpose-driven chatbots are more valuable than generic ones. Generic assistants like ChatGPT are commoditized—everyone has access. Specialized tools that solve specific problems stand out and provide genuine value by being tailored to particular use cases."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You have a solid understanding of Week 6 concepts.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

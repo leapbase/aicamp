@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 2: Prompting & API Fundamentals - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 2: Prompting & API Fundamentals</h1>
+            <p class="week-meta">Month 1: Get Fluent with AI Tools</p>
+            <a href="week2-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete the comprehensive "Building with the Claude API" course</li>
+                <li>Master practical prompting techniques that work across all LLMs</li>
+                <li>Understand system prompts and their strategic importance</li>
+                <li>Learn structured output: JSON mode and function calling/tool use</li>
+                <li>Build a real-world tool that extracts structured data from text</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Throughout the Week)</h2>
+
+        <h3>Course: Building with the Claude API</h3>
+        <p>This is the most comprehensive API course in the curriculum. Unlike Week 1's introductory courses, this one is substantial—plan to spread it across the week rather than cramming it before Session 1.</p>
+
+        <h4>What This Course Covers:</h4>
+        <ul>
+            <li><strong>Advanced Prompting:</strong> Clear instructions, examples, role prompting, chain-of-thought</li>
+            <li><strong>Tool Use (Function Calling):</strong> How to give Claude access to external functions and APIs</li>
+            <li><strong>Vision Capabilities:</strong> Working with images alongside text</li>
+            <li><strong>Streaming Responses:</strong> Real-time token-by-token output</li>
+            <li><strong>System Prompts:</strong> The hidden layer that controls model behavior</li>
+            <li><strong>Best Practices:</strong> Cost optimization, safety, evaluation</li>
+        </ul>
+
+        <p><strong>Time commitment:</strong> 3-4 hours (spread across the week)</p>
+        <p><strong>Pro tip:</strong> Watch the course videos, but more importantly, type out and run every code example yourself. Don't just copy-paste—typing builds muscle memory.</p>
+
+        <div class="highlight-box">
+            <h3>Why This Course Is Critical</h3>
+            <p>Building with the Claude API isn't just about Anthropic's API—the techniques you learn (prompting, function calling, streaming) are universal across all LLM APIs. Master these concepts now, and you'll be productive with any AI API you encounter.</p>
+        </div>
+
+        <h2>Session 1: Practical Prompting Deep Dive</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Prompting Techniques Workshop (60 minutes)</h3>
+
+            <p>Prompting is a skill, not magic. Let's break down what actually works and why.</p>
+
+            <h4>1. Be Specific and Direct</h4>
+            <div class="example-box">
+                <p><strong>Bad:</strong> "Write some code for me"</p>
+                <p><strong>Good:</strong> "Write a Python function that takes a list of dictionaries and returns only those with a 'status' field equal to 'active'. Include type hints and a docstring."</p>
+            </div>
+            <p><strong>Why:</strong> Vague prompts get vague results. Specificity eliminates ambiguity.</p>
+
+            <h4>2. Provide Examples (Few-Shot Prompting)</h4>
+            <div class="example-box">
+                <p><strong>Instead of:</strong> "Extract names from this text"</p>
+                <p><strong>Try:</strong> "Extract person names from the text. Examples:<br>
+                Input: 'Sarah called John yesterday.'<br>
+                Output: ['Sarah', 'John']<br><br>
+                Input: 'The Amazon rainforest...'<br>
+                Output: []<br><br>
+                Now extract from: [your actual text]"</p>
+            </div>
+            <p><strong>Why:</strong> Examples show format and edge cases (like 'Amazon' not being a name).</p>
+
+            <h4>3. Assign a Role (Role Prompting)</h4>
+            <div class="example-box">
+                <p>"You are an expert Python developer reviewing code for security vulnerabilities. Focus especially on SQL injection, XSS, and authentication bypasses."</p>
+            </div>
+            <p><strong>Why:</strong> Roles activate relevant training data and set expectations for tone/depth.</p>
+
+            <h4>4. Use Chain-of-Thought</h4>
+            <div class="example-box">
+                <p>"Before answering, think through the problem step by step. Show your reasoning, then give the final answer."</p>
+            </div>
+            <p><strong>Why:</strong> Asking the model to "think out loud" improves reasoning, especially for complex problems.</p>
+
+            <h4>5. Set Constraints</h4>
+            <div class="example-box">
+                <p>"Respond in exactly 3 bullet points, each under 20 words. Do not use jargon."</p>
+            </div>
+            <p><strong>Why:</strong> Constraints prevent rambling and ensure output fits your use case.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Hands-On Prompting Challenge (45 minutes)</h3>
+
+            <p>Time to apply these techniques. You'll be given a challenging prompt scenario and iterate until you get a good result.</p>
+
+            <h4>The Challenge:</h4>
+            <p>Get the AI to write a function that solves a moderately complex problem (e.g., "Parse a CSV with error handling, validate email addresses, and return structured data"). Your first prompt will likely fail or produce incomplete code.</p>
+
+            <h4>What You'll Learn:</h4>
+            <ul>
+                <li>How to diagnose why a prompt failed</li>
+                <li>When to add examples vs. when to be more specific</li>
+                <li>How to iterate on prompts (Diligence from the 4 D's!)</li>
+                <li>The difference between what you meant and what you said</li>
+            </ul>
+
+            <p><strong>Deliverable:</strong> Save your prompt iterations in a document. Track what you changed and why. This process is what working with AI looks like in practice.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: System Prompts — The Hidden Layer (30 minutes)</h3>
+
+            <p>System prompts are like the "rules of engagement" for an AI conversation. They're set once at the start and influence every response.</p>
+
+            <h4>What System Prompts Control:</h4>
+            <ul>
+                <li><strong>Personality and tone:</strong> Formal vs. casual, concise vs. detailed</li>
+                <li><strong>Expertise level:</strong> Expert coder vs. beginner-friendly explainer</li>
+                <li><strong>Output format:</strong> Always return JSON, always include code comments, etc.</li>
+                <li><strong>Safety guardrails:</strong> Don't execute code, don't make assumptions, always cite sources</li>
+            </ul>
+
+            <h4>Example System Prompt:</h4>
+            <div class="example-box">
+                <p>"You are a senior software engineer pair programming with a junior developer. Your responses should:<br>
+                - Explain the 'why' behind decisions, not just the 'what'<br>
+                - Write production-quality code with error handling<br>
+                - Point out potential edge cases<br>
+                - Be encouraging but honest about trade-offs"</p>
+            </div>
+
+            <h4>Exercise:</h4>
+            <p>Write a system prompt for your Week 1 chatbot that makes it a Python tutor for beginners. Test it with a few questions and see how it changes the responses.</p>
+        </div>
+
+        <h2>Session 2: Structured Output & Tool Use</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Why Structured Output Matters (20 minutes)</h3>
+
+            <p>So far, the AI has given you back free-form text. But what if you need reliable, parseable data?</p>
+
+            <h4>The Problem with Free-Form Text:</h4>
+            <ul>
+                <li>Parsing is fragile (one extra space breaks your regex)</li>
+                <li>Format can vary response-to-response</li>
+                <li>Difficult to integrate into applications</li>
+            </ul>
+
+            <h4>The Solution: JSON Mode & Function Calling</h4>
+            <p><strong>JSON Mode:</strong> Forces the model to respond with valid JSON</p>
+            <p><strong>Function Calling (Tool Use):</strong> The model can invoke functions you define, with type-safe parameters</p>
+
+            <p>Both OpenAI and Anthropic support these features (with slightly different syntax).</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Function Calling / Tool Use Tutorial (60 minutes)</h3>
+
+            <p>Let's walk through how function calling works, step by step.</p>
+
+            <h4>The Concept:</h4>
+            <ol>
+                <li>You define a function schema (name, description, parameters)</li>
+                <li>The model decides when to call your function</li>
+                <li>The model generates a function call with arguments</li>
+                <li>Your code executes the function and returns results</li>
+                <li>The model uses those results to continue the conversation</li>
+            </ol>
+
+            <h4>Example Use Case: Weather Bot</h4>
+            <p>User: "What's the weather in Seattle?"</p>
+            <ul>
+                <li>Model decides it needs weather data</li>
+                <li>Model calls <code>get_weather(location="Seattle")</code></li>
+                <li>Your code hits a weather API and returns JSON</li>
+                <li>Model says: "It's 55°F and rainy in Seattle."</li>
+            </ul>
+
+            <h4>Hands-On:</h4>
+            <p>Implement a simple function-calling example with both OpenAI and Anthropic APIs. Use a mock function (don't worry about real APIs yet).</p>
+
+            <div class="highlight-box">
+                <h3>Key Insight</h3>
+                <p>Function calling is how you give LLMs superpowers. They can search databases, call APIs, do calculations, and more—all by invoking functions you control. This is the foundation of AI agents, which you'll build later in the camp.</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Build a Real Tool — Job Posting Parser (60-90 minutes)</h3>
+
+            <p>Now let's build something practical: a tool that extracts structured information from messy text.</p>
+
+            <h4>The Project:</h4>
+            <p>Create a CLI tool that takes a job posting (as text or a URL) and extracts:</p>
+            <ul>
+                <li>Job title</li>
+                <li>Company name</li>
+                <li>Location (or "Remote")</li>
+                <li>Required skills (as a list)</li>
+                <li>Years of experience required</li>
+                <li>Salary range (if mentioned)</li>
+            </ul>
+
+            <p>Output should be clean JSON that you could insert into a database.</p>
+
+            <h4>Technical Requirements:</h4>
+            <ul>
+                <li>Use function calling or JSON mode (your choice)</li>
+                <li>Handle edge cases (missing fields)</li>
+                <li>Work with both OpenAI and Anthropic (add a <code>--provider</code> flag)</li>
+                <li>Include error handling for API failures</li>
+            </ul>
+
+            <h4>Stretch Goals:</h4>
+            <ul>
+                <li>Accept a URL and scrape the posting (use <code>requests</code> + <code>BeautifulSoup</code>)</li>
+                <li>Process multiple job postings in batch</li>
+                <li>Save results to a SQLite database or CSV file</li>
+                <li>Compare results between OpenAI and Anthropic—which is more accurate?</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Finish the Building with the Claude API Course:</strong> If you haven't completed it, do so now. This course is too valuable to skip.</li>
+                <li><strong>Complete the Job Posting Parser:</strong> Make sure it works with both providers and handles edge cases.</li>
+                <li><strong>Test with Real Data:</strong> Find 5 real job postings online (from LinkedIn, Indeed, etc.) and run them through your tool. Document where it succeeds and where it fails.</li>
+                <li><strong>Write a System Prompt:</strong> Add a system prompt to your parser that makes the extraction more accurate. Experiment with different phrasings and note what works best.</li>
+                <li><strong>Push to GitHub:</strong> Update your repo with the new project. Include a README with examples and setup instructions.</li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Prompting is an iterative skill</strong> - Your first prompt rarely works perfectly; iteration is expected</li>
+            <li><strong>System prompts are powerful</strong> - They let you "program" the AI's personality and behavior</li>
+            <li><strong>Structured output makes AI practical</strong> - JSON mode and function calling bridge the gap between demos and production apps</li>
+            <li><strong>Function calling is foundational</strong> - Almost every advanced AI application uses some form of function calling</li>
+            <li><strong>Test with real data</strong> - Toy examples hide edge cases; real data reveals them</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 3</h3>
+            <p>Next week, you'll dive into Claude Code—an AI coding assistant that can edit files, run commands, and build entire applications. The prompting and API fundamentals you learned this week apply directly, but now you'll see them in action at a higher level. Make sure your job posting parser works—it's a great baseline for understanding what AI can do when it has the right instructions.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week2-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 2 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 2 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

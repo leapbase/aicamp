@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 10 Quiz: Build - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 10 Quiz: Build</h1>
+            <p class="quiz-info">Test your understanding of intensive development, implementation strategies, OSS contributions, and using Skills & Subagents</p>
+        </header>
+
+        <a href="week10.html" class="back-link">← Back to Week 10 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What is the primary philosophy of Week 10 (Build Week)?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Learn new AI frameworks and tools through tutorials</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">This is a working week, not a learning week - apply your skills intensively to build</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Research best practices and plan for future implementation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Focus on writing comprehensive documentation</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">According to the feature-by-feature implementation approach, what should you do immediately after implementing a feature?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">Move on to the next feature to maintain momentum</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">Test manually, handle errors, test edge cases, write tests, document, and commit</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">Deploy to production immediately</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">Share it on social media for feedback</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">Why should you leverage your Week 5 custom Skills and Subagents during Build Week?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">To show off your skills to peers</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">Because they're required for Week 10 assignments</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">They were designed for exactly this type of intensive development and can accelerate your work</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">To practice using them before they expire</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">What is the recommended approach regarding quality versus speed during Build Week?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">Speed is everything - complete all features as quickly as possible</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">A polished 80% is better than a sloppy 100%</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">Quality doesn't matter yet - focus on quantity of features</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">Spend equal time on every feature regardless of importance</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">When should you ask for help when you're stuck on a problem?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">Immediately - don't waste any time</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Never - figure it out yourself</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">After trying for 30 minutes, or sooner for architecture decisions or security-sensitive code</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Only after you've spent at least 3 hours on the problem</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">Why is making an open-source contribution important during Week 10?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">It's required to pass the course</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">It gives back to tools you use, looks great on your resume, and shows you can work with real codebases</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">To increase your GitHub contribution graph</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">To practice using Git and GitHub</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">What should you do about technical debt during the 3-week capstone project?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">Avoid it completely by spending more time on each feature</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">Ignore it - technical debt doesn't matter for small projects</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">Some debt is okay, but track it with GitHub issues for 'known issues' and 'future improvements'</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">Fix all technical debt immediately before moving forward</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">What is the target feature completeness goal by the end of Week 10?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">100% complete with all nice-to-have features</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">80%+ feature completeness with all core features working</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">50% complete with basic prototype</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Just the architecture and planning completed</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'c',
+            q4: 'b',
+            q5: 'c',
+            q6: 'b',
+            q7: 'c',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "Week 10 is a working week, not a learning week. You have the skills from the previous weeks - now you apply them intensively. The focus is on building and implementation, not learning new concepts or tools.",
+            q2: "The feature-by-feature approach emphasizes completing each feature fully before moving on: implement, test manually, handle errors, test edge cases, write automated tests, document, and commit. This ensures quality and prevents accumulating incomplete work.",
+            q3: "Your Week 5 custom Skills and Subagents were designed specifically for intensive development work like Build Week. They can accelerate your work through code review, documentation generation, test creation, and multi-agent orchestration patterns.",
+            q4: "Quality over speed is crucial - a polished 80% complete project is better than a sloppy 100% complete one. It's better to have fewer features that work well than many features that are buggy or half-baked.",
+            q5: "The recommendation is to try solving problems yourself for about 30 minutes before asking for help. However, for architecture decisions or security-sensitive code, it's appropriate to ask sooner. This balances learning through struggle with efficient problem-solving.",
+            q6: "Open-source contributions during Week 10 serve multiple purposes: giving back to the AI tools you've been using, building your resume with real-world contributions, and demonstrating that you can work with existing codebases - a critical skill for internships.",
+            q7: "For a 3-week project, some technical debt is acceptable and realistic. The key is to track it by creating GitHub issues for 'known issues' and 'future improvements.' This shows interviewers you understand trade-offs and engineering decisions.",
+            q8: "The goal for Week 10 is 80%+ feature completeness with all core features working. This leaves Week 11 for polish, deployment, documentation, and demo creation rather than scrambling to finish basic functionality."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You understand the key concepts of intensive development and build strategies.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

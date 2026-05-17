@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 4: OpenAI Codex (CLI + Cloud) - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 4: OpenAI Codex (CLI + Cloud)</h1>
+            <p class="week-meta">Month 1: Get Fluent with AI Tools | Final Week of Foundation Phase</p>
+            <a href="week4-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Finish Claude Code in Action course</li>
+                <li>Learn OpenAI's Codex CLI tool and cloud-based coding assistant</li>
+                <li>Build a comparison matrix of AI coding tools</li>
+                <li>Delegate a complex, multi-hour task to an AI agent</li>
+                <li>Complete and present Project 1: a polished CLI tool or web app</li>
+                <li>Understand when to use each AI coding tool</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Complete Claude Code in Action</h3>
+        <p>Finish the remaining chapters of Claude Code in Action. By now you've used Claude Code hands-on, so the course examples will resonate more deeply.</p>
+
+        <h4>Focus on These Topics:</h4>
+        <ul>
+            <li>Advanced workflows: refactoring, debugging, testing</li>
+            <li>How experienced developers structure their prompts</li>
+            <li>Common pitfalls and how to avoid them</li>
+            <li>Working with large codebases</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 1.5-2 hours</p>
+
+        <h3>OpenAI Codex Documentation (Light Reading)</h3>
+        <p>Familiarize yourself with OpenAI's coding tools:</p>
+        <ul>
+            <li>Read the Codex CLI quickstart</li>
+            <li>Review the cloud-based assistant overview</li>
+            <li>Understand the differences from Claude Code</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 30-45 minutes</p>
+
+        <div class="highlight-box">
+            <h3>End of Month 1 Milestone</h3>
+            <p>This week marks the end of your first month. You've gone from zero to building real applications with AI. You can call APIs, write effective prompts, use Claude Code, and contribute to open source. Next month, you'll build increasingly complex systems.</p>
+        </div>
+
+        <h2>Session 1: OpenAI Codex CLI & Comparison Matrix</h2>
+
+        <div class="session-card">
+            <h3>Part 1: OpenAI Codex CLI Setup & Exploration (60 minutes)</h3>
+
+            <h4>Installation & Configuration:</h4>
+            <ol>
+                <li><strong>Install the Codex CLI:</strong>
+                    <ul>
+                        <li>Follow OpenAI's installation instructions</li>
+                        <li>Configure with your OpenAI API key</li>
+                        <li>Test basic functionality</li>
+                    </ul>
+                </li>
+                <li><strong>Learn Core Commands:</strong>
+                    <ul>
+                        <li>Code generation and editing</li>
+                        <li>Project context management</li>
+                        <li>File navigation and search</li>
+                    </ul>
+                </li>
+                <li><strong>Try Common Workflows:</strong>
+                    <ul>
+                        <li>Adding a feature to existing code</li>
+                        <li>Debugging an error</li>
+                        <li>Refactoring for readability</li>
+                        <li>Writing tests</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Hands-On Exercise:</h4>
+            <p>Use Codex CLI to accomplish the same tasks you did with Claude Code in Week 3:</p>
+            <ul>
+                <li>Add a new feature to your Week 3 project</li>
+                <li>Fix a bug (introduce one if needed)</li>
+                <li>Refactor a function for better clarity</li>
+            </ul>
+
+            <p>Take notes on differences you notice:</p>
+            <ul>
+                <li>How do the UX and workflows differ?</li>
+                <li>Which tool gives better suggestions?</li>
+                <li>Which is faster or more efficient?</li>
+                <li>How do they handle context and memory?</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Build a Comparison Matrix (60 minutes)</h3>
+
+            <p>Now that you've used multiple AI coding tools, create a structured comparison. This is valuable both for your learning and for future reference.</p>
+
+            <h4>Tools to Compare:</h4>
+            <ul>
+                <li>Claude Code</li>
+                <li>OpenAI Codex CLI</li>
+                <li>GitHub Copilot (if you have access)</li>
+                <li>Raw API calls (OpenAI & Anthropic)</li>
+            </ul>
+
+            <h4>Dimensions to Evaluate:</h4>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>What to Evaluate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Setup Complexity</strong></td>
+                        <td>How easy is it to get started?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Quality</strong></td>
+                        <td>How good are the suggestions?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Context Awareness</strong></td>
+                        <td>How well does it understand your project?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speed</strong></td>
+                        <td>Latency of responses</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost</strong></td>
+                        <td>API pricing or subscription fees</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Iteration</strong></td>
+                        <td>How easy is it to refine and correct?</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best Use Cases</strong></td>
+                        <td>When would you choose this tool?</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Deliverable:</h4>
+            <p>Create a Markdown document or spreadsheet with your findings. Include:</p>
+            <ul>
+                <li>Ratings (1-5 stars) for each dimension</li>
+                <li>Specific examples supporting your ratings</li>
+                <li>Recommendations for when to use each tool</li>
+                <li>Personal preferences and why</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Why This Matters</h3>
+                <p>In interviews, you'll be asked "What AI tools do you use?" A nuanced answer—comparing tools with specific examples—shows depth. Generic answers like "I use ChatGPT" don't differentiate you. This comparison matrix is your cheat sheet for thoughtful responses.</p>
+            </div>
+        </div>
+
+        <h2>Session 2: Codex Cloud & Long-Running Delegation</h2>
+
+        <div class="session-card">
+            <h3>Part 1: OpenAI Codex Cloud (45 minutes)</h3>
+
+            <p>The cloud-based coding assistant can handle longer, more complex tasks than CLI tools. Let's explore its capabilities.</p>
+
+            <h4>Key Differences from CLI:</h4>
+            <ul>
+                <li><strong>Longer Context Windows:</strong> Can handle larger codebases</li>
+                <li><strong>Persistent Sessions:</strong> Maintains state across interactions</li>
+                <li><strong>Async Execution:</strong> Can work on tasks while you do other things</li>
+                <li><strong>Collaboration Features:</strong> Share sessions with team members</li>
+            </ul>
+
+            <h4>Setting Up a Cloud Session:</h4>
+            <ol>
+                <li>Create a new project in the web interface</li>
+                <li>Upload or connect your repository</li>
+                <li>Configure project context and guidelines</li>
+                <li>Test with a simple task</li>
+            </ol>
+
+            <h4>Use Cases for Cloud vs. CLI:</h4>
+            <p><strong>Use CLI when:</strong> Quick edits, local development, tight feedback loop needed</p>
+            <p><strong>Use Cloud when:</strong> Large refactors, research tasks, complex features spanning multiple files</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Delegate a Complex Task (90 minutes)</h3>
+
+            <p>This is your first experience with true task delegation. Give the AI a substantial task and let it work relatively independently.</p>
+
+            <h4>Task Options (Choose One):</h4>
+
+            <p><strong>Option 1: Full-Stack Web App</strong></p>
+            <ul>
+                <li>A simple todo app with frontend and backend</li>
+                <li>React or Vue frontend</li>
+                <li>Flask or Express backend</li>
+                <li>SQLite or MongoDB database</li>
+                <li>Basic authentication</li>
+            </ul>
+
+            <p><strong>Option 2: Data Analysis Pipeline</strong></p>
+            <ul>
+                <li>Fetch data from a public API (e.g., weather, stocks, sports)</li>
+                <li>Clean and transform the data</li>
+                <li>Generate visualizations with matplotlib or plotly</li>
+                <li>Create a daily report as HTML or PDF</li>
+                <li>Schedule with cron or similar</li>
+            </ul>
+
+            <p><strong>Option 3: CLI Tool with TUI</strong></p>
+            <ul>
+                <li>A terminal user interface (TUI) application</li>
+                <li>File manager, system monitor, or dev tool</li>
+                <li>Use libraries like rich, textual, or blessed</li>
+                <li>Keyboard shortcuts and navigation</li>
+                <li>Configuration file support</li>
+            </ul>
+
+            <h4>Delegation Strategy:</h4>
+            <ol>
+                <li><strong>Write a Detailed Spec:</strong> Describe the project in detail (2-3 paragraphs)
+                    <ul>
+                        <li>Features and requirements</li>
+                        <li>Tech stack preferences</li>
+                        <li>Edge cases to handle</li>
+                        <li>Testing requirements</li>
+                    </ul>
+                </li>
+                <li><strong>Set Checkpoints:</strong> "After completing the basic structure, show me the code for review before proceeding."</li>
+                <li><strong>Let It Work:</strong> Give the AI time to generate code. This might take 30-60 minutes of AI work.</li>
+                <li><strong>Review & Iterate:</strong> Test the result. What works? What doesn't? Provide feedback and iterate.</li>
+            </ol>
+
+            <div class="highlight-box">
+                <h3>Learning Objective: Effective Delegation</h3>
+                <p>This exercise teaches the Delegation dimension of the 4 D's. You're learning:</p>
+                <ul>
+                    <li>What level of detail to provide in specs</li>
+                    <li>When to step in vs. let the AI continue</li>
+                    <li>How to evaluate whether delegation succeeded</li>
+                    <li>How to recover when the AI goes off track</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Discussion — When to Use Each Tool (30 minutes)</h3>
+
+            <p>Based on your experience this week, discuss decision criteria for tool selection.</p>
+
+            <h4>Discussion Framework:</h4>
+
+            <p><strong>For Quick Tasks (< 30 min):</strong></p>
+            <ul>
+                <li>What's the fastest tool to get a result?</li>
+                <li>Does quality matter, or is speed paramount?</li>
+            </ul>
+
+            <p><strong>For Learning:</strong></p>
+            <ul>
+                <li>Which tool helps you understand code better?</li>
+                <li>Which explains its reasoning most clearly?</li>
+            </ul>
+
+            <p><strong>For Production Code:</strong></p>
+            <ul>
+                <li>Which produces the most maintainable code?</li>
+                <li>Which is best for security-critical code?</li>
+            </ul>
+
+            <p><strong>For Collaboration:</strong></p>
+            <ul>
+                <li>Which tools work best in a team setting?</li>
+                <li>How do you share AI-generated code with teammates?</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Project 1 Due: Polished CLI Tool or Web App</h3>
+            <p>This is your first major deliverable. Choose either your Week 3 application or your Week 4 delegation project, and polish it to portfolio quality.</p>
+
+            <h4>Requirements:</h4>
+            <ol>
+                <li><strong>Functionality:</strong>
+                    <ul>
+                        <li>All features work without errors</li>
+                        <li>Edge cases are handled gracefully</li>
+                        <li>User experience is smooth</li>
+                    </ul>
+                </li>
+                <li><strong>Code Quality:</strong>
+                    <ul>
+                        <li>Clean, readable code</li>
+                        <li>Consistent style and formatting</li>
+                        <li>Comments for complex logic</li>
+                        <li>No obvious bugs or security issues</li>
+                    </ul>
+                </li>
+                <li><strong>Documentation:</strong>
+                    <ul>
+                        <li>Comprehensive README with screenshots/demo</li>
+                        <li>Installation and setup instructions</li>
+                        <li>Usage examples</li>
+                        <li>Architecture overview</li>
+                        <li>CLAUDE.md or equivalent</li>
+                    </ul>
+                </li>
+                <li><strong>Testing:</strong>
+                    <ul>
+                        <li>Manual testing completed</li>
+                        <li>Automated tests (at least basic ones)</li>
+                        <li>Test results documented</li>
+                    </ul>
+                </li>
+                <li><strong>Reflection:</strong>
+                    <ul>
+                        <li>Add a "Development Process" section to README</li>
+                        <li>Describe which AI tools you used and how</li>
+                        <li>What worked well? What was challenging?</li>
+                        <li>What would you do differently next time?</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Additional Tasks:</h4>
+            <ul>
+                <li><strong>Finalize Your Comparison Matrix:</strong> Clean up and format your AI tools comparison</li>
+                <li><strong>Prepare a 5-Minute Presentation:</strong> Demo your project and explain your design decisions</li>
+                <li><strong>Update Your GitHub:</strong> Ensure your profile showcases your best work</li>
+            </ul>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>No single tool is best for everything</strong> - Each AI coding tool has strengths and ideal use cases</li>
+            <li><strong>Delegation requires clear specs</strong> - The better your initial description, the better the AI's output</li>
+            <li><strong>Long-running tasks need checkpoints</strong> - Don't let AI work for hours without review</li>
+            <li><strong>Comparison builds expertise</strong> - Using multiple tools makes you fluent in AI-assisted development</li>
+            <li><strong>Polish matters for portfolios</strong> - A working prototype isn't enough; make it presentable</li>
+            <li><strong>Documentation is part of the project</strong> - Good docs make your work accessible and impressive</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Month 2</h3>
+            <p>Congratulations on completing Month 1! You're now fluent with AI tools and have built real applications. Month 2 focuses on building increasingly complex systems: Skills & Subagents, RAG chatbots, MCP servers, and agents. You'll also learn how to connect AI to external systems and data sources. The pace accelerates—you're ready for it.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week4-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 4 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 4 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

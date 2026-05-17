@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 6: Chatbot + RAG Intro - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        /* Content slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Big list */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Code style */
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        /* Framework box */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 6</h1>
+            <p class="subtitle">Building a Useful Chatbot + RAG Intro</p>
+            <p class="meta">Month 2: Build Real Apps</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 6 Objectives</h2>
+            <ul class="big-list">
+                <li>Build a chatbot with a real, practical purpose</li>
+                <li>Implement streaming responses for better UX</li>
+                <li>Manage conversation history and context</li>
+                <li>Add tool use and function calling to your chatbot</li>
+                <li>Understand RAG (Retrieval-Augmented Generation)</li>
+                <li>Learn embeddings and vector databases with Chroma</li>
+                <li>Build a "chat with your documents" application</li>
+                <li>Deploy both apps to production with free hosting</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: The Shift to User-Facing Apps -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>From Developer Tools to User Apps</h2>
+            <div class="highlight">
+                <h3>Building for Real Users</h3>
+                <p style="margin-top: 30px;">Up until now, you've built developer tools and CLI apps. This week, you're building applications for real users—chatbots with UIs that people can actually interact with. This requires thinking about UX, deployment, and reliability in new ways.</p>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>Developer Tools</h3>
+                    <ul>
+                        <li>CLI interfaces</li>
+                        <li>Local execution</li>
+                        <li>Technical users</li>
+                        <li>Error messages are okay</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>User-Facing Apps</h3>
+                    <ul>
+                        <li>Web interfaces</li>
+                        <li>Cloud deployment</li>
+                        <li>Non-technical users</li>
+                        <li>Graceful error handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Chatbot Ideas -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 1: Purpose-Driven Chatbots</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Study Buddy</h3>
+                    <ul>
+                        <li>Helps with specific class or subject</li>
+                        <li>Explains concepts simply</li>
+                        <li>Generates practice problems</li>
+                        <li>Flashcard-style interactions</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Code Explainer</h3>
+                    <ul>
+                        <li>Line-by-line explanations</li>
+                        <li>Identifies design patterns</li>
+                        <li>Suggests improvements</li>
+                        <li>Answers "why" questions</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Interview Prep Coach</h3>
+                    <ul>
+                        <li>Asks technical questions</li>
+                        <li>Provides hints when stuck</li>
+                        <li>Evaluates your answers</li>
+                        <li>Tracks progress over time</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Recipe Adapter</h3>
+                    <ul>
+                        <li>Modifies for dietary restrictions</li>
+                        <li>Scales serving sizes</li>
+                        <li>Suggests substitutions</li>
+                        <li>Explains techniques</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 30px;">
+                <h3>Generic Chatbots Are Boring</h3>
+                <p>Build one that solves a specific problem you care about. What makes it better than ChatGPT?</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Required Features -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Core Implementation: Required Features</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Streaming Responses</h4>
+                    <p>Display tokens as they arrive for better perceived performance. User can stop generation mid-stream.</p>
+                </div>
+                <div class="step">
+                    <h4>2. Conversation History</h4>
+                    <p>Maintain context across multiple turns, store in memory, allow users to start new conversations</p>
+                </div>
+                <div class="step">
+                    <h4>3. Tool Use (at least one)</h4>
+                    <p>Add a function the chatbot can call: calculator, web search, database lookup, or API call</p>
+                </div>
+                <div class="step">
+                    <h4>4. System Prompt</h4>
+                    <p>Define personality and expertise, set clear boundaries, include examples of good interactions</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Technology Stack -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Technology Stack & Streamlit</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Tech Stack</h3>
+                    <ul>
+                        <li>Backend: Flask or FastAPI</li>
+                        <li>Frontend: Streamlit (easiest)</li>
+                        <li>AI API: Claude or GPT-4</li>
+                        <li>Deployment: Streamlit Cloud</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Streamlit Basics</h3>
+                    <ul>
+                        <li><code>st.chat_input()</code> - User input</li>
+                        <li><code>st.chat_message()</code> - Display messages</li>
+                        <li><code>st.write_stream()</code> - Streaming</li>
+                        <li><code>st.session_state</code> - History</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 40px;">
+                <h3>Streamlit Makes It Trivial</h3>
+                <p>Streamlit is the fastest way to create web interfaces for Python apps. You can build a full chatbot UI in under 100 lines of code.</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Understanding RAG -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 2: What is RAG?</h2>
+            <div class="framework">
+                <div class="framework-item">
+                    <div class="icon">🔍</div>
+                    <h4>Retrieve</h4>
+                    <p>Find relevant documents or passages</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">➕</div>
+                    <h4>Augment</h4>
+                    <p>Add that context to the prompt</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">✨</div>
+                    <h4>Generate</h4>
+                    <p>LLM responds with grounded information</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">✓</div>
+                    <h4>Result</h4>
+                    <p>Factual, grounded responses</p>
+                </div>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>Problems RAG Solves</h3>
+                    <ul>
+                        <li>Static knowledge cutoff</li>
+                        <li>No access to private data</li>
+                        <li>Hallucination issues</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>RAG Enables</h3>
+                    <ul>
+                        <li>Current information</li>
+                        <li>Your documents and data</li>
+                        <li>Grounded, factual responses</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Embeddings Explained -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>How Retrieval Works: Embeddings</h2>
+            <div class="highlight">
+                <h3>What Are Embeddings?</h3>
+                <p>Vector representations of text. Similar concepts are close together in vector space. "dog" and "puppy" have similar embeddings; "dog" and "blockchain" have very different embeddings.</p>
+            </div>
+            <div class="steps" style="margin-top: 40px;">
+                <div class="step">
+                    <h4>The Process</h4>
+                    <p>1. Split documents into chunks → 2. Generate embeddings for each chunk → 3. Store in vector database → 4. When user asks: embed question, find similar chunks, include in prompt</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Build Chat with PDF -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Build a "Chat with PDF" App</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Tech Stack</h3>
+                    <ul>
+                        <li>Vector DB: Chroma</li>
+                        <li>Embeddings: OpenAI API</li>
+                        <li>PDF Parsing: PyPDF2</li>
+                        <li>UI: Streamlit</li>
+                        <li>LLM: Claude or GPT-4</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Key Steps</h3>
+                    <ul>
+                        <li>Parse PDF into text</li>
+                        <li>Split into chunks</li>
+                        <li>Generate embeddings</li>
+                        <li>Store in Chroma</li>
+                        <li>Query interface</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 40px;">
+                <h3>The Goal</h3>
+                <p>Upload a PDF, then chat with its contents. Ask questions and get answers grounded in the document with page citations.</p>
+            </info-box>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: RAG Implementation Steps -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Implementation Steps</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Step 1: PDF Processing</h4>
+                    <p>Parse PDF into text, split into chunks (500-1000 tokens each), handle overlapping chunks for context</p>
+                </div>
+                <div class="step">
+                    <h4>Step 2: Create Embeddings</h4>
+                    <p>Generate embeddings for each chunk, store in Chroma with metadata (page number, chunk ID)</p>
+                </div>
+                <div class="step">
+                    <h4>Step 3: Query Interface</h4>
+                    <p>User asks question, embed the question, retrieve top K similar chunks (K=3-5), show retrieved chunks in UI</p>
+                </div>
+                <div class="step">
+                    <h4>Step 4: Augmented Generation</h4>
+                    <p>Build prompt with system instructions + retrieved chunks + user question, call LLM API, stream response</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Deployment -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Deploy Your Apps</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Streamlit Cloud</h3>
+                    <ul>
+                        <li>Best for Streamlit apps</li>
+                        <li>Connect to GitHub repo</li>
+                        <li>Automatic deploys on push</li>
+                        <li>Free tier is generous</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Vercel</h3>
+                    <ul>
+                        <li>Great for Next.js</li>
+                        <li>Serverless functions</li>
+                        <li>Fast edge network</li>
+                        <li>Free tier available</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Render</h3>
+                    <ul>
+                        <li>Good for Python backends</li>
+                        <li>Supports Docker</li>
+                        <li>Free tier with auto-sleep</li>
+                        <li>Simple deployment</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Deployment Checklist</h3>
+                    <ul>
+                        <li>requirements.txt ready</li>
+                        <li>Environment variables set</li>
+                        <li>Error handling added</li>
+                        <li>Testing completed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Purpose-Driven Chatbots Are More Valuable</h4>
+                    <p>Generic assistants are commoditized; specialized tools stand out</p>
+                </div>
+                <div class="step">
+                    <h4>Streaming Improves Perceived Performance</h4>
+                    <p>Users prefer seeing incremental progress over waiting for complete responses</p>
+                </div>
+                <div class="step">
+                    <h4>RAG Solves the Knowledge Limitation</h4>
+                    <p>LLMs + retrieval = grounded, factual responses based on your data</p>
+                </div>
+                <div class="step">
+                    <h4>Embeddings Enable Semantic Search</h4>
+                    <p>Vector similarity finds relevant content better than keywords alone</p>
+                </div>
+                <div class="step">
+                    <h4>Deployment is Part of Development</h4>
+                    <p>If users can't access it, it doesn't exist. Real user feedback is invaluable.</p>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 30px;">
+                <h3>Next Week: MCP (Model Context Protocol)</h3>
+                <p>Learn to connect Claude to external systems: filesystems, databases, APIs. Build your own custom MCP server.</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

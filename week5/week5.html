@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 5: Claude Code Power Features: Skills & Subagents - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 5: Claude Code Power Features</h1>
+            <p class="week-meta">Month 2: Build Real Apps | Skills & Subagents</p>
+            <a href="week5-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Complete Introduction to Agent Skills and Introduction to Subagents courses</li>
+                <li>Understand how Skills extend Claude Code's capabilities</li>
+                <li>Write a custom Skill for your own workflow</li>
+                <li>Learn to orchestrate multiple Subagents for complex tasks</li>
+                <li>Build a multi-agent system with specialized roles</li>
+                <li>Apply agent orchestration concepts (crucial for interviews)</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Course 1: Introduction to Agent Skills</h3>
+        <p>Skills are reusable, shareable capabilities that extend what Claude Code can do. Think of them as plugins or macros for your AI assistant.</p>
+
+        <h4>What You'll Learn:</h4>
+        <ul>
+            <li><strong>What Skills Are:</strong> Pre-defined workflows that Claude Code can execute</li>
+            <li><strong>Built-in Skills:</strong> Code review, documentation, testing, deployment</li>
+            <li><strong>Custom Skills:</strong> How to write your own</li>
+            <li><strong>Skill Composition:</strong> Combining skills for powerful workflows</li>
+            <li><strong>Best Practices:</strong> When to create a skill vs. just prompting</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 60-90 minutes</p>
+
+        <h3>Course 2: Introduction to Subagents</h3>
+        <p>Subagents are specialized AI instances that handle specific parts of a complex task. This is your introduction to agent orchestration—a hot topic in AI development.</p>
+
+        <h4>What You'll Learn:</h4>
+        <ul>
+            <li><strong>Agent Orchestration Basics:</strong> Why and when to use multiple agents</li>
+            <li><strong>Subagent Roles:</strong> Researcher, writer, critic, coder, tester</li>
+            <li><strong>Communication Patterns:</strong> How subagents pass information</li>
+            <li><strong>Coordination Strategies:</strong> Sequential, parallel, hierarchical</li>
+            <li><strong>Practical Examples:</strong> Real workflows using subagents</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 60-90 minutes</p>
+
+        <div class="highlight-box">
+            <h3>Why These Courses Are High-Leverage</h3>
+            <p>Skills and Subagents are how power users maximize Claude Code's value. More importantly, these concepts apply beyond Claude—agent orchestration is a fundamental pattern in modern AI systems. Understanding it makes you conversant with cutting-edge AI architecture, which is impressive in interviews.</p>
+        </div>
+
+        <h2>Session 1: Writing Custom Skills</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Understanding Skill Architecture (30 minutes)</h3>
+
+            <h4>What Makes a Good Skill?</h4>
+            <p>A skill should be:</p>
+            <ul>
+                <li><strong>Reusable:</strong> Solves a problem you encounter repeatedly</li>
+                <li><strong>Well-defined:</strong> Clear inputs and outputs</li>
+                <li><strong>Composable:</strong> Can combine with other skills</li>
+                <li><strong>Documented:</strong> Clear description and usage examples</li>
+            </ul>
+
+            <h4>Skill Components:</h4>
+            <ol>
+                <li><strong>Trigger:</strong> When should this skill activate?</li>
+                <li><strong>Instructions:</strong> What should Claude do?</li>
+                <li><strong>Context:</strong> What information does it need?</li>
+                <li><strong>Output:</strong> What format should the result take?</li>
+            </ol>
+
+            <h4>Example Skill Breakdown:</h4>
+            <div class="example-box">
+                <p><strong>Skill Name:</strong> "Code Review Checklist"</p>
+                <p><strong>Trigger:</strong> When reviewing a pull request or file changes</p>
+                <p><strong>Instructions:</strong></p>
+                <ul>
+                    <li>Check for security vulnerabilities (SQL injection, XSS, etc.)</li>
+                    <li>Verify error handling and edge cases</li>
+                    <li>Assess code readability and maintainability</li>
+                    <li>Look for performance issues</li>
+                    <li>Confirm tests exist and cover key paths</li>
+                </ul>
+                <p><strong>Context:</strong> The changed files and surrounding code</p>
+                <p><strong>Output:</strong> Markdown checklist with findings and severity ratings</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Brainstorm Your Custom Skill (30 minutes)</h3>
+
+            <p>Think about your workflow. What do you do repeatedly that could be automated?</p>
+
+            <h4>Skill Ideas to Consider:</h4>
+
+            <p><strong>For Learning:</strong></p>
+            <ul>
+                <li>"Explain Like I'm a Beginner" - Adds detailed comments and explanations to complex code</li>
+                <li>"Generate Study Notes" - Summarizes a codebase or file into study material</li>
+            </ul>
+
+            <p><strong>For Development:</strong></p>
+            <ul>
+                <li>"API Endpoint Builder" - Scaffolds REST endpoints with error handling, validation, tests</li>
+                <li>"Database Migration Creator" - Generates migration files from schema changes</li>
+                <li>"Component Generator" - Creates React/Vue components with tests and stories</li>
+            </ul>
+
+            <p><strong>For Writing:</strong></p>
+            <ul>
+                <li>"Blog Post Drafter" - Converts notes into structured blog posts</li>
+                <li>"Technical Documentation" - Generates docs from code comments and function signatures</li>
+                <li>"README Generator" - Creates comprehensive READMEs from code analysis</li>
+            </ul>
+
+            <p><strong>For Productivity:</strong></p>
+            <ul>
+                <li>"Daily Standup Summary" - Summarizes your git commits into a standup update</li>
+                <li>"PR Description Writer" - Generates detailed PR descriptions from git diff</li>
+                <li>"Refactor Suggester" - Analyzes code and suggests refactoring opportunities</li>
+            </ul>
+
+            <h4>Choose One Skill to Build:</h4>
+            <p>Pick something you'll actually use. Write out:</p>
+            <ol>
+                <li>The problem it solves</li>
+                <li>When you'd use it</li>
+                <li>What inputs it needs</li>
+                <li>What output you expect</li>
+            </ol>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Build & Test Your Skill (60-90 minutes)</h3>
+
+            <h4>Implementation Steps:</h4>
+            <ol>
+                <li><strong>Create the Skill File:</strong>
+                    <ul>
+                        <li>Follow Claude Code's skill format</li>
+                        <li>Write clear trigger conditions</li>
+                        <li>Document parameters and options</li>
+                    </ul>
+                </li>
+                <li><strong>Write the Skill Logic:</strong>
+                    <ul>
+                        <li>Define the instructions Claude should follow</li>
+                        <li>Specify context gathering (which files, data sources)</li>
+                        <li>Format the output template</li>
+                    </ul>
+                </li>
+                <li><strong>Add Examples:</strong>
+                    <ul>
+                        <li>Include sample inputs and expected outputs</li>
+                        <li>Show edge cases</li>
+                    </ul>
+                </li>
+                <li><strong>Test Thoroughly:</strong>
+                    <ul>
+                        <li>Run the skill on real code</li>
+                        <li>Try different scenarios</li>
+                        <li>Refine based on results</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Testing Your Skill:</h4>
+            <p>Run your skill multiple times with different inputs:</p>
+            <ul>
+                <li>Does it produce consistent output?</li>
+                <li>Are the results useful?</li>
+                <li>Does it handle edge cases gracefully?</li>
+                <li>Is it faster than doing the task manually?</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Iteration is Expected</h3>
+                <p>Your first version won't be perfect. Skills often need 3-5 iterations before they're truly useful. Pay attention to where they fail and refine the instructions.</p>
+            </div>
+        </div>
+
+        <h2>Session 2: Multi-Agent Systems with Subagents</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Agent Orchestration Theory (30 minutes)</h3>
+
+            <h4>Why Use Multiple Agents?</h4>
+            <p>Single agents can handle simple tasks, but complex workflows benefit from specialization:</p>
+            <ul>
+                <li><strong>Separation of Concerns:</strong> Each agent has a specific role</li>
+                <li><strong>Expertise:</strong> Agents can have specialized knowledge (research vs. coding vs. writing)</li>
+                <li><strong>Checks and Balances:</strong> One agent creates, another critiques</li>
+                <li><strong>Parallel Processing:</strong> Multiple agents can work simultaneously</li>
+            </ul>
+
+            <h4>Common Orchestration Patterns:</h4>
+
+            <p><strong>1. Sequential Pipeline:</strong></p>
+            <div class="example-box">
+                <p>Agent 1 (Researcher) → Agent 2 (Writer) → Agent 3 (Editor)</p>
+                <p>Each agent passes its output to the next</p>
+            </div>
+
+            <p><strong>2. Parallel + Synthesize:</strong></p>
+            <div class="example-box">
+                <p>Agent 1 (Option A) ⟍<br>
+                Agent 2 (Option B) → Agent 4 (Synthesizer)<br>
+                Agent 3 (Option C) ⟋</p>
+                <p>Multiple agents work independently, then a coordinator combines results</p>
+            </div>
+
+            <p><strong>3. Iterative Refinement:</strong></p>
+            <div class="example-box">
+                <p>Agent 1 (Creator) ⇄ Agent 2 (Critic)</p>
+                <p>Two agents iterate back and forth until a quality threshold is met</p>
+            </div>
+
+            <p><strong>4. Hierarchical:</strong></p>
+            <div class="example-box">
+                <p>Manager Agent → coordinates → Worker Agents</p>
+                <p>One agent delegates to others and synthesizes results</p>
+            </div>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Build a Multi-Agent System (90-120 minutes)</h3>
+
+            <p>Now let's build a practical multi-agent system. You'll create a workflow where specialized subagents collaborate on a complex task.</p>
+
+            <h4>Project: Research Report Generator</h4>
+            <p>Build a system that produces a comprehensive research report on any technical topic.</p>
+
+            <h4>Agent Roles:</h4>
+            <ol>
+                <li><strong>Researcher Agent:</strong>
+                    <ul>
+                        <li>Takes a topic and generates research questions</li>
+                        <li>Searches for information (simulated or via APIs)</li>
+                        <li>Compiles raw findings</li>
+                    </ul>
+                </li>
+                <li><strong>Analyst Agent:</strong>
+                    <ul>
+                        <li>Receives research findings</li>
+                        <li>Identifies key themes and patterns</li>
+                        <li>Structures information into an outline</li>
+                    </ul>
+                </li>
+                <li><strong>Writer Agent:</strong>
+                    <ul>
+                        <li>Takes the outline and raw research</li>
+                        <li>Writes clear, engaging prose</li>
+                        <li>Formats with proper citations</li>
+                    </ul>
+                </li>
+                <li><strong>Critic Agent:</strong>
+                    <ul>
+                        <li>Reviews the draft</li>
+                        <li>Checks for logical gaps, unclear sections</li>
+                        <li>Suggests improvements</li>
+                    </ul>
+                </li>
+                <li><strong>Editor Agent:</strong>
+                    <ul>
+                        <li>Incorporates critic feedback</li>
+                        <li>Polishes language and formatting</li>
+                        <li>Produces final report</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Implementation Strategy:</h4>
+            <ol>
+                <li><strong>Define Agent Prompts:</strong> Write system prompts for each agent that define their role and constraints</li>
+                <li><strong>Create Communication Protocol:</strong> How do agents pass information? (JSON, structured text, etc.)</li>
+                <li><strong>Build the Orchestrator:</strong> The main script that coordinates agents</li>
+                <li><strong>Test Each Agent:</strong> Verify each works independently before connecting them</li>
+                <li><strong>Connect the Pipeline:</strong> Run the full workflow end-to-end</li>
+            </ol>
+
+            <h4>Test Your System:</h4>
+            <p>Generate reports on topics like:</p>
+            <ul>
+                <li>"The state of vector databases in 2026"</li>
+                <li>"Comparing frontend frameworks: React vs Vue vs Svelte"</li>
+                <li>"Best practices for API security"</li>
+            </ul>
+
+            <p>Evaluate the output quality:</p>
+            <ul>
+                <li>Is the research thorough?</li>
+                <li>Is the writing clear and well-structured?</li>
+                <li>Are the criticisms valid?</li>
+                <li>Does the final report feel cohesive?</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Reflection & Optimization (30 minutes)</h3>
+
+            <h4>Discussion Questions:</h4>
+            <ul>
+                <li>Where did the multi-agent approach excel vs. a single agent?</li>
+                <li>Which agent was the weakest link? How could you improve it?</li>
+                <li>What information got lost between agents?</li>
+                <li>If you had 10 agents instead of 5, what would you add?</li>
+                <li>How would you handle disagreements between agents?</li>
+            </ul>
+
+            <h4>Optimization Ideas:</h4>
+            <ul>
+                <li><strong>Add Iteration:</strong> Let the Writer and Critic loop 2-3 times</li>
+                <li><strong>Parallel Research:</strong> Run multiple Researcher agents on different aspects</li>
+                <li><strong>Quality Gates:</strong> Don't proceed if an agent's output scores below a threshold</li>
+                <li><strong>Human-in-the-Loop:</strong> Add approval steps between agents</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Polish Your Custom Skill:</strong>
+                    <ul>
+                        <li>Test it on at least 5 different scenarios</li>
+                        <li>Add comprehensive documentation</li>
+                        <li>Create a README with usage examples</li>
+                        <li>Consider publishing it for others to use</li>
+                    </ul>
+                </li>
+                <li><strong>Extend Your Multi-Agent System:</strong>
+                    <ul>
+                        <li>Add at least one more agent or improve an existing one</li>
+                        <li>Implement error handling and retry logic</li>
+                        <li>Generate 3 reports on different topics</li>
+                        <li>Document the architecture with a diagram</li>
+                    </ul>
+                </li>
+                <li><strong>Write a Blog Post Draft:</strong>
+                    <ul>
+                        <li>Title: "Building a Multi-Agent System: Lessons Learned"</li>
+                        <li>Explain the concept of agent orchestration</li>
+                        <li>Share your architecture and results</li>
+                        <li>Discuss what worked and what didn't</li>
+                    </ul>
+                </li>
+                <li><strong>Interview Prep:</strong>
+                    <ul>
+                        <li>Practice explaining your multi-agent system out loud</li>
+                        <li>Prepare to draw the architecture on a whiteboard</li>
+                        <li>Think through: "Why not use a single agent?"</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Skills extend AI capabilities systematically</strong> - They're reusable, shareable, and composable</li>
+            <li><strong>Agent orchestration is a design pattern</strong> - Applies beyond Claude to any multi-agent system</li>
+            <li><strong>Specialization improves output quality</strong> - Dedicated agents outperform generalists on complex tasks</li>
+            <li><strong>Communication between agents is critical</strong> - Clear protocols prevent information loss</li>
+            <li><strong>Iteration and feedback loops matter</strong> - Critic agents and refinement passes significantly improve results</li>
+            <li><strong>This is interview-worthy knowledge</strong> - Very few students understand agent orchestration at this level</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 6</h3>
+            <p>Next week, you'll build a useful chatbot with RAG (Retrieval-Augmented Generation). You'll learn how to connect AI to external knowledge sources—documents, databases, APIs—making it far more useful than a standalone model. This is where AI apps become genuinely practical.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week5-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 5 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 5 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

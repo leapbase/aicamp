@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 3: Claude Code Part 1 - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        /* Content slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Big list */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Code style */
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        /* Framework box */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 3</h1>
+            <p class="subtitle">Claude Code Part 1</p>
+            <p class="meta">Month 1: Get Fluent with AI Tools</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 3 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete Claude Code 101 and begin Claude Code in Action courses</li>
+                <li>Set up Claude Code with your own projects</li>
+                <li>Master CLAUDE.md project documentation</li>
+                <li>Learn slash commands and plan mode</li>
+                <li>Contribute to an open-source repository using Claude Code</li>
+                <li>Build a complete application from scratch with AI assistance</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: The Shift to Agents -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>From APIs to Agents</h2>
+            <div class="highlight">
+                <h3>A Major Paradigm Shift</h3>
+                <p style="margin-top: 30px;">Weeks 1-2 taught you to call AI APIs directly. Now you're moving to an agentic tool—Claude Code can read files, edit code, run commands, and iterate on its own work. This is your first exposure to AI as a collaborator, not just a function you call.</p>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>API Approach</h3>
+                    <ul>
+                        <li>You control every step</li>
+                        <li>Single request/response</li>
+                        <li>Manual iteration</li>
+                        <li>Limited context</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Agent Approach</h3>
+                    <ul>
+                        <li>AI takes initiative</li>
+                        <li>Multi-step workflows</li>
+                        <li>Self-correction</li>
+                        <li>Deep codebase understanding</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Pre-Work Courses -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Pre-Work: Foundation Courses</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Claude Code 101</h3>
+                    <p><strong>Time:</strong> 45-60 minutes</p>
+                    <p>Your introduction to Claude's powerful coding assistant:</p>
+                    <ul>
+                        <li>Installation and setup</li>
+                        <li>Basic workflow patterns</li>
+                        <li>File navigation</li>
+                        <li>Essential commands</li>
+                        <li>Best practices</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Claude Code in Action</h3>
+                    <p><strong>Time:</strong> 1-1.5 hours this week</p>
+                    <p>Real-world examples of Claude Code solving actual problems:</p>
+                    <ul>
+                        <li>Watch first 3-4 chapters</li>
+                        <li>Expert prompting techniques</li>
+                        <li>Adding features to existing code</li>
+                        <li>When to intervene</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Complete before Session 1</h3>
+                <p>These courses establish your mental model for working with an AI pair programmer</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Session 1 Setup -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 1: Claude Code Setup</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Install Claude Code CLI</h4>
+                    <p>Download from Anthropic's website, configure with API key, test basic commands</p>
+                </div>
+                <div class="step">
+                    <h4>2. VS Code Integration</h4>
+                    <p>Install extension, learn keyboard shortcuts, configure settings for your workflow</p>
+                </div>
+                <div class="step">
+                    <h4>3. Git Integration</h4>
+                    <p>Understand how Claude Code uses Git, best practices for AI-assisted commits, review diffs</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: CLAUDE.md -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Your First CLAUDE.md</h2>
+            <div class="highlight">
+                <h3>Project Documentation as System Prompt</h3>
+                <p>CLAUDE.md tells Claude Code about your project. Think of it as a system prompt for your codebase.</p>
+            </div>
+            <div class="two-column" style="margin-top: 40px;">
+                <div class="column">
+                    <h3>What to Include</h3>
+                    <ul>
+                        <li>Project overview and purpose</li>
+                        <li>Architecture and key components</li>
+                        <li>Coding conventions and style</li>
+                        <li>Common commands and setup</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Areas to be cautious</li>
+                        <li>Testing requirements</li>
+                        <li>Known issues or limitations</li>
+                        <li>Deployment instructions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Slash Commands -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Essential Slash Commands</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Core Commands</h3>
+                    <ul>
+                        <li><code>/edit</code> - Make targeted changes</li>
+                        <li><code>/add</code> - Create new files or features</li>
+                        <li><code>/ask</code> - Ask about the codebase</li>
+                        <li><code>/debug</code> - Diagnose and fix issues</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Advanced Commands</h3>
+                    <ul>
+                        <li><code>/test</code> - Generate or run tests</li>
+                        <li><code>/plan</code> - Create multi-step plans</li>
+                        <li><code>/review</code> - Code review</li>
+                        <li><code>/docs</code> - Generate documentation</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box" style="margin-top: 30px;">
+                <h3>Pro Tip: Use Plan Mode</h3>
+                <p>For complex features, use <code>/plan</code> to review Claude's approach before execution. This prevents surprises and ensures you're aligned.</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Plan Mode -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Understanding Plan Mode</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Analyze</h4>
+                    <p>Claude examines your request and the codebase context</p>
+                </div>
+                <div class="step">
+                    <h4>2. Propose</h4>
+                    <p>Creates a detailed multi-step plan with rationale</p>
+                </div>
+                <div class="step">
+                    <h4>3. Approve</h4>
+                    <p>You review the plan and can request changes before execution</p>
+                </div>
+                <div class="step">
+                    <h4>4. Execute</h4>
+                    <p>Claude implements the plan step by step, checking in before major changes</p>
+                </div>
+            </div>
+            <div class="two-column" style="margin-top: 30px;">
+                <div class="column">
+                    <h3>When to Use</h3>
+                    <ul>
+                        <li>Complex features</li>
+                        <li>Major refactoring</li>
+                        <li>Multi-file changes</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>When to Skip</h3>
+                    <ul>
+                        <li>Simple bug fixes</li>
+                        <li>Single-file changes</li>
+                        <li>Quick additions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Open Source Contribution -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Contributing to Open Source</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Find a Good First Issue</h4>
+                    <p>Look for beginner-friendly labels, active maintenance, clear contribution guidelines, Python or JavaScript projects</p>
+                </div>
+                <div class="step">
+                    <h4>Set Up the Project</h4>
+                    <p>Fork, clone, read CONTRIBUTING.md, create CLAUDE.md, run tests</p>
+                </div>
+                <div class="step">
+                    <h4>Use Claude Code</h4>
+                    <p>Create a plan first, implement changes, test manually and automated, review every line</p>
+                </div>
+                <div class="step">
+                    <h4>Submit a Pull Request</h4>
+                    <p>Clear commit message, push to fork, open PR with description, link to original issue</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Build from Scratch -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 2: Build Something from Scratch</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Project Options</h3>
+                    <ul>
+                        <li>Personal Dashboard CLI</li>
+                        <li>Markdown Blog Generator</li>
+                        <li>Code Snippet Manager</li>
+                        <li>Or propose your own idea</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Development Approach</h3>
+                    <ul>
+                        <li>Start with plan mode</li>
+                        <li>Build feature by feature</li>
+                        <li>Test immediately</li>
+                        <li>Iterate on prompts</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 40px;">
+                <h3>You're Still Responsible</h3>
+                <p>Claude Code wrote the code, but you must understand every change. This is Discernment from the 4 D's in action.</p>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Apply What You Learned</h2>
+            <ul class="big-list">
+                <li><strong>Complete Your Application:</strong> Finish the project from Session 2 with full functionality and error handling</li>
+                <li><strong>Write Comprehensive Documentation:</strong> README with screenshots, installation instructions, CLAUDE.md, and code comments</li>
+                <li><strong>Follow Up on Open Source PR:</strong> Respond to code review feedback using Claude Code to implement changes</li>
+                <li><strong>Continue Course:</strong> Watch at least 2 more chapters of Claude Code in Action</li>
+                <li><strong>Push to GitHub:</strong> Both your new app and open-source contribution fork</li>
+            </ul>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Looking Ahead -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Claude Code is a Collaborator</h4>
+                    <p>Not a magic button—you still guide, review, and intervene when needed</p>
+                </div>
+                <div class="step">
+                    <h4>CLAUDE.md is Your Project's System Prompt</h4>
+                    <p>Good context leads to better suggestions and more relevant code</p>
+                </div>
+                <div class="step">
+                    <h4>Plan Mode Prevents Chaos</h4>
+                    <p>For complex tasks, always review the plan before execution</p>
+                </div>
+                <div class="step">
+                    <h4>Open-Source Contribution is Valuable</h4>
+                    <p>Even small PRs show you can work with real codebases</p>
+                </div>
+                <div class="step">
+                    <h4>Iteration is Normal</h4>
+                    <p>Your first prompt won't be perfect; refining is part of the process</p>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 30px;">
+                <h3>Next Week: OpenAI Codex</h3>
+                <p>Compare Claude Code to OpenAI's coding tools and complete your first major project</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

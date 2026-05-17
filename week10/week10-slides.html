@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 10: Build - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 10</h1>
+            <p class="subtitle">Build</p>
+            <p class="meta">Month 3: Capstone & Portfolio</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 10 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete all core features of your capstone</li>
+                <li>Use Claude Code with your custom Skills and Subagents</li>
+                <li>Make a meaningful open-source contribution</li>
+                <li>Reach 80%+ feature completeness by end of week</li>
+                <li>Begin comprehensive testing</li>
+                <li>Update documentation as you build</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: Build Week Philosophy -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Build Week Philosophy</h2>
+            <div class="highlight">
+                <h3>Pure Building - Not Learning</h3>
+                <p>This is a working week, not a learning week. You have the skills - now apply them intensively. Expect to code 20-30 hours this week. Use Claude Code heavily, but stay in control.</p>
+            </div>
+            <div class="info-box">
+                <h3>Your Goal</h3>
+                <p>By Sunday, your capstone should be substantially complete with all core features working.</p>
+            </info-box>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Leverage Week 5 Skills -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Leverage Your Custom Skills</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Use Your Skill</h3>
+                    <ul>
+                        <li>Code review skill on capstone</li>
+                        <li>Documentation generator for README</li>
+                        <li>Test generator for test cases</li>
+                        <li>Custom debugging tools</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Multi-Agent Patterns</h3>
+                    <ul>
+                        <li>Implementer agent: writes code</li>
+                        <li>Tester agent: creates tests</li>
+                        <li>Reviewer agent: critiques code</li>
+                        <li>Documenter agent: writes docs</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Now Your Week 5 Skills Pay Off</h3>
+                <p>The custom Skills and Subagents you built are designed for exactly this type of intensive development.</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Implementation Strategy -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Feature-by-Feature Approach</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Implement</h4>
+                    <p>Write the feature code - start with happy path</p>
+                </div>
+                <div class="step">
+                    <h4>2. Test Manually</h4>
+                    <p>Does it work in the happy path? Try it out.</p>
+                </div>
+                <div class="step">
+                    <h4>3. Handle Errors</h4>
+                    <p>What breaks it? Add comprehensive error handling.</p>
+                </div>
+                <div class="step">
+                    <h4>4. Test Edge Cases</h4>
+                    <p>Try unusual inputs, boundary conditions</p>
+                </div>
+                <div class="step">
+                    <h4>5. Write Tests</h4>
+                    <p>Automate your manual tests for repeatability</p>
+                </div>
+                <div class="step">
+                    <h4>6. Document</h4>
+                    <p>Update README and docstrings as you go</p>
+                </div>
+                <div class="step">
+                    <h4>7. Commit</h4>
+                    <p>Clear message, push to GitHub</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Quality Over Speed -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Quality Over Speed</h2>
+            <div class="highlight">
+                <h3>A Polished 80% Beats a Sloppy 100%</h3>
+                <p>It's tempting to rush. Don't. A well-built, partially complete project is better than a buggy, complete one.</p>
+            </div>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Code Quality Checklist</h3>
+                    <ul>
+                        <li>Handles errors gracefully?</li>
+                        <li>Clear variable/function names?</li>
+                        <li>Complex logic commented?</li>
+                        <li>Another developer could understand?</li>
+                        <li>Tested?</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>When to Refactor</h3>
+                    <ul>
+                        <li>Copy-pasting code? Extract function</li>
+                        <li>Function > 50 lines? Split it</li>
+                        <li>Confused by own code? Refactor now</li>
+                        <li>Tests hard to write? Code too complex</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Technical Debt -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Managing Technical Debt</h2>
+            <div class="info-box">
+                <h3>Technical Debt Is Real</h3>
+                <p>Every shortcut you take now, you'll pay back with interest later. For a 3-week project, some debt is okay - but track it.</p>
+            </info-box>
+            <div class="steps">
+                <div class="step">
+                    <h4>Create GitHub Issues</h4>
+                    <p>Document "known issues" and "future improvements" so interviewers see you understand trade-offs</p>
+                </div>
+                <div class="step">
+                    <h4>Be Honest in Documentation</h4>
+                    <p>A "Known Limitations" section shows maturity and self-awareness</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Open Source Contribution -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Open Source Contribution</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Why Contribute?</h3>
+                    <ul>
+                        <li>Give back to tools you use</li>
+                        <li>Great for your resume</li>
+                        <li>Learn from code reviews</li>
+                        <li>Build your network</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Target Repos</h3>
+                    <ul>
+                        <li>AI tooling you've used</li>
+                        <li>Claude Code, MCP servers</li>
+                        <li>RAG frameworks, agent libraries</li>
+                        <li>Look for "good first issue"</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Types of Contributions</h3>
+                <p>Bug fixes (high impact, often easier), documentation improvements, example code or tutorials, new features (if clearly needed)</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Contribution Workflow -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Making Your Contribution</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Find and Claim Issue</h4>
+                    <p>Comment on issue with your approach. Wait for maintainer response.</p>
+                </div>
+                <div class="step">
+                    <h4>2. Fork and Branch</h4>
+                    <p>Fork the repo, create a branch with clear name</p>
+                </div>
+                <div class="step">
+                    <h4>3. Implement Fix/Feature</h4>
+                    <p>Understand codebase, match style, test thoroughly</p>
+                </div>
+                <div class="step">
+                    <h4>4. Create PR with Clear Description</h4>
+                    <p>Explain problem, solution, testing. Reference issue number.</p>
+                </div>
+                <div class="step">
+                    <h4>5. Respond to Feedback</h4>
+                    <p>Be prompt, gracious, and willing to make changes</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Staying Focused -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Productivity Tips</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Environment</h3>
+                    <ul>
+                        <li>Remove distractions</li>
+                        <li>Dedicated workspace</li>
+                        <li>Good music or silence</li>
+                        <li>Stay hydrated, eat well</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Time Management</h3>
+                    <ul>
+                        <li>Time-box features</li>
+                        <li>Track your time</li>
+                        <li>Schedule breaks</li>
+                        <li>End-of-day review</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>When Stuck</h3>
+                    <ul>
+                        <li>First 10 min: Read errors, Google</li>
+                        <li>Next 20 min: Try different approaches</li>
+                        <li>After 30 min: Ask Claude Code</li>
+                        <li>After 60 min: Ask a human</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Celebrate Progress</h3>
+                    <ul>
+                        <li>Close issue? Take 5-min break</li>
+                        <li>Finish feature? Share screenshot</li>
+                        <li>Hit milestone? Post on social</li>
+                        <li>Momentum builds on visibility</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Intensive Building</h2>
+            <ul class="big-list">
+                <li><strong>Implement All Core Features:</strong> Every feature from your spec should work with error handling</li>
+                <li><strong>Write Tests:</strong> Unit tests for core functions, integration tests for key workflows, >70% coverage</li>
+                <li><strong>Complete OSS Contribution:</strong> Submit PR, respond to review feedback, update resume</li>
+                <li><strong>Update Documentation:</strong> README reflects actual state, installation instructions work</li>
+                <li><strong>Code Review with AI:</strong> Use Claude Code to review entire codebase, fix obvious issues</li>
+                <li><strong>Daily Commits:</strong> Commit at least once per day, push regularly</li>
+            </ul>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 10 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>This Is a Marathon Sprint</h4>
+                    <p>Intense but sustainable. Pace yourself wisely.</p>
+                </div>
+                <div class="step">
+                    <h4>AI Tools Are Force Multipliers</h4>
+                    <p>Use your Week 5 skills and subagents liberally</p>
+                </div>
+                <div class="step">
+                    <h4>Quality Compounds</h4>
+                    <p>Each well-built feature makes the next one easier</p>
+                </div>
+                <div class="step">
+                    <h4>OSS Contributions Are Valuable</h4>
+                    <p>Even small PRs show you can work with real codebases</p>
+                </div>
+                <div class="step">
+                    <h4>Stay in Control</h4>
+                    <p>Claude Code is your copilot, but you're the pilot</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Next week: Polish, deploy, demo video, and comprehensive blog post</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

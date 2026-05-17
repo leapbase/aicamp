@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 6: Building a Useful Chatbot + RAG Intro - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 6: Building a Useful Chatbot + RAG Intro</h1>
+            <p class="week-meta">Month 2: Build Real Apps</p>
+            <a href="week6-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Build a chatbot with a real, practical purpose</li>
+                <li>Implement streaming responses for better UX</li>
+                <li>Manage conversation history and context</li>
+                <li>Add tool use/function calling to your chatbot</li>
+                <li>Understand RAG (Retrieval-Augmented Generation) and why it exists</li>
+                <li>Learn embeddings and vector databases (Chroma)</li>
+                <li>Build a "chat with your documents" application</li>
+                <li>Deploy both apps to production (free hosting)</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work (Before Session 1)</h2>
+
+        <h3>Review: Building with the Claude API</h3>
+        <p>Revisit the sections on streaming and tool use from Week 2's course. You'll apply these concepts extensively this week.</p>
+
+        <h4>Key Topics to Refresh:</h4>
+        <ul>
+            <li>Streaming API responses</li>
+            <li>Managing conversation history</li>
+            <li>Tool use and function calling</li>
+            <li>Error handling and retries</li>
+        </ul>
+        <p><strong>Time commitment:</strong> 30-45 minutes</p>
+
+        <div class="highlight-box">
+            <h3>The Shift to User-Facing Apps</h3>
+            <p>Up until now, you've built developer tools and CLI apps. This week, you're building applications for real users—chatbots with UIs that people can actually interact with. This requires thinking about UX, deployment, and reliability in new ways.</p>
+        </div>
+
+        <h2>Session 1: Build a Purpose-Driven Chatbot</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Choosing Your Chatbot's Purpose (20 minutes)</h3>
+
+            <p>Generic chatbots are boring. Build one that solves a specific problem you care about.</p>
+
+            <h4>Chatbot Ideas:</h4>
+
+            <p><strong>Study Buddy:</strong></p>
+            <ul>
+                <li>Helps with a specific class or subject</li>
+                <li>Explains concepts in simple terms</li>
+                <li>Generates practice problems</li>
+                <li>Uses flashcard-style interactions</li>
+            </ul>
+
+            <p><strong>Code Explainer:</strong></p>
+            <ul>
+                <li>Paste code, get line-by-line explanations</li>
+                <li>Identifies design patterns</li>
+                <li>Suggests improvements</li>
+                <li>Answers "why" questions about the code</li>
+            </ul>
+
+            <p><strong>Interview Prep Coach:</strong></p>
+            <ul>
+                <li>Asks technical interview questions</li>
+                <li>Provides hints when you're stuck</li>
+                <li>Evaluates your answers</li>
+                <li>Tracks progress over time</li>
+            </ul>
+
+            <p><strong>Personal Writing Assistant:</strong></p>
+            <ul>
+                <li>Helps brainstorm blog post ideas</li>
+                <li>Drafts outlines</li>
+                <li>Offers editing suggestions</li>
+                <li>Maintains your writing style</li>
+            </ul>
+
+            <p><strong>Recipe Adapter:</strong></p>
+            <ul>
+                <li>Modifies recipes based on dietary restrictions</li>
+                <li>Scales serving sizes</li>
+                <li>Suggests ingredient substitutions</li>
+                <li>Explains cooking techniques</li>
+            </ul>
+
+            <h4>Define Your Chatbot's Scope:</h4>
+            <ul>
+                <li>What specific problem does it solve?</li>
+                <li>Who is the target user?</li>
+                <li>What makes it better than ChatGPT?</li>
+                <li>What features are must-haves vs. nice-to-haves?</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Core Implementation (90 minutes)</h3>
+
+            <h4>Required Features:</h4>
+
+            <p><strong>1. Streaming Responses:</strong></p>
+            <ul>
+                <li>Display tokens as they arrive (not all at once)</li>
+                <li>Better perceived performance</li>
+                <li>User can stop generation mid-stream</li>
+            </ul>
+
+            <p><strong>2. Conversation History:</strong></p>
+            <ul>
+                <li>Maintain context across multiple turns</li>
+                <li>Store in memory (for now)</li>
+                <li>Allow users to start new conversations</li>
+                <li>Show conversation history in UI</li>
+            </ul>
+
+            <p><strong>3. Tool Use (at least one):</strong></p>
+            <ul>
+                <li>Add a function the chatbot can call</li>
+                <li>Examples: calculator, web search, database lookup, API call</li>
+                <li>Display when tools are being used</li>
+            </ul>
+
+            <p><strong>4. System Prompt:</strong></p>
+            <ul>
+                <li>Define your chatbot's personality and expertise</li>
+                <li>Set clear boundaries (what it will/won't do)</li>
+                <li>Include examples of good interactions</li>
+            </ul>
+
+            <h4>Technology Stack:</h4>
+            <p><strong>Backend:</strong> Python with Flask or FastAPI</p>
+            <p><strong>Frontend:</strong> Streamlit (easiest) or simple HTML/JS</p>
+            <p><strong>AI API:</strong> Claude or GPT-4 (your choice)</p>
+
+            <h4>Implementation Steps:</h4>
+            <ol>
+                <li><strong>Backend Setup:</strong> API routes, conversation management, tool definitions</li>
+                <li><strong>Streaming Implementation:</strong> Server-sent events or websockets</li>
+                <li><strong>Tool Integration:</strong> Implement and test your function calling</li>
+                <li><strong>Frontend:</strong> Build the chat interface</li>
+                <li><strong>Polish:</strong> Error handling, loading states, clear buttons</li>
+            </ol>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Add a Streamlit UI (45 minutes)</h3>
+
+            <p>Streamlit makes it trivial to create web interfaces for Python apps.</p>
+
+            <h4>Streamlit Basics:</h4>
+            <ul>
+                <li><code>st.chat_input()</code> - User input field</li>
+                <li><code>st.chat_message()</code> - Display messages</li>
+                <li><code>st.write_stream()</code> - Streaming responses</li>
+                <li><code>st.session_state</code> - Maintain conversation history</li>
+            </ul>
+
+            <h4>UI Enhancements:</h4>
+            <ul>
+                <li>Add a sidebar with settings or context</li>
+                <li>Display token usage and cost</li>
+                <li>Include a "New Chat" button</li>
+                <li>Show when tools are being invoked</li>
+                <li>Add example prompts to get users started</li>
+            </ul>
+
+            <h4>Test Your Chatbot:</h4>
+            <p>Have real conversations with it:</p>
+            <ul>
+                <li>Does it stay in character?</li>
+                <li>Does it handle edge cases gracefully?</li>
+                <li>Is the streaming smooth?</li>
+                <li>Do the tools work correctly?</li>
+                <li>Is it actually useful?</li>
+            </ul>
+        </div>
+
+        <h2>Session 2: RAG and Chat with Documents</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Understanding RAG (45 minutes)</h3>
+
+            <h4>The Problem RAG Solves:</h4>
+            <p>LLMs have limitations:</p>
+            <ul>
+                <li><strong>Static Knowledge:</strong> Training data has a cutoff date</li>
+                <li><strong>No Private Data:</strong> Can't know about your documents, codebase, or company data</li>
+                <li><strong>Hallucination:</strong> Will confidently make up facts when it doesn't know</li>
+            </ul>
+
+            <h4>The RAG Solution:</h4>
+            <ol>
+                <li><strong>Retrieve:</strong> Find relevant documents or passages</li>
+                <li><strong>Augment:</strong> Add that context to the prompt</li>
+                <li><strong>Generate:</strong> LLM responds with grounded information</li>
+            </ol>
+
+            <div class="example-box">
+                <p><strong>Without RAG:</strong></p>
+                <p>User: "What did our Q3 earnings report say about cloud revenue?"</p>
+                <p>AI: "I don't have access to your specific earnings reports."</p>
+
+                <p><strong>With RAG:</strong></p>
+                <p>System: [Retrieves relevant section from Q3 report]</p>
+                <p>AI: "According to your Q3 earnings report, cloud revenue grew 34% year-over-year to $42M, exceeding expectations..."</p>
+            </div>
+
+            <h4>How Retrieval Works: Embeddings</h4>
+            <p><strong>Embeddings</strong> are vector representations of text. Similar concepts are close together in vector space.</p>
+
+            <ul>
+                <li>"dog" and "puppy" have similar embeddings</li>
+                <li>"dog" and "blockchain" have very different embeddings</li>
+            </ul>
+
+            <p><strong>The Process:</strong></p>
+            <ol>
+                <li>Split documents into chunks</li>
+                <li>Generate embeddings for each chunk</li>
+                <li>Store embeddings in a vector database</li>
+                <li>When user asks a question:
+                    <ul>
+                        <li>Embed the question</li>
+                        <li>Find chunks with similar embeddings (cosine similarity)</li>
+                        <li>Include those chunks in the prompt</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Build a "Chat with PDF" App (90-120 minutes)</h3>
+
+            <p>Let's build a practical RAG application: upload a PDF, then chat with its contents.</p>
+
+            <h4>Tech Stack:</h4>
+            <ul>
+                <li><strong>Vector DB:</strong> Chroma (easy to use, no server needed)</li>
+                <li><strong>Embeddings:</strong> OpenAI embeddings API or sentence-transformers</li>
+                <li><strong>PDF Parsing:</strong> PyPDF2 or pdfplumber</li>
+                <li><strong>UI:</strong> Streamlit</li>
+                <li><strong>LLM:</strong> Claude or GPT-4</li>
+            </ul>
+
+            <h4>Implementation Steps:</h4>
+
+            <p><strong>Step 1: PDF Processing</strong></p>
+            <ul>
+                <li>Parse PDF into text</li>
+                <li>Split into chunks (500-1000 tokens each)</li>
+                <li>Handle overlapping chunks for context</li>
+            </ul>
+
+            <p><strong>Step 2: Create Embeddings</strong></p>
+            <ul>
+                <li>Generate embeddings for each chunk</li>
+                <li>Store in Chroma with metadata (page number, chunk ID)</li>
+            </ul>
+
+            <p><strong>Step 3: Query Interface</strong></p>
+            <ul>
+                <li>User asks a question</li>
+                <li>Embed the question</li>
+                <li>Retrieve top K similar chunks (K=3-5)</li>
+                <li>Show retrieved chunks in UI (for transparency)</li>
+            </ul>
+
+            <p><strong>Step 4: Augmented Generation</strong></p>
+            <ul>
+                <li>Build prompt: system instructions + retrieved chunks + user question</li>
+                <li>Call LLM API</li>
+                <li>Stream response to user</li>
+            </ul>
+
+            <p><strong>Step 5: Conversation Handling</strong></p>
+            <ul>
+                <li>Maintain conversation history</li>
+                <li>For follow-up questions, use original question + history for retrieval</li>
+                <li>Keep context window in mind (don't exceed token limits)</li>
+            </ul>
+
+            <h4>Example System Prompt for RAG:</h4>
+            <div class="example-box">
+                <p>"You are a helpful assistant that answers questions based on provided context. Follow these rules:</p>
+                <ul>
+                    <li>Only use information from the provided context</li>
+                    <li>If the context doesn't contain the answer, say so explicitly</li>
+                    <li>Cite page numbers when referencing specific information</li>
+                    <li>If uncertain, express your level of confidence</li>
+                    <li>Keep answers concise but complete"</li>
+                </ul>
+            </div>
+
+            <h4>Advanced Features (Optional):</h4>
+            <ul>
+                <li>Support multiple PDFs simultaneously</li>
+                <li>Highlight relevant passages in the original PDF</li>
+                <li>Allow re-ranking of retrieved chunks</li>
+                <li>Add hybrid search (keyword + semantic)</li>
+                <li>Cache embeddings to avoid re-processing</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Deploy Your Apps (45 minutes)</h3>
+
+            <p>Time to make your chatbots accessible to others.</p>
+
+            <h4>Deployment Options (All Free):</h4>
+
+            <p><strong>Streamlit Cloud:</strong></p>
+            <ul>
+                <li>Best for Streamlit apps (obviously)</li>
+                <li>Connect to GitHub repo</li>
+                <li>Automatic deploys on push</li>
+                <li>Free tier is generous</li>
+            </ul>
+
+            <p><strong>Vercel:</strong></p>
+            <ul>
+                <li>Great for Next.js or static sites</li>
+                <li>Serverless functions for backend</li>
+                <li>Fast edge network</li>
+            </ul>
+
+            <p><strong>Render:</strong></p>
+            <ul>
+                <li>Good for Python backends</li>
+                <li>Supports Docker</li>
+                <li>Free tier with auto-sleep</li>
+            </ul>
+
+            <h4>Deployment Checklist:</h4>
+            <ol>
+                <li>Add requirements.txt with all dependencies</li>
+                <li>Environment variables for API keys (never commit secrets!)</li>
+                <li>Add error handling for production</li>
+                <li>Set up logging for debugging</li>
+                <li>Test thoroughly before making public</li>
+                <li>Add rate limiting if needed</li>
+                <li>Create a simple landing page explaining what your app does</li>
+            </ol>
+
+            <h4>Share Your Work:</h4>
+            <ul>
+                <li>Add deployment links to your GitHub README</li>
+                <li>Share on Twitter/LinkedIn</li>
+                <li>Ask friends to test and give feedback</li>
+                <li>Document any issues you encounter</li>
+            </ul>
+        </div>
+
+        <h2>Homework</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Polish Both Applications:</strong>
+                    <ul>
+                        <li>Ensure chatbot and RAG app are fully functional</li>
+                        <li>Add comprehensive error handling</li>
+                        <li>Improve UI/UX based on testing</li>
+                        <li>Write clear documentation</li>
+                    </ul>
+                </li>
+                <li><strong>Deploy to Production:</strong>
+                    <ul>
+                        <li>Get both apps live on free hosting</li>
+                        <li>Test in production environment</li>
+                        <li>Fix any deployment issues</li>
+                        <li>Add deployment links to READMEs</li>
+                    </ul>
+                </li>
+                <li><strong>Test with Real Users:</strong>
+                    <ul>
+                        <li>Share with at least 3 people</li>
+                        <li>Collect feedback on usability</li>
+                        <li>Document common issues or confusion</li>
+                        <li>Iterate based on feedback</li>
+                    </ul>
+                </li>
+                <li><strong>Experiment with Your RAG App:</strong>
+                    <ul>
+                        <li>Test with different types of PDFs (textbooks, papers, reports)</li>
+                        <li>Try different chunk sizes and overlap settings</li>
+                        <li>Measure accuracy on known questions</li>
+                        <li>Document what works best</li>
+                    </ul>
+                </li>
+                <li><strong>Write a Technical README:</strong>
+                    <ul>
+                        <li>Explain your RAG implementation</li>
+                        <li>Include architecture diagrams</li>
+                        <li>Document design decisions (why Chroma? why these chunk sizes?)</li>
+                        <li>Add troubleshooting section</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Purpose-driven chatbots are more valuable</strong> - Generic assistants are commoditized; specialized tools stand out</li>
+            <li><strong>Streaming improves perceived performance</strong> - Users prefer seeing incremental progress</li>
+            <li><strong>RAG solves the knowledge limitation problem</strong> - LLMs + retrieval = grounded, factual responses</li>
+            <li><strong>Embeddings enable semantic search</strong> - Vector similarity finds relevant content better than keywords alone</li>
+            <li><strong>Chunk size matters</strong> - Too small loses context; too large wastes tokens and dilutes relevance</li>
+            <li><strong>Deployment is part of development</strong> - If users can't access it, it doesn't exist</li>
+            <li><strong>Real user feedback is invaluable</strong> - Your assumptions about UX are often wrong; test with real people</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Looking Ahead to Week 7</h3>
+            <p>Next week, you'll learn MCP (Model Context Protocol)—a powerful way to connect Claude to external systems like filesystems, databases, APIs, and more. MCP is a major focus area for 2026 and highly valuable on your resume. You'll build your own custom MCP server, giving Claude new superpowers.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week6-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 6 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 6 of 12 | 2026 Summer AI Camp</p>
+        </div>
+    </footer>
+</body>
+</html>

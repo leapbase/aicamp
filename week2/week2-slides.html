@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 2: Prompting & API Fundamentals - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 2</h1>
+            <p class="subtitle">Prompting & API Fundamentals</p>
+            <p class="meta">Month 1: Get Fluent with AI Tools</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 2 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete the comprehensive "Building with the Claude API" course</li>
+                <li>Master practical prompting techniques that work across all LLMs</li>
+                <li>Understand system prompts and their strategic importance</li>
+                <li>Learn structured output: JSON mode and function calling/tool use</li>
+                <li>Build a real-world tool that extracts structured data from text</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: Pre-Work Course -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Pre-Work: Building with the Claude API</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Course Overview</h3>
+                    <p>This is the most comprehensive API course in the curriculum</p>
+                    <ul>
+                        <li>Advanced Prompting techniques</li>
+                        <li>Tool Use (Function Calling)</li>
+                        <li>Vision Capabilities</li>
+                        <li>Streaming Responses</li>
+                        <li>System Prompts</li>
+                        <li>Best Practices</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Time & Approach</h3>
+                    <p><strong>Time:</strong> 3-4 hours (spread across the week)</p>
+                    <p><strong>Pro Tip:</strong> Type out every code example yourself - don't just copy-paste. Typing builds muscle memory.</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Why This Course Is Critical</h3>
+                <p>The techniques you learn here are universal across all LLM APIs - master these concepts now and you'll be productive with any AI API you encounter</p>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Prompting Techniques -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 1: Practical Prompting Techniques</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Be Specific and Direct</h4>
+                    <p>Vague prompts get vague results. Specificity eliminates ambiguity. Example: "Write a Python function with type hints that filters a list of dictionaries by status field"</p>
+                </div>
+                <div class="step">
+                    <h4>2. Provide Examples (Few-Shot Prompting)</h4>
+                    <p>Show format and edge cases through examples. This demonstrates what you want and handles corner cases</p>
+                </div>
+                <div class="step">
+                    <h4>3. Assign a Role (Role Prompting)</h4>
+                    <p>"You are an expert Python developer reviewing code for security vulnerabilities" - activates relevant training data</p>
+                </div>
+                <div class="step">
+                    <h4>4. Use Chain-of-Thought</h4>
+                    <p>"Think through the problem step by step before answering" - improves reasoning on complex problems</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: System Prompts -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>System Prompts: The Hidden Layer</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>What System Prompts Control</h3>
+                    <ul>
+                        <li>Personality and tone</li>
+                        <li>Expertise level</li>
+                        <li>Output format</li>
+                        <li>Safety guardrails</li>
+                        <li>Consistent behavior</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Set once at conversation start</li>
+                        <li>Be clear and specific</li>
+                        <li>Define boundaries</li>
+                        <li>Include output format requirements</li>
+                        <li>Explain the "why" behind decisions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Think of System Prompts as Configuration</h3>
+                <p>System prompts are like the "rules of engagement" for an AI conversation. They influence every response without being repeated in each turn.</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Structured Output -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Why Structured Output Matters</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>The Problem</h3>
+                    <ul>
+                        <li>Free-form text is hard to parse</li>
+                        <li>Format varies response-to-response</li>
+                        <li>Fragile integration with apps</li>
+                        <li>Difficult to validate</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>The Solution</h3>
+                    <ul>
+                        <li>JSON Mode: Forces valid JSON</li>
+                        <li>Function Calling: Type-safe parameters</li>
+                        <li>Reliable parsing</li>
+                        <li>Easy integration</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Structured Output Bridges the Gap</h3>
+                <p>From demos to production apps - JSON mode and function calling make AI output reliable and parseable</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Function Calling -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Function Calling / Tool Use</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>The Concept</h4>
+                    <p>1. Define function schema (name, description, parameters)<br>
+                    2. Model decides when to call your function<br>
+                    3. Model generates function call with arguments<br>
+                    4. Your code executes and returns results<br>
+                    5. Model uses results to continue conversation</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Function Calling Gives LLMs Superpowers</h3>
+                <p>They can search databases, call APIs, do calculations, and more - all by invoking functions you control. This is the foundation of AI agents.</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Job Posting Parser Project -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Project: Job Posting Parser</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Required Features</h3>
+                    <ul>
+                        <li>Extract job title</li>
+                        <li>Company name</li>
+                        <li>Location or "Remote"</li>
+                        <li>Required skills list</li>
+                        <li>Years of experience</li>
+                        <li>Salary range (if mentioned)</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Technical Requirements</h3>
+                    <ul>
+                        <li>Use function calling or JSON mode</li>
+                        <li>Handle missing fields</li>
+                        <li>Support both OpenAI and Anthropic</li>
+                        <li>Include error handling</li>
+                        <li>Output clean JSON</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Stretch Goals</h3>
+                <p>Accept URLs and scrape, process batches, save to database, compare provider accuracy</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Hands-On Prompting Challenge -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Hands-On: Prompting Challenge</h2>
+            <ul class="big-list">
+                <li><strong>The Task:</strong> Get AI to write a function for a moderately complex problem with proper error handling</li>
+                <li><strong>What You'll Learn:</strong> How to diagnose prompt failures and iterate effectively</li>
+                <li><strong>Save Your Work:</strong> Track each prompt iteration and what you changed</li>
+                <li><strong>This is Real Work:</strong> Iteration is what working with AI looks like in practice</li>
+            </ul>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Apply What You Learned</h2>
+            <ul class="big-list">
+                <li><strong>Finish Building with Claude API Course:</strong> If incomplete, do so now - too valuable to skip</li>
+                <li><strong>Complete Job Posting Parser:</strong> Works with both providers, handles edge cases</li>
+                <li><strong>Test with Real Data:</strong> Find 5 real job postings and run them through your tool</li>
+                <li><strong>Write a System Prompt:</strong> Add one to your parser to improve extraction accuracy</li>
+                <li><strong>Push to GitHub:</strong> Update repo with README and examples</li>
+            </ul>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 2 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Prompting is an Iterative Skill</h4>
+                    <p>Your first prompt rarely works perfectly - iteration is expected and normal</p>
+                </div>
+                <div class="step">
+                    <h4>System Prompts are Powerful</h4>
+                    <p>They let you "program" the AI's personality and behavior consistently</p>
+                </div>
+                <div class="step">
+                    <h4>Structured Output Makes AI Practical</h4>
+                    <p>JSON mode and function calling bridge the gap between demos and production apps</p>
+                </div>
+                <div class="step">
+                    <h4>Function Calling is Foundational</h4>
+                    <p>Almost every advanced AI application uses some form of function calling</p>
+                </div>
+                <div class="step">
+                    <h4>Test with Real Data</h4>
+                    <p>Toy examples hide edge cases - real data reveals them</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Looking Ahead -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Looking Ahead to Week 3</h2>
+            <div class="highlight">
+                <h3>Claude Code: Part 1</h3>
+                <p style="margin-top: 30px;">Next week, you'll dive into Claude Code - an AI coding assistant that can edit files, run commands, and build entire applications. The prompting and API fundamentals you learned this week apply directly.</p>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>What to Prepare</h3>
+                    <ul>
+                        <li>Ensure job posting parser works</li>
+                        <li>Complete the API course</li>
+                        <li>Bring questions about Week 2</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>What's Coming</h3>
+                    <ul>
+                        <li>Claude Code setup and basics</li>
+                        <li>CLAUDE.md project documentation</li>
+                        <li>Contributing to open source</li>
+                        <li>Build from scratch with AI</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

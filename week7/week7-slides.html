@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 7: Model Context Protocol - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        /* Content slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Big list */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Code style */
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        /* Framework box */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 7</h1>
+            <p class="subtitle">Model Context Protocol</p>
+            <p class="meta">Month 2: Build Real Apps</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 7 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete Introduction to Model Context Protocol course</li>
+                <li>Understand MCP architecture and its role in AI systems</li>
+                <li>Connect Claude Code to existing MCP servers</li>
+                <li>Use filesystem, GitHub, and database MCP servers</li>
+                <li>Build a custom MCP server in Python</li>
+                <li>Integrate your MCP server with Claude Code</li>
+                <li>Brainstorm innovative MCP server ideas</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: What Is MCP? -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>What Is Model Context Protocol?</h2>
+            <div class="highlight">
+                <h3>MCP is USB for AI</h3>
+                <p>A standardized protocol for connecting AI models to external data sources and tools. It's a universal interface that lets Claude connect to anything.</p>
+            </div>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Why MCP Exists</h3>
+                    <ul>
+                        <li>Solves integration problem at scale</li>
+                        <li>Standardized across applications</li>
+                        <li>Reusable and composable</li>
+                        <li>Discoverable capabilities</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Key Components</h3>
+                    <ul>
+                        <li>MCP Servers (expose data/tools)</li>
+                        <li>MCP Clients (connect to servers)</li>
+                        <li>Resources (read-only data)</li>
+                        <li>Tools (actions to perform)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Why MCP Is Resume Gold -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Why MCP Matters</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>New Technology (2025)</h4>
+                    <p>MCP is cutting-edge and strategically important to Anthropic. Most developers don't know it yet.</p>
+                </div>
+                <div class="step">
+                    <h4>Early Adopter Advantage</h4>
+                    <p>Being able to say "I built custom MCP servers" signals you're ahead of the curve and understand modern AI architecture.</p>
+                </div>
+                <div class="step">
+                    <h4>Universal Integration</h4>
+                    <p>One MCP server can be reused across many contexts - high leverage for developers.</p>
+                </div>
+                <div class="step">
+                    <h4>Future of AI Integration</h4>
+                    <p>Understanding MCP puts you at the forefront of how AI systems will connect to the world.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: MCP Architecture -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>MCP Architecture & How It Works</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>The Model</h3>
+                    <ul>
+                        <li>Server exposes resources and tools</li>
+                        <li>Client connects to servers</li>
+                        <li>Resources: read-only data</li>
+                        <li>Tools: actions AI can perform</li>
+                        <li>Prompts: pre-defined templates</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>The Flow</h3>
+                    <ul>
+                        <li>Configure Claude Code to connect</li>
+                        <li>Claude discovers capabilities</li>
+                        <li>When relevant, reads resources</li>
+                        <li>When needed, invokes tools</li>
+                        <li>Results flow back to Claude</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>MCP vs Function Calling</h3>
+                <p>Function calling is one-off and custom. MCP is standardized, reusable, discoverable, and composable. MCP is function calling + a universal protocol.</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Built-In MCP Servers -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Built-In MCP Servers</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Filesystem MCP</h3>
+                    <p>Gives Claude access to your filesystem with permissions.</p>
+                    <ul>
+                        <li>Read files and directories</li>
+                        <li>Search by name or content</li>
+                        <li>Watch for changes</li>
+                        <li>Create, edit, delete (with approval)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>GitHub MCP</h3>
+                    <p>Connects Claude to GitHub repositories.</p>
+                    <ul>
+                        <li>List repos, issues, pull requests</li>
+                        <li>Read files from any branch</li>
+                        <li>Create issues and PRs</li>
+                        <li>Comment on PRs</li>
+                        <li>Search code across repos</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Database MCP</h3>
+                    <p>Connects to PostgreSQL, MySQL, or SQLite.</p>
+                    <ul>
+                        <li>Run SELECT queries</li>
+                        <li>Describe schema</li>
+                        <li>Execute writes (with permission)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>The Power</h3>
+                    <p>No integration code needed - just connect servers. MCP handles the plumbing.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Practical Use Cases -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Practical MCP Use Cases</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Automated Code Review</h3>
+                    <ul>
+                        <li>Use GitHub MCP to list PRs</li>
+                        <li>Claude reviews for security issues</li>
+                        <li>Verifies tests exist</li>
+                        <li>Posts review as PR comment</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Documentation Generator</h3>
+                    <ul>
+                        <li>Use Filesystem MCP to read code</li>
+                        <li>Claude analyzes architecture</li>
+                        <li>Generates comprehensive README</li>
+                        <li>Creates architecture diagrams</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>The MCP Advantage</h3>
+                <p>Notice how you didn't write integration code - you just connected servers. MCP handles the plumbing, letting you focus on what you want Claude to do.</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Building Custom MCP Servers -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Building Your Own MCP Server</h2>
+            <div class="framework">
+                <div class="framework-item">
+                    <div class="icon">📋</div>
+                    <h4>Server Manifest</h4>
+                    <p>Declares capabilities: resources, tools, prompts</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">📊</div>
+                    <h4>Resource Handlers</h4>
+                    <p>Functions that return data to Claude</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">⚡</div>
+                    <h4>Tool Handlers</h4>
+                    <p>Functions that perform actions</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">🔧</div>
+                    <h4>Configuration</h4>
+                    <p>Setup, auth, API keys, rate limits</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Development Environment</h3>
+                <p>Install the MCP Python SDK: <code>pip install mcp</code>. Review SDK documentation and examine example servers from Anthropic.</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: MCP Server Ideas -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>MCP Server Ideas</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Personal Productivity</h3>
+                    <ul>
+                        <li>Todo list integration</li>
+                        <li>Calendar management</li>
+                        <li>Note-taking connector</li>
+                        <li>Knowledge base search</li>
+                    </ul>
+                    <h3>Development Tools</h3>
+                    <ul>
+                        <li>Test runner and analyzer</li>
+                        <li>Code metrics analyzer</li>
+                        <li>Vulnerability scanner</li>
+                        <li>Docker container manager</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Data Sources</h3>
+                    <ul>
+                        <li>RSS feed aggregator</li>
+                        <li>Weather API connector</li>
+                        <li>Stock/crypto tracker</li>
+                        <li>News API integration</li>
+                    </ul>
+                    <h3>Academic/Learning</h3>
+                    <ul>
+                        <li>Flashcard system connector</li>
+                        <li>Academic paper search</li>
+                        <li>Course materials organizer</li>
+                        <li>Study session tracker</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Implementation Steps -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Building Your MCP Server</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Define the Manifest</h4>
+                    <p>Decide what resources and tools your server will expose</p>
+                </div>
+                <div class="step">
+                    <h4>2. Implement Resource Handlers</h4>
+                    <p>Write functions that fetch and format data - handle errors gracefully</p>
+                </div>
+                <div class="step">
+                    <h4>3. Implement Tool Handlers</h4>
+                    <p>Write functions that perform actions - validate parameters and return status</p>
+                </div>
+                <div class="step">
+                    <h4>4. Add Configuration</h4>
+                    <p>API keys from environment variables, rate limiting, logging</p>
+                </div>
+                <div class="step">
+                    <h4>5. Test Independently</h4>
+                    <p>Use MCP inspector tool before connecting to Claude Code</p>
+                </div>
+                <div class="step">
+                    <h4>6. Connect to Claude Code</h4>
+                    <p>Configure and verify Claude can discover and use your server</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Build & Share</h2>
+            <ul class="big-list">
+                <li><strong>Complete Your MCP Server:</strong> Implement all resources/tools with error handling and tests</li>
+                <li><strong>Create Demo Video:</strong> Show your server in action with Claude Code (2-3 minutes)</li>
+                <li><strong>Write Technical Blog Post:</strong> Explain MCP and walk through your implementation</li>
+                <li><strong>Brainstorm Advanced Ideas:</strong> List 5 MCP servers you wish existed - one might become your capstone</li>
+                <li><strong>Share Your Work:</strong> Push to GitHub, publish blog post, add to portfolio</li>
+            </ul>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 7 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>MCP Is a Universal Integration Layer</h4>
+                    <p>Standardized, reusable, and composable - the future of AI integration</p>
+                </div>
+                <div class="step">
+                    <h4>Servers Expose Resources and Tools</h4>
+                    <p>Data (read) and actions (write) through a unified interface</p>
+                </div>
+                <div class="step">
+                    <h4>MCP Eliminates Integration Boilerplate</h4>
+                    <p>Focus on what to connect, not how to wire it together</p>
+                </div>
+                <div class="step">
+                    <h4>Building MCP Servers Is High-Leverage</h4>
+                    <p>One server can be reused across many contexts and applications</p>
+                </div>
+                <div class="step">
+                    <h4>This Knowledge Is Rare and Valuable</h4>
+                    <p>Most developers haven't heard of MCP yet - you're ahead of the curve</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Next week: Agents and OpenClaw - autonomous systems that think, act, and observe in loops</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

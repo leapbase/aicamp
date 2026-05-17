@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 1: Setup & First API Calls - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Title slide */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        /* Content slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Big list */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Card grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Code style */
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        /* Framework box */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .framework-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(124, 58, 237, 0.15);
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+        }
+
+        .framework-item .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .framework-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .framework-item p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Steps */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid,
+            .framework {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 1</h1>
+            <p class="subtitle">Setup & First API Calls</p>
+            <p class="meta">Month 1: Get Fluent with AI Tools</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 1 Objectives</h2>
+            <ul class="big-list">
+                <li>Set up a complete AI development environment</li>
+                <li>Complete foundational courses: Claude 101 and AI Fluency for Students</li>
+                <li>Make your first API calls to both OpenAI and Anthropic</li>
+                <li>Build and customize a CLI chatbot</li>
+                <li>Understand the AI Fluency framework (4 D's)</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: The 4 D's Framework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>AI Fluency Framework: The 4 D's</h2>
+            <div class="framework">
+                <div class="framework-item">
+                    <div class="icon">📋</div>
+                    <h4>Delegation</h4>
+                    <p>Knowing what tasks to give to AI and what to do yourself</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">✍️</div>
+                    <h4>Description</h4>
+                    <p>Writing clear prompts and instructions</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">🔍</div>
+                    <h4>Discernment</h4>
+                    <p>Evaluating AI output critically</p>
+                </div>
+                <div class="framework-item">
+                    <div class="icon">🔄</div>
+                    <h4>Diligence</h4>
+                    <p>Iterating and refining your approach</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Your Vocabulary for the Summer</h3>
+                <p>This framework becomes a shared vocabulary you'll use throughout the camp to discuss your AI interactions and reflect on your work.</p>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Pre-Work Courses -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Pre-Work: Foundation Courses</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Claude 101</h3>
+                    <p><strong>Time:</strong> 30-45 minutes</p>
+                    <p>A quick introduction to Claude and its capabilities:</p>
+                    <ul>
+                        <li>What Claude is and how it differs from other AI models</li>
+                        <li>Basic interaction patterns</li>
+                        <li>Understanding strengths and limitations</li>
+                        <li>Safety and responsible AI use</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>AI Fluency for Students</h3>
+                    <p><strong>Time:</strong> 45-60 minutes</p>
+                    <p>Introduces the 4 D's framework:</p>
+                    <ul>
+                        <li>Delegation strategies</li>
+                        <li>Description techniques</li>
+                        <li>Discernment skills</li>
+                        <li>Diligence practices</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Complete these before Session 1 - they establish the mental model for working with AI effectively</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Session 1 Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 1: Environment Setup</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Tools to Install</h3>
+                    <ul>
+                        <li>Python 3.10+</li>
+                        <li>VS Code + Extensions</li>
+                        <li>Git & GitHub</li>
+                        <li>Virtual environments</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>API Setup</h3>
+                    <ul>
+                        <li>OpenAI account & API key</li>
+                        <li>Anthropic account & API key</li>
+                        <li>Set billing caps ($10 to start)</li>
+                        <li>Environment variables</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Security Best Practice</h3>
+                <p>Never hardcode API keys! Use <code>.env</code> files with <code>python-dotenv</code>. Add <code>.env</code> to <code>.gitignore</code> immediately.</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Development Tools -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Your AI Development Environment</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Python 3.10+</h4>
+                    <p>The primary language for AI development. Install via python.org or package managers. Verify with <code>python --version</code></p>
+                </div>
+                <div class="step">
+                    <h4>2. VS Code</h4>
+                    <p>Your code editor with Python, Pylance, and Jupyter extensions installed</p>
+                </div>
+                <div class="step">
+                    <h4>3. Git & GitHub</h4>
+                    <p>Version control is essential. Configure your identity and create a GitHub account</p>
+                </div>
+                <div class="step">
+                    <h4>4. Virtual Environments</h4>
+                    <p>Keep dependencies isolated with <code>python -m venv myenv</code></p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: AI Fluency Discussion -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Applying the 4 D's to Your Work</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Delegation</h3>
+                    <p>What programming tasks can AI handle? Which should you always do yourself?</p>
+                </div>
+                <div class="card">
+                    <h3>Description</h3>
+                    <p>How is writing a prompt similar to writing a function docstring?</p>
+                </div>
+                <div class="card">
+                    <h3>Discernment</h3>
+                    <p>How will you verify that AI-generated code actually works and is secure?</p>
+                </div>
+                <div class="card">
+                    <h3>Diligence</h3>
+                    <p>When AI gives you wrong code, what's your debugging process?</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>No single right answers - these are frameworks for thinking about your work</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Session 2 - First API Calls -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Session 2: Making Your First API Calls</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>OpenAI SDK</h3>
+                    <ul>
+                        <li>Install: <code>pip install openai</code></li>
+                        <li>Set up authentication</li>
+                        <li>Create chat completion with GPT-4</li>
+                        <li>Parse response</li>
+                        <li>Understand tokens and pricing</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Anthropic SDK</h3>
+                    <ul>
+                        <li>Install: <code>pip install anthropic</code></li>
+                        <li>Compare API structure to OpenAI</li>
+                        <li>Use Claude Sonnet or Opus</li>
+                        <li>Note parameter differences</li>
+                        <li>Compare response formats</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Hands-On Exercise</h3>
+                <p>Build a script that sends input to both APIs and displays responses side-by-side with token counts</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Build a CLI Chatbot -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Project: CLI Chatbot</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Required Features</h3>
+                    <ul>
+                        <li>Continuous conversation loop</li>
+                        <li>Message history for context</li>
+                        <li>Model selection (OpenAI/Anthropic)</li>
+                        <li>Basic error handling</li>
+                        <li>Token counter display</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Stretch Goals</h3>
+                    <ul>
+                        <li>System prompt customization</li>
+                        <li>Conversation save/load</li>
+                        <li>Color-coded output</li>
+                        <li>Streaming responses</li>
+                        <li>Command shortcuts</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Build Together, Customize for Homework</h3>
+                <p>We'll build the basic version together in session, then you'll add your own improvements</p>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Apply What You Learned</h2>
+            <ul class="big-list">
+                <li><strong>Customize Your Chatbot:</strong> Add at least two features from the stretch goals or invent your own</li>
+                <li><strong>Test Both APIs:</strong> Have 3+ conversations with each API. Note which responses you prefer and why</li>
+                <li><strong>Create GitHub Repo:</strong> Initialize Git, add README with setup instructions, push to GitHub</li>
+                <li><strong>Write Reflection:</strong> 2-3 paragraphs in your README applying the 4 D's framework to your work</li>
+            </ul>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 1 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Environment Setup is Foundational</h4>
+                    <p>You now have a professional AI development environment you'll use all summer</p>
+                </div>
+                <div class="step">
+                    <h4>Both APIs Have Strengths</h4>
+                    <p>Understanding both OpenAI and Anthropic makes you flexible and well-rounded</p>
+                </div>
+                <div class="step">
+                    <h4>The 4 D's Are a Mental Model</h4>
+                    <p>Use them to reflect on your work, not as rigid constraints</p>
+                </div>
+                <div class="step">
+                    <h4>API Costs Are Real</h4>
+                    <p>Always set billing caps and monitor usage carefully</p>
+                </div>
+                <div class="step">
+                    <h4>Version Control from Day 1</h4>
+                    <p>Git isn't optional in modern development - start good habits now</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Looking Ahead -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Looking Ahead to Week 2</h2>
+            <div class="highlight">
+                <h3>Prompting & API Fundamentals</h3>
+                <p style="margin-top: 30px;">Next week, you'll dive deep into prompting techniques and learn about structured output, including tool use and function calling.</p>
+            </div>
+            <div class="two-column" style="margin-top: 50px;">
+                <div class="column">
+                    <h3>What to Prepare</h3>
+                    <ul>
+                        <li>Ensure your environment is fully set up</li>
+                        <li>Have your chatbot working</li>
+                        <li>Bring questions about Week 1</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>What's Coming</h3>
+                    <ul>
+                        <li>Advanced prompting workshop</li>
+                        <li>System prompts deep dive</li>
+                        <li>Function calling tutorial</li>
+                        <li>Build a job posting parser</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

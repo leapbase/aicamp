@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>2026 Summer AI Camp - Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Slide 1: Title */
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Standard slide layout */
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3.5rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .column h3 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.6rem;
+        }
+
+        /* Three column layout */
+        .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card .number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Timeline slide */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .timeline-block {
+            flex: 1;
+            background: rgba(37, 99, 235, 0.15);
+            border-left: 5px solid;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .timeline-block:nth-child(1) {
+            border-left-color: var(--primary);
+        }
+
+        .timeline-block:nth-child(2) {
+            border-left-color: var(--secondary);
+        }
+
+        .timeline-block:nth-child(3) {
+            border-left-color: var(--accent);
+        }
+
+        .timeline-block h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .timeline-block .weeks {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .timeline-block ul {
+            list-style: none;
+        }
+
+        .timeline-block li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .timeline-block li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Certificate grid */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .cert-box {
+            background: rgba(6, 182, 212, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            padding: 20px 25px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cert-box::before {
+            content: '✓';
+            color: var(--accent);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Highlight box */
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .number {
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stat .label {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* List styles */
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 40px;
+        }
+
+        .big-list li {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            padding-left: 50px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .big-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .three-column {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>2026 Summer AI Camp</h1>
+            <p class="subtitle">Build Real AI Applications. Master Modern Tools.</p>
+            <p class="meta">12 Weeks | 9-10 Certificates | Portfolio Projects</p>
+        </div>
+        <div class="slide-number">1 / 10</div>
+    </div>
+
+    <!-- Slide 2: Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Program Overview</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="number">12</div>
+                    <div class="label">Weeks</div>
+                </div>
+                <div class="stat">
+                    <div class="number">9-10</div>
+                    <div class="label">Certificates</div>
+                </div>
+                <div class="stat">
+                    <div class="number">100%</div>
+                    <div class="label">Hands-On</div>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Who Is This For?</h3>
+                <p>CS freshmen and sophomores who want to become genuinely productive with AI tools, build portfolio-worthy projects, and earn industry-recognized credentials.</p>
+            </div>
+        </div>
+        <div class="slide-number">2 / 10</div>
+    </div>
+
+    <!-- Slide 3: What You'll Learn -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>What You'll Learn</h2>
+            <div class="three-column">
+                <div class="card">
+                    <div class="number">🤖</div>
+                    <h3>AI-First Development</h3>
+                    <p>Master Claude Code, OpenAI Codex, and modern AI coding assistants</p>
+                </div>
+                <div class="card">
+                    <div class="number">🔨</div>
+                    <h3>Real Projects</h3>
+                    <p>Build RAG apps, MCP servers, AI agents, and production chatbots</p>
+                </div>
+                <div class="card">
+                    <div class="number">🎓</div>
+                    <h3>Credentials</h3>
+                    <p>Earn official Anthropic certifications for LinkedIn</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 10</div>
+    </div>
+
+    <!-- Slide 4: Curriculum Structure -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>12-Week Curriculum</h2>
+            <div class="timeline">
+                <div class="timeline-block">
+                    <h3>Month 1</h3>
+                    <p class="weeks">Weeks 1-4</p>
+                    <ul>
+                        <li>Setup & First API Calls</li>
+                        <li>Prompting Fundamentals</li>
+                        <li>Claude Code Basics</li>
+                        <li>OpenAI Codex</li>
+                    </ul>
+                </div>
+                <div class="timeline-block">
+                    <h3>Month 2</h3>
+                    <p class="weeks">Weeks 5-8</p>
+                    <ul>
+                        <li>Skills & Subagents</li>
+                        <li>Chatbots with RAG</li>
+                        <li>Model Context Protocol</li>
+                        <li>AI Agents & OpenClaw</li>
+                    </ul>
+                </div>
+                <div class="timeline-block">
+                    <h3>Month 3</h3>
+                    <p class="weeks">Weeks 9-12</p>
+                    <ul>
+                        <li>Capstone Kickoff</li>
+                        <li>Build & Deploy</li>
+                        <li>Blog & Documentation</li>
+                        <li>Resume Prep & Demo Day</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">4 / 10</div>
+    </div>
+
+    <!-- Slide 5: Month 1 Details -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Month 1: Get Fluent with AI Tools</h2>
+            <ul class="big-list">
+                <li><strong>Week 1:</strong> Environment setup, API fundamentals, build your first CLI chatbot</li>
+                <li><strong>Week 2:</strong> Master prompting techniques, structured output, function calling</li>
+                <li><strong>Week 3:</strong> Claude Code deep dive - CLAUDE.md, slash commands, plan mode</li>
+                <li><strong>Week 4:</strong> OpenAI Codex comparison, build evaluation matrix</li>
+            </ul>
+            <div class="highlight">
+                <p><strong>Deliverable:</strong> A useful CLI tool or small web app built with AI assistance</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 10</div>
+    </div>
+
+    <!-- Slide 6: Month 2 Details -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Month 2: Build Real Apps</h2>
+            <ul class="big-list">
+                <li><strong>Week 5:</strong> Custom Skills and Subagents - agent orchestration</li>
+                <li><strong>Week 6:</strong> Production chatbot with RAG, embeddings, vector databases</li>
+                <li><strong>Week 7:</strong> Model Context Protocol - connect Claude to everything</li>
+                <li><strong>Week 8:</strong> Build AI agents from scratch, deploy OpenClaw</li>
+            </ul>
+            <div class="highlight">
+                <p><strong>Deliverables:</strong> Deployed chatbot, custom MCP server, working agent</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 10</div>
+    </div>
+
+    <!-- Slide 7: Month 3 Details -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Month 3: Capstone & Portfolio</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Build Phase</h3>
+                    <ul>
+                        <li>Define capstone scope</li>
+                        <li>Architecture design</li>
+                        <li>Intensive development</li>
+                        <li>Open-source contribution</li>
+                        <li>Deploy to production</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Polish Phase</h3>
+                    <ul>
+                        <li>Write technical blog post</li>
+                        <li>Create demo video</li>
+                        <li>Polish README & docs</li>
+                        <li>Resume optimization</li>
+                        <li>Mock interviews & demo day</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 10</div>
+    </div>
+
+    <!-- Slide 8: Certificates -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Official Anthropic Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-box">Claude 101</div>
+                <div class="cert-box">AI Fluency for Students</div>
+                <div class="cert-box">Building with the Claude API</div>
+                <div class="cert-box">Claude Code 101</div>
+                <div class="cert-box">Claude Code in Action</div>
+                <div class="cert-box">Introduction to Agent Skills</div>
+                <div class="cert-box">Introduction to Subagents</div>
+                <div class="cert-box">Intro to Model Context Protocol</div>
+                <div class="cert-box">AI Capabilities and Limitations</div>
+                <div class="cert-box">MCP: Advanced Topics (Optional)</div>
+            </div>
+        </div>
+        <div class="slide-number">8 / 10</div>
+    </div>
+
+    <!-- Slide 9: Why This Matters -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Why This Program Works</h2>
+            <ul class="big-list">
+                <li><strong>Practical Focus:</strong> No ML theory overload - learn by building real applications</li>
+                <li><strong>Modern Tools:</strong> Master the AI tools that professional developers use daily</li>
+                <li><strong>Portfolio First:</strong> Every project is shippable and interview-ready</li>
+                <li><strong>Credential Stack:</strong> 9-10 official certificates that stand out on LinkedIn</li>
+                <li><strong>Real Experience:</strong> Open-source contributions and production deployments</li>
+            </ul>
+        </div>
+        <div class="slide-number">9 / 10</div>
+    </div>
+
+    <!-- Slide 10: Outcomes -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>What You'll Walk Away With</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Technical Skills</h3>
+                    <ul>
+                        <li>Fluency with AI APIs</li>
+                        <li>Production chatbot development</li>
+                        <li>RAG implementation</li>
+                        <li>MCP server creation</li>
+                        <li>AI agent architecture</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Career Assets</h3>
+                    <ul>
+                        <li>9-10 Anthropic certificates</li>
+                        <li>Portfolio of deployed projects</li>
+                        <li>Technical blog posts</li>
+                        <li>Open-source contributions</li>
+                        <li>Interview-ready experience</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Ready to become an AI-fluent developer?</h3>
+            </div>
+        </div>
+        <div class="slide-number">10 / 10</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

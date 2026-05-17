@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 12: Resume & Interview Prep - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 60px 20px 40px;
+        }
+
+        .back-link {
+            color: var(--white);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .week-meta {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .slide-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .slide-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        main {
+            background: var(--white);
+            margin: -20px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 30px 0 15px 0;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin: 20px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--dark);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+
+        .session-card {
+            background: var(--light);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .session-card h3 {
+            margin-top: 0;
+        }
+
+        .objectives {
+            background: #fefce8;
+            border-left: 4px solid #eab308;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .objectives h3 {
+            color: #854d0e;
+            margin-top: 0;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+
+        .example-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .congrats-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 3px solid #22c55e;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .congrats-box h3 {
+            color: #15803d;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding: 30px 20px;
+                margin: -10px 20px 40px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to Overview
+            </a>
+            <h1>Week 12: Resume & Interview Prep</h1>
+            <p class="week-meta">Month 3: Capstone & Portfolio | Final Week</p>
+            <a href="week12-slides.html" class="slide-link">View Slides →</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="objectives">
+            <h3>Week Objectives</h3>
+            <ul>
+                <li>Polish your resume for AI/ML internship applications</li>
+                <li>Ensure all projects have clean READMEs with screenshots</li>
+                <li>Add the complete Anthropic certificate stack to LinkedIn</li>
+                <li>Practice technical interview questions</li>
+                <li>Prepare and deliver your capstone demo</li>
+                <li>Participate in demo day</li>
+                <li>Plan your ongoing learning and project roadmap</li>
+            </ul>
+        </div>
+
+        <h2>Pre-Work</h2>
+
+        <h3>Collect Your Anthropic Certificates</h3>
+        <p>Verify you have certificates for all completed courses:</p>
+        <ul>
+            <li>Claude 101 (Week 1)</li>
+            <li>AI Fluency for Students (Week 1)</li>
+            <li>Building with the Claude API (Week 2)</li>
+            <li>Claude Code 101 (Week 3)</li>
+            <li>Claude Code in Action (Weeks 3-4)</li>
+            <li>Introduction to Agent Skills (Week 5)</li>
+            <li>Introduction to Subagents (Week 5)</li>
+            <li>Introduction to Model Context Protocol (Week 7)</li>
+            <li>AI Capabilities and Limitations (Week 8)</li>
+            <li>Model Context Protocol: Advanced Topics (Week 9, if completed)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Why Certificates Matter</h3>
+            <p>For a freshman or sophomore, having 9-10 official Anthropic certificates is striking. Most internship applicants have zero. This is real, verifiable evidence that you've invested in structured learning and understand modern AI systems at a level most students don't reach until graduate school or industry work.</p>
+        </div>
+
+        <h2>Session 1: Resume Review & LinkedIn Optimization</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Resume Structure for AI Roles (45 minutes)</h3>
+
+            <h4>Resume Sections (in order):</h4>
+
+            <p><strong>1. Header:</strong></p>
+            <ul>
+                <li>Name (large, prominent)</li>
+                <li>Email, Phone, LinkedIn, GitHub</li>
+                <li>Location (city, state) - optional</li>
+                <li>Personal website or portfolio (if you have one)</li>
+            </ul>
+
+            <p><strong>2. Education:</strong></p>
+            <ul>
+                <li>University, degree, expected graduation</li>
+                <li>GPA (if 3.5+)</li>
+                <li>Relevant coursework (CS, math, AI courses)</li>
+            </ul>
+
+            <p><strong>3. Skills:</strong></p>
+            <ul>
+                <li><strong>Languages:</strong> Python, JavaScript, SQL, etc.</li>
+                <li><strong>AI/ML:</strong> Claude API, OpenAI API, RAG, embeddings, vector databases, prompt engineering</li>
+                <li><strong>Tools & Frameworks:</strong> Claude Code, Git, Docker, Streamlit, FastAPI, React, etc.</li>
+                <li><strong>Concepts:</strong> Agent orchestration, MCP, function calling, system design</li>
+            </ul>
+
+            <p><strong>4. Projects (Most Important Section):</strong></p>
+            <p>For each project (list 3-4 best):</p>
+            <ul>
+                <li><strong>Project Name</strong> | Tech Stack | [GitHub] [Live Demo]</li>
+                <li>1-2 sentence description focusing on impact/purpose</li>
+                <li>2-3 bullets with specific accomplishments:
+                    <ul>
+                        <li>Start with action verbs (Built, Implemented, Designed, Deployed)</li>
+                        <li>Include metrics where possible (reduced latency by 200ms, processed 10k documents)</li>
+                        <li>Highlight technical decisions and challenges solved</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <p><strong>5. Certifications:</strong></p>
+            <ul>
+                <li>List all 9-10 Anthropic course certificates</li>
+                <li>Include completion dates</li>
+                <li>Link to verification if possible</li>
+            </ul>
+
+            <p><strong>6. Experience (if applicable):</strong></p>
+            <ul>
+                <li>Previous internships, research, relevant jobs</li>
+                <li>Same bullet format as projects</li>
+            </ul>
+
+            <h4>Example Project Bullet:</h4>
+            <div class="example-box">
+                <p><strong>ArXiv Research Assistant MCP Server</strong> | Python, MCP SDK, Claude API, PyPDF2 | [GitHub] [Demo]</p>
+                <p>Custom Model Context Protocol server enabling Claude to search, download, and analyze academic papers from arXiv</p>
+                <ul>
+                    <li>Implemented PDF parsing and summarization pipeline processing 100+ papers with 95% accuracy</li>
+                    <li>Designed MCP resource and tool handlers with rate limiting and caching, reducing API calls by 60%</li>
+                    <li>Integrated with Claude Code allowing natural language research queries (e.g., "compare transformer architectures")</li>
+                </ul>
+            </div>
+
+            <h4>Resume Dos:</h4>
+            <ul>
+                <li>Keep it to 1 page (as a student)</li>
+                <li>Use consistent formatting</li>
+                <li>Quantify achievements wherever possible</li>
+                <li>Tailor for each application (emphasize relevant skills)</li>
+                <li>Use keywords from job descriptions</li>
+                <li>Proofread obsessively (zero typos)</li>
+            </ul>
+
+            <h4>Resume Don'ts:</h4>
+            <ul>
+                <li>Generic objective statements</li>
+                <li>Listing courses without context</li>
+                <li>Vague bullets ("worked on AI project")</li>
+                <li>Including high school activities (unless truly exceptional)</li>
+                <li>Lying or exaggerating</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Project READMEs Review (30 minutes)</h3>
+
+            <p>Recruiters will click your GitHub links. Make sure they're impressive.</p>
+
+            <h4>README Checklist (for each major project):</h4>
+            <ul>
+                <li>Clear project title and description</li>
+                <li>Demo video or GIF at the top</li>
+                <li>Screenshots of key features</li>
+                <li>Installation instructions that work</li>
+                <li>Usage examples</li>
+                <li>Architecture overview</li>
+                <li>Technologies used</li>
+                <li>License</li>
+                <li>Professional tone (no jokes, memes, or excessive emoji)</li>
+            </ul>
+
+            <h4>GitHub Profile Optimization:</h4>
+            <ul>
+                <li><strong>Pin your best 6 repositories</strong></li>
+                <li><strong>Profile README:</strong> Create a profile README (GitHub shows it on your profile page)
+                    <ul>
+                        <li>Who you are</li>
+                        <li>What you're learning/building</li>
+                        <li>How to reach you</li>
+                        <li>Link to blog, LinkedIn, portfolio</li>
+                    </ul>
+                </li>
+                <li><strong>Contribution graph:</strong> Should show consistent activity (not empty)</li>
+                <li><strong>Profile photo:</strong> Professional or neutral</li>
+            </ul>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: LinkedIn Optimization (45 minutes)</h3>
+
+            <h4>LinkedIn Profile Sections:</h4>
+
+            <p><strong>Headline:</strong></p>
+            <p>Don't just put "Student at [University]"</p>
+            <div class="example-box">
+                <p><strong>Good Example:</strong> "CS Student | AI/ML | Building with Claude, OpenAI APIs | 10 Anthropic Certifications"</p>
+            </div>
+
+            <p><strong>About Section:</strong></p>
+            <p>3-4 paragraphs:</p>
+            <ul>
+                <li>Who you are and what you're passionate about</li>
+                <li>What you've been learning/building</li>
+                <li>Your technical skills and interests</li>
+                <li>What you're looking for (internships, collaborations)</li>
+            </ul>
+
+            <p><strong>Experience:</strong></p>
+            <ul>
+                <li>Add "AI Training Camp" as an experience (self-directed project)</li>
+                <li>List key accomplishments and skills learned</li>
+                <li>Add other internships, research, relevant work</li>
+            </ul>
+
+            <p><strong>Projects:</strong></p>
+            <ul>
+                <li>Add all major projects with descriptions</li>
+                <li>Include links to GitHub, live demos, blog posts</li>
+                <li>Add media (screenshots, videos)</li>
+            </ul>
+
+            <p><strong>Certifications:</strong></p>
+            <ul>
+                <li>Create a "Certifications" section</li>
+                <li>Add all 9-10 Anthropic certificates</li>
+                <li>Include completion dates</li>
+                <li>This section is highly visible and impressive</li>
+            </ul>
+
+            <p><strong>Skills & Endorsements:</strong></p>
+            <ul>
+                <li>Add all relevant technical skills</li>
+                <li>Ask camp peers to endorse you</li>
+                <li>Endorse others (they'll often reciprocate)</li>
+            </ul>
+
+            <h4>LinkedIn Post Strategy:</h4>
+            <p>Post about your summer work:</p>
+            <ul>
+                <li>Share your capstone completion</li>
+                <li>Link to blog post and demo video</li>
+                <li>Post weekly learnings or project updates</li>
+                <li>Engage with AI/ML content (comment, share)</li>
+                <li>Follow companies you want to work for</li>
+            </ul>
+        </div>
+
+        <h2>Session 2: Mock Interviews & Demo Day</h2>
+
+        <div class="session-card">
+            <h3>Part 1: Technical Interview Prep (60 minutes)</h3>
+
+            <h4>Common Interview Question Categories:</h4>
+
+            <p><strong>1. Project Deep-Dive:</strong></p>
+            <p>"Tell me about your capstone project."</p>
+            <ul>
+                <li>Describe the problem and why it matters</li>
+                <li>Explain your architecture and tech choices</li>
+                <li>Discuss challenges and how you solved them</li>
+                <li>Share metrics or results</li>
+                <li>Mention what you'd improve</li>
+            </ul>
+
+            <p><strong>2. Technical Knowledge:</strong></p>
+            <ul>
+                <li>"What's the difference between embeddings and fine-tuning?"</li>
+                <li>"Explain how RAG works."</li>
+                <li>"What is prompt engineering? Give me an example."</li>
+                <li>"How do LLM APIs work? What's a token?"</li>
+                <li>"What's MCP and why does it matter?"</li>
+            </ul>
+
+            <p><strong>3. Tools & Workflow:</strong></p>
+            <ul>
+                <li>"What AI tools do you use and when?"</li>
+                <li>"How has Claude Code changed your development workflow?"</li>
+                <li>"Describe your process for debugging AI-generated code."</li>
+            </ul>
+
+            <p><strong>4. Design Questions:</strong></p>
+            <ul>
+                <li>"Design a chatbot for customer support."</li>
+                <li>"How would you build a code search tool for a large codebase?"</li>
+                <li>"Design a system that monitors and alerts on AI agent behavior."</li>
+            </ul>
+
+            <p><strong>5. Behavioral:</strong></p>
+            <ul>
+                <li>"Tell me about a time you got stuck on a hard problem."</li>
+                <li>"Describe a technical decision you made and why."</li>
+                <li>"What's a project you're proud of and why?"</li>
+            </ul>
+
+            <h4>Interview Answering Framework (STAR):</h4>
+            <ul>
+                <li><strong>Situation:</strong> Set the context</li>
+                <li><strong>Task:</strong> What was the goal or challenge?</li>
+                <li><strong>Action:</strong> What did you do specifically?</li>
+                <li><strong>Result:</strong> What was the outcome? Metrics if possible.</li>
+            </ul>
+
+            <h4>Practice Questions for Mock Interviews:</h4>
+            <ol>
+                <li>"Walk me through your capstone project from start to finish."</li>
+                <li>"What's the most interesting technical problem you solved this summer?"</li>
+                <li>"How would you explain RAG to a non-technical person?"</li>
+                <li>"What are the limitations of current LLMs?"</li>
+                <li>"Design an AI-powered code review tool."</li>
+                <li>"Why are you interested in working with our company?"</li>
+            </ol>
+
+            <p>Pair up and practice. Give each other feedback.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 2: Capstone Demo Presentations (2-3 hours)</h3>
+
+            <p>Each student presents their capstone to the group.</p>
+
+            <h4>Presentation Format (5 minutes each):</h4>
+            <ol>
+                <li><strong>Introduction (30 sec):</strong>
+                    <ul>
+                        <li>Name and project name</li>
+                        <li>One-sentence description</li>
+                    </ul>
+                </li>
+                <li><strong>Problem & Motivation (45 sec):</strong>
+                    <ul>
+                        <li>What problem does this solve?</li>
+                        <li>Why does it matter?</li>
+                    </ul>
+                </li>
+                <li><strong>Demo (2-3 min):</strong>
+                    <ul>
+                        <li>Show the application working</li>
+                        <li>Highlight 3-5 key features</li>
+                        <li>Use interesting, real examples</li>
+                    </ul>
+                </li>
+                <li><strong>Technical Highlights (1 min):</strong>
+                    <ul>
+                        <li>Architecture overview</li>
+                        <li>Key technologies</li>
+                        <li>Interesting technical decisions</li>
+                    </ul>
+                </li>
+                <li><strong>Lessons & Future (30 sec):</strong>
+                    <ul>
+                        <li>What you learned</li>
+                        <li>What's next for the project</li>
+                    </ul>
+                </li>
+                <li><strong>Q&A (2-3 min):</strong>
+                    <ul>
+                        <li>Audience asks questions</li>
+                        <li>Answer clearly and honestly</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h4>Presentation Tips:</h4>
+            <ul>
+                <li>Practice your timing (don't go over 5 minutes for the demo)</li>
+                <li>Speak clearly and at a moderate pace</li>
+                <li>Make eye contact (don't just stare at screen)</li>
+                <li>Show enthusiasm for your project</li>
+                <li>Be prepared for "What would you do differently?" questions</li>
+                <li>Have your demo ready to go (don't troubleshoot live)</li>
+            </ul>
+
+            <h4>Peer Feedback:</h4>
+            <p>After each presentation, the group provides:</p>
+            <ul>
+                <li>One thing that was impressive</li>
+                <li>One question or curiosity</li>
+                <li>One suggestion for improvement</li>
+            </ul>
+
+            <p>This is great practice for real demos and interviews.</p>
+        </div>
+
+        <div class="session-card">
+            <h3>Part 3: Reflection & Next Steps (30 minutes)</h3>
+
+            <h4>Group Discussion:</h4>
+            <ul>
+                <li>What was the most valuable thing you learned this summer?</li>
+                <li>What surprised you most about working with AI tools?</li>
+                <li>What will you continue working on?</li>
+                <li>How has your understanding of AI changed?</li>
+                <li>What advice would you give to someone starting this camp?</li>
+            </ul>
+
+            <h4>Individual Reflection (write this down):</h4>
+            <ul>
+                <li>What are you most proud of?</li>
+                <li>What skills grew the most?</li>
+                <li>What would you do differently?</li>
+                <li>What's your next learning goal?</li>
+                <li>What project will you build next?</li>
+            </ul>
+        </div>
+
+        <h2>Homework (Final Week)</h2>
+
+        <div class="objectives">
+            <h3>Required Tasks</h3>
+            <ol>
+                <li><strong>Finalize Resume:</strong>
+                    <ul>
+                        <li>Incorporate feedback from session</li>
+                        <li>Proofread multiple times</li>
+                        <li>Have someone else review it</li>
+                        <li>Export as PDF (never send .docx)</li>
+                        <li>Create both a general version and tailored versions</li>
+                    </ul>
+                </li>
+                <li><strong>Update All Online Profiles:</strong>
+                    <ul>
+                        <li>LinkedIn fully updated with certificates</li>
+                        <li>GitHub profile README and pinned repos</li>
+                        <li>Personal website (if you have one)</li>
+                        <li>Ensure consistency across platforms</li>
+                    </ul>
+                </li>
+                <li><strong>Practice Interview Questions:</strong>
+                    <ul>
+                        <li>Answer the 6 practice questions out loud</li>
+                        <li>Time yourself</li>
+                        <li>Record yourself (awkward but helpful)</li>
+                        <li>Refine your answers</li>
+                    </ul>
+                </li>
+                <li><strong>Start Applying:</strong>
+                    <ul>
+                        <li>Identify 10 companies you'd like to work for</li>
+                        <li>Find their internship postings</li>
+                        <li>Apply to at least 3 this week</li>
+                        <li>Tailor resume and cover letter for each</li>
+                    </ul>
+                </li>
+                <li><strong>Stay Connected:</strong>
+                    <ul>
+                        <li>Share contact info with camp peers</li>
+                        <li>Join relevant Discord/Slack communities</li>
+                        <li>Follow AI researchers and companies on Twitter</li>
+                        <li>Continue learning and building</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>Ongoing Learning & Next Steps</h2>
+
+        <div class="session-card">
+            <h3>How to Stay Sharp</h3>
+
+            <h4>Build One Project Per Month:</h4>
+            <ul>
+                <li>Small, focused, and finished</li>
+                <li>Try new technologies or techniques</li>
+                <li>Document and share each one</li>
+            </ul>
+
+            <h4>Contribute to Open Source:</h4>
+            <ul>
+                <li>Make at least one PR per month</li>
+                <li>Start with documentation, work up to features</li>
+                <li>Engage with the community</li>
+            </ul>
+
+            <h4>Write Technical Content:</h4>
+            <ul>
+                <li>Blog about what you're learning</li>
+                <li>Create tutorials</li>
+                <li>Share on social media</li>
+                <li>Build your personal brand</li>
+            </ul>
+
+            <h4>Keep Learning:</h4>
+            <ul>
+                <li>Follow AI news (Hacker News, /r/MachineLearning)</li>
+                <li>Read research papers (start with summaries)</li>
+                <li>Take advanced courses when ready</li>
+                <li>Experiment with new models and APIs as they release</li>
+            </ul>
+
+            <h4>Network:</h4>
+            <ul>
+                <li>Attend local AI/ML meetups</li>
+                <li>Join online communities</li>
+                <li>Reach out to people doing interesting work</li>
+                <li>Help beginners (teaching reinforces learning)</li>
+            </ul>
+        </div>
+
+        <div class="congrats-box">
+            <h3>Congratulations!</h3>
+            <p style="font-size: 1.2rem; color: var(--gray); margin-top: 10px;">You've completed the 2026 Summer AI Training Camp!</p>
+            <p style="color: var(--gray); margin-top: 20px;">You started as a CS underclassman with curiosity about AI. Now you:</p>
+            <ul style="text-align: left; max-width: 600px; margin: 20px auto; color: var(--gray);">
+                <li>Build production apps with Claude and OpenAI APIs</li>
+                <li>Use Claude Code, Skills, and Subagents like a pro</li>
+                <li>Understand RAG, embeddings, and vector databases</li>
+                <li>Write custom MCP servers</li>
+                <li>Build and deploy autonomous agents</li>
+                <li>Contribute to open source AI projects</li>
+                <li>Have 9-10 official Anthropic certifications</li>
+                <li>Possess a portfolio of impressive, documented projects</li>
+            </ul>
+            <p style="color: var(--gray); margin-top: 20px;">Most students don't reach this level until graduate school or after years in industry. You got here in one summer through focused, intensive work.</p>
+            <p style="color: var(--primary); font-weight: 600; font-size: 1.2rem; margin-top: 30px;">Now go build something amazing.</p>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li><strong>Your resume is a living document</strong> - Update it as you build new projects</li>
+            <li><strong>Certificates are credentials</strong> - The Anthropic stack is rare and valuable</li>
+            <li><strong>Projects prove capability</strong> - Show, don't just tell</li>
+            <li><strong>Documentation matters</strong> - READMEs are often your first impression</li>
+            <li><strong>Interview prep is a skill</strong> - Practice makes perfect</li>
+            <li><strong>Networking compounds</strong> - Stay connected with peers and community</li>
+            <li><strong>Keep building</strong> - One project per month keeps you growing</li>
+            <li><strong>You're ready</strong> - You have real, demonstrable AI skills that most students lack</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h3>Final Thoughts</h3>
+            <p>This summer was intense. You learned tools, built projects, wrote code, deployed apps, contributed to open source, and documented everything. The skills you've developed—practical AI development, prompt engineering, agent orchestration, system design—are exactly what companies are looking for in 2026.</p>
+            <p>But more importantly, you've learned how to learn. AI is evolving rapidly. New models, tools, and techniques emerge constantly. The meta-skill you've developed—the ability to quickly learn new AI technologies and apply them to real problems—will serve you for your entire career.</p>
+            <p>You're not just an AI-curious student anymore. You're an AI-capable developer. Go prove it.</p>
+        </div>
+    </main>
+
+    <div style="text-align: center; margin: 40px auto; max-width: 1000px; padding: 0 20px;">
+        <a href="week12-quiz.html" style="display: inline-block; padding: 12px 30px; background: var(--primary); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem;">Take the Week 12 Quiz →</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><a href="../index.html" style="color: var(--primary); text-decoration: none;">← Back to AI Camp Overview</a></p>
+            <p style="margin-top: 10px;">Week 12 of 12 | 2026 Summer AI Camp — Complete!</p>
+        </div>
+    </footer>
+</body>
+</html>

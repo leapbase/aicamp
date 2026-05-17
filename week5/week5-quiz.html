@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 5 Quiz: Skills & Subagents - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 5 Quiz: Skills & Subagents</h1>
+            <p class="quiz-info">Test your understanding of custom Skills, agent orchestration, multi-agent systems, and subagent coordination</p>
+        </header>
+
+        <a href="week5.html" class="back-link">← Back to Week 5 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What are Skills in the context of Claude Code?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Programming languages Claude understands</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Reusable, shareable capabilities that extend what Claude Code can do—like plugins or macros for your AI assistant</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Error messages that Claude generates</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Data structures in Python</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">What makes a good Skill?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">It only works once and is complex</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">Reusable (solves repeated problems), well-defined (clear inputs/outputs), composable (combines with other skills), and documented</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">It requires manual configuration every time</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">It has no documentation</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">What are Subagents?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">Bugs in the agent code</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">Specialized AI instances that handle specific parts of a complex task—an introduction to agent orchestration</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">Helper functions for debugging</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">Backup copies of the main agent</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">Why use multiple agents instead of a single agent?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">It's always faster</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">Separation of concerns, specialized expertise, checks and balances, and parallel processing benefits</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">To make the system more complicated</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">Single agents are always better</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">What is the "Sequential Pipeline" orchestration pattern?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">All agents work at the same time without coordination</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Agent 1 → Agent 2 → Agent 3, where each agent passes its output to the next in a linear chain</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">Random agent selection</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Agents never communicate</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">In a multi-agent Research Report Generator, which agent role synthesizes information into an outline?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">Researcher Agent</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">Analyst Agent</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">Writer Agent</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">Critic Agent</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">What is a key component of a Skill?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">Only the skill name</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">Trigger (when to activate), Instructions (what to do), Context (what information needed), and Output (result format)</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">Just random code snippets</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">A single line of documentation</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">Why is understanding agent orchestration valuable for interviews?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">It's not valuable for interviews</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">Very few students understand agent orchestration at this level—it's a fundamental pattern in modern AI systems and makes you conversant with cutting-edge AI architecture</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Everyone already knows it</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Interviewers never ask about it</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "Skills are reusable, shareable capabilities that extend what Claude Code can do. Think of them as plugins or macros for your AI assistant—pre-defined workflows that Claude Code can execute to maximize productivity.",
+            q2: "A good Skill should be: Reusable (solves a problem you encounter repeatedly), Well-defined (clear inputs and outputs), Composable (can combine with other skills), and Documented (clear description and usage examples). These qualities make Skills valuable and maintainable.",
+            q3: "Subagents are specialized AI instances that handle specific parts of a complex task. This is your introduction to agent orchestration—a hot topic in AI development where multiple specialized agents collaborate on complex workflows.",
+            q4: "Multiple agents offer: Separation of concerns (each has a specific role), Expertise (agents can have specialized knowledge), Checks and balances (one creates, another critiques), and Parallel processing (multiple agents can work simultaneously). Single agents struggle with complex workflows.",
+            q5: "In a Sequential Pipeline, Agent 1 → Agent 2 → Agent 3, where each agent passes its output to the next. For example: Researcher → Writer → Editor. This is one of the common orchestration patterns for multi-step workflows.",
+            q6: "The Analyst Agent receives research findings, identifies key themes and patterns, and structures information into an outline. It sits between the Researcher (who gathers data) and the Writer (who creates prose).",
+            q7: "A Skill has four key components: Trigger (when should this skill activate?), Instructions (what should Claude do?), Context (what information does it need?), and Output (what format should the result take?). These components define how the skill operates.",
+            q8: "Very few students understand agent orchestration at this level. These concepts apply beyond Claude—agent orchestration is a fundamental pattern in modern AI systems. Understanding it makes you conversant with cutting-edge AI architecture, which is impressive in interviews."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You have a solid understanding of Week 5 concepts.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

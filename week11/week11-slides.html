@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 11: Finish & Write - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 11</h1>
+            <p class="subtitle">Finish & Write</p>
+            <p class="meta">Month 3: Capstone & Portfolio</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 11 Objectives</h2>
+            <ul class="big-list">
+                <li>Complete all remaining capstone features</li>
+                <li>Deploy your project (if applicable)</li>
+                <li>Create a professional demo video</li>
+                <li>Write and publish a comprehensive blog post</li>
+                <li>Polish all documentation</li>
+                <li>Prepare your capstone for showcase</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: The Final Push -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>From Working to Showcase-Ready</h2>
+            <div class="highlight">
+                <h3>This Week Transforms Your Project</h3>
+                <p>The difference between "it works" and "it's showcase-ready" is polish, documentation, and presentation. These final touches are what make your project interview-worthy.</p>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Prioritize Ruthlessly -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Feature Completion Priority</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Must Finish</h3>
+                    <ul>
+                        <li>Core features that define your project</li>
+                        <li>Critical bug fixes</li>
+                        <li>Error handling for common failures</li>
+                        <li>Basic UX polish</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Can Skip</h3>
+                    <ul>
+                        <li>Nice-to-have features</li>
+                        <li>Advanced optimizations</li>
+                        <li>Features you can't finish in one day</li>
+                        <li>Anything not essential to demo</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>The 80/20 Rule</h3>
+                <p>20% of polish gives 80% of the wow factor: smooth first launch, friendly error messages, visual consistency, acceptable performance</p>
+            </info-box>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Known Issues Documentation -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Can't Finish Everything?</h2>
+            <div class="highlight">
+                <h3>Document What's Missing</h3>
+                <p>Create a "Known Issues" section in your README. List limitations honestly. Explain why they're not fixed. Describe how you'd fix them given more time.</p>
+            </div>
+            <div class="info-box">
+                <h3>This Shows Maturity</h3>
+                <p>Interviewers appreciate honesty about trade-offs. It shows you understand engineering decisions.</p>
+            </info-box>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Deployment -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Deploy Your Project</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Hosting Options</h3>
+                    <ul>
+                        <li>Streamlit Cloud</li>
+                        <li>Vercel (Next.js, static)</li>
+                        <li>Render (Python, Docker)</li>
+                        <li>Railway (full-stack)</li>
+                        <li>Fly.io (flexible)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Deployment Checklist</h3>
+                    <ul>
+                        <li>Environment variables secure</li>
+                        <li>Dependencies frozen</li>
+                        <li>Health check passes</li>
+                        <li>Test from different device</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>If not web-deployable: Create clear installation instructions, test on fresh machine, record demo video</p>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: README Excellence -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Polish Your README</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Essential Sections</h4>
+                    <p>Title & tagline, demo (screenshot/GIF/video at top), features list, quick start, architecture overview, usage examples, configuration, development guide, known issues, license, acknowledgments</p>
+                </div>
+                <div class="step">
+                    <h4>Make It Scannable</h4>
+                    <p>Use headers, code blocks, lists. Add badges (build status, version, license). Include table of contents for long READMEs. People skim, not read.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Demo Video -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Create Your Demo Video (3-5 min)</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Introduction (30 sec)</h4>
+                    <p>Name, project name, tagline, problem it solves</p>
+                </div>
+                <div class="step">
+                    <h4>2. Quick Tour (30 sec)</h4>
+                    <p>Show UI or interface, point out key components</p>
+                </div>
+                <div class="step">
+                    <h4>3. Feature Demonstrations (2-3 min)</h4>
+                    <p>Show 3-5 core features with real, interesting examples</p>
+                </div>
+                <div class="step">
+                    <h4>4. Technical Highlight (30 sec)</h4>
+                    <p>Briefly show code or architecture, mention interesting decisions</p>
+                </div>
+                <div class="step">
+                    <h4>5. Conclusion (30 sec)</h4>
+                    <p>Summarize, mention future improvements, provide GitHub link</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Video Recording Tips -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Recording Tips</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Best Practices</h3>
+                    <ul>
+                        <li>Use Loom, OBS, or QuickTime</li>
+                        <li>Quiet environment, decent mic</li>
+                        <li>Script narration, practice once</li>
+                        <li>Close unnecessary tabs/apps</li>
+                        <li>Speak clearly, not too fast</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>What to Show</h3>
+                    <ul>
+                        <li>Happy path (working smoothly)</li>
+                        <li>Interesting edge cases</li>
+                        <li>Performance (if impressive)</li>
+                        <li>Any "wow" moments</li>
+                        <li>Don't show bugs or apologize</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Upload to YouTube, add to README and LinkedIn, embed in blog post</p>
+            </div>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Blog Post Structure -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Write Your Blog Post</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Introduction</h4>
+                    <p>Hook: why you built this. Problem statement. Brief overview of solution.</p>
+                </div>
+                <div class="step">
+                    <h4>2. Architecture & Design</h4>
+                    <p>High-level diagram. Key technologies and why. Design decisions and trade-offs.</p>
+                </div>
+                <div class="step">
+                    <h4>3. Implementation Highlights</h4>
+                    <p>Walk through 2-3 interesting features with code snippets. Explain challenges and solutions.</p>
+                </div>
+                <div class="step">
+                    <h4>4. Results & Demo</h4>
+                    <p>Embed video, screenshots, metrics if relevant</p>
+                </div>
+                <div class="step">
+                    <h4>5. Lessons Learned</h4>
+                    <p>Technical and process lessons. What you'd do differently.</p>
+                </div>
+                <div class="step">
+                    <h4>6. Conclusion</h4>
+                    <p>Summarize, link to GitHub/demo, call to action</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Publishing Your Work -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Publish & Share</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Where to Publish</h3>
+                    <ul>
+                        <li>Dev.to (developer-focused)</li>
+                        <li>Medium (broader audience)</li>
+                        <li>Hashnode (developer platform)</li>
+                        <li>Personal blog (bonus points)</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Share Widely</h3>
+                    <ul>
+                        <li>LinkedIn post with video</li>
+                        <li>Twitter/X thread</li>
+                        <li>Reddit relevant communities</li>
+                        <li>Discord/Slack communities</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Update Portfolio</h3>
+                    <ul>
+                        <li>Pin repo on GitHub</li>
+                        <li>Add to LinkedIn Projects</li>
+                        <li>Update resume</li>
+                        <li>Personal website/portfolio</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Collect Certificates</h3>
+                    <ul>
+                        <li>Verify all 9-10 Anthropic certificates</li>
+                        <li>Add to LinkedIn Certifications</li>
+                        <li>Real evidence of skills</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 11 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Polish Makes the Difference</h4>
+                    <p>Working code + good docs + demo = portfolio piece</p>
+                </div>
+                <div class="step">
+                    <h4>Documentation Is a Skill</h4>
+                    <p>Technical writing is as important as coding</p>
+                </div>
+                <div class="step">
+                    <h4>Demo Videos Prove It Works</h4>
+                    <p>Show, don't just tell. Visual proof matters.</p>
+                </div>
+                <div class="step">
+                    <h4>Blog Posts Demonstrate Communication</h4>
+                    <p>Employers value clear technical communication</p>
+                </div>
+                <div class="step">
+                    <h4>Certificates Are Credentials</h4>
+                    <p>Don't underestimate their value on LinkedIn</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Next week: Resume polish, interview prep, and demo day presentations</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

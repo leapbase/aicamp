@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 9: Capstone Kickoff - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            padding: 60px;
+            position: relative;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .title-slide {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .title-slide .subtitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .title-slide .meta {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-top: 30px;
+        }
+
+        .content-slide {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        .content-slide h2 {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .column h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .column li {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .column li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .big-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        .big-list li {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-left: 45px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .big-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .big-list strong {
+            color: var(--accent);
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 35px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .highlight p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.15);
+            border-left: 5px solid var(--accent);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .info-box p {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 1024px) {
+            .slide-container {
+                padding: 40px;
+            }
+
+            .title-slide h1 {
+                font-size: 3rem;
+            }
+
+            .content-slide h2 {
+                font-size: 2.5rem;
+            }
+
+            .two-column,
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide-container active title-slide">
+        <div class="slide-content">
+            <h1>Week 9</h1>
+            <p class="subtitle">Capstone Kickoff</p>
+            <p class="meta">Month 3: Capstone & Portfolio</p>
+            <p class="meta" style="margin-top: 50px;">2026 Summer AI Camp</p>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Week Overview -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 9 Objectives</h2>
+            <ul class="big-list">
+                <li>Choose your capstone project direction</li>
+                <li>Define clear, achievable scope</li>
+                <li>Create detailed architecture design</li>
+                <li>Set up project repository and structure</li>
+                <li>Establish weekly milestones</li>
+                <li>Begin implementation of core functionality</li>
+            </ul>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: Capstone Philosophy -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>What Makes a Great Capstone?</h2>
+            <div class="highlight">
+                <h3>Quality Over Quantity</h3>
+                <p>Your capstone should demonstrate mastery of what you've learned. It should be impressive enough to discuss in interviews, polished enough to put on your resume, and useful enough that you (or others) would actually use it.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <h4>A well-executed, focused project beats an ambitious, half-finished one</h4>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Project Directions -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Capstone Directions</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Custom MCP Server</h3>
+                    <p>Production-ready MCP server solving a real problem</p>
+                    <p><strong>Examples:</strong> Academic paper search, personal knowledge management, cloud resource manager</p>
+                </div>
+                <div class="card">
+                    <h3>Claude Code Skills Pack</h3>
+                    <p>Cohesive set of Skills for a specific domain</p>
+                    <p><strong>Examples:</strong> Frontend dev pack, data science pack, DevOps pack</p>
+                </div>
+                <div class="card">
+                    <h3>Polished RAG Application</h3>
+                    <p>Production-grade RAG app with advanced features</p>
+                    <p><strong>Examples:</strong> Study assistant, codebase documentation chat, research paper analyzer</p>
+                </div>
+                <div class="card">
+                    <h3>OpenClaw Skill Suite</h3>
+                    <p>Collection of powerful, integrated OpenClaw skills</p>
+                    <p><strong>Examples:</strong> Personal productivity, developer workflow, content creation</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: Choosing Your Direction -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>How to Choose Your Direction</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Key Questions</h3>
+                    <ul>
+                        <li>What are you most excited about?</li>
+                        <li>What demonstrates your breadth best?</li>
+                        <li>Would you or others use this?</li>
+                        <li>Does this differentiate you?</li>
+                        <li>Can you complete it in 3 weeks?</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Success Factors</h3>
+                    <ul>
+                        <li>Clear problem statement</li>
+                        <li>Defined scope</li>
+                        <li>Realistic timeline</li>
+                        <li>Technical showcase</li>
+                        <li>Portfolio-worthy polish</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: Project Specification -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Define Your Scope</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>1. Project Name & Tagline</h4>
+                    <p>What is it in one sentence?</p>
+                </div>
+                <div class="step">
+                    <h4>2. Problem Statement</h4>
+                    <p>What problem does this solve? Who has this problem?</p>
+                </div>
+                <div class="step">
+                    <h4>3. Core Features (Must-Have)</h4>
+                    <p>List 3-5 essential features that define the MVP</p>
+                </div>
+                <div class="step">
+                    <h4>4. Nice-to-Have Features</h4>
+                    <p>Additional features if time permits</p>
+                </div>
+                <div class="step">
+                    <h4>5. Tech Stack & Success Criteria</h4>
+                    <p>Languages, frameworks, APIs. How do you know it works?</p>
+                </div>
+                <div class="step">
+                    <h4>6. Non-Goals</h4>
+                    <p>Explicitly state what you won't build to prevent scope creep</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Architecture Design -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Architecture Design</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>What to Document</h3>
+                    <ul>
+                        <li>System overview diagram</li>
+                        <li>Component breakdown</li>
+                        <li>Data models</li>
+                        <li>External integrations</li>
+                        <li>Error handling strategy</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Why It Matters</h3>
+                    <ul>
+                        <li>Prevents mid-build chaos</li>
+                        <li>Shows engineering maturity</li>
+                        <li>Essential for interviews</li>
+                        <li>Guides implementation</li>
+                        <li>Identifies gaps early</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>An Hour of Planning Saves Days of Refactoring</h3>
+                <p>In interviews, you'll be asked to explain your capstone's design. A clear architecture shows you think before you code.</p>
+            </div>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Repository Setup -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Professional Project Structure</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Essential Files</h3>
+                    <ul>
+                        <li><code>README.md</code></li>
+                        <li><code>ARCHITECTURE.md</code></li>
+                        <li><code>requirements.txt</code></li>
+                        <li><code>.gitignore</code></li>
+                        <li><code>.env.example</code></li>
+                        <li><code>LICENSE</code></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Directory Structure</h3>
+                    <ul>
+                        <li><code>src/</code> (main logic)</li>
+                        <li><code>tests/</code></li>
+                        <li><code>docs/</code></li>
+                        <li><code>examples/</code></li>
+                        <li><code>scripts/</code></li>
+                        <li><code>.github/workflows/</code></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight">
+                <h3>Set Up Development Workflow</h3>
+                <p>Git branching strategy, clear commit messages, GitHub issues for tasks, basic CI/CD with GitHub Actions</p>
+            </div>
+        </div>
+        <div class="slide-number">8 / 12</div>
+    </div>
+
+    <!-- Slide 9: Milestone Planning -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>3-Week Roadmap</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Week 9 (This Week)</h4>
+                    <p>Complete architecture and setup, implement core data structures, get one end-to-end flow working</p>
+                </div>
+                <div class="step">
+                    <h4>Week 10</h4>
+                    <p>Implement all core features, add error handling, begin testing, start documentation</p>
+                </div>
+                <div class="step">
+                    <h4>Week 11</h4>
+                    <p>Polish features, complete testing, finish documentation, deploy (if applicable), create demo video</p>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>Break Down Week 9 Tasks</h3>
+                <p>Create specific, actionable tasks for the next 7 days. Estimate hours for each task. Be realistic.</p>
+            </info-box>
+        </div>
+        <div class="slide-number">9 / 12</div>
+    </div>
+
+    <!-- Slide 10: Starting Simple -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Implementation Philosophy</h2>
+            <div class="highlight">
+                <h3>Start Simple, Iterate</h3>
+                <p>Get one thing working end-to-end, then expand</p>
+            </div>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Week 9 Goals</h3>
+                    <ul>
+                        <li>Project structure set up</li>
+                        <li>Core data models implemented</li>
+                        <li>One feature working fully</li>
+                        <li>Documentation started</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Avoid These Traps</h3>
+                    <ul>
+                        <li>Perfectionism (80% done > 100% perfect)</li>
+                        <li>Scope creep (stick to spec)</li>
+                        <li>Premature optimization</li>
+                        <li>Skipping documentation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">10 / 12</div>
+    </div>
+
+    <!-- Slide 11: Homework -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Homework: Plan & Build Foundation</h2>
+            <ul class="big-list">
+                <li><strong>Finalize and Document Spec:</strong> Complete project specification, create architecture document with diagrams, get feedback</li>
+                <li><strong>Set Up Repository:</strong> Create GitHub repo with proper structure, add all essential files, write initial README</li>
+                <li><strong>Build Core Foundation:</strong> Implement basic structure, set up dependencies, create core data models</li>
+                <li><strong>Test Key Integration:</strong> If using external API, test it works, verify authentication, check rate limits</li>
+                <li><strong>Daily Progress Updates:</strong> Commit daily with clear messages, close GitHub issues as you complete tasks</li>
+            </ul>
+        </div>
+        <div class="slide-number">11 / 12</div>
+    </div>
+
+    <!-- Slide 12: Key Takeaways -->
+    <div class="slide-container content-slide">
+        <div class="slide-content">
+            <h2>Week 9 Key Takeaways</h2>
+            <div class="steps">
+                <div class="step">
+                    <h4>Scope Is Critical</h4>
+                    <p>Better to nail a focused project than half-finish an ambitious one</p>
+                </div>
+                <div class="step">
+                    <h4>Architecture Prevents Chaos</h4>
+                    <p>An hour of planning saves days of refactoring</p>
+                </div>
+                <div class="step">
+                    <h4>Start Simple, Iterate</h4>
+                    <p>Get one thing working end-to-end, then expand</p>
+                </div>
+                <div class="step">
+                    <h4>Documentation Isn't Optional</h4>
+                    <p>Start README and architecture docs now, not at the end</p>
+                </div>
+                <div class="step">
+                    <h4>This Is Your Portfolio Piece</h4>
+                    <p>Quality and polish matter. Make it showcase-worthy.</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p>Next week: Pure build time with working sessions and focused development</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 12</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousSlide()">← Previous</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('btn')) {
+                const rect = document.body.getBoundingClientRect();
+                if (e.clientX > rect.width / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

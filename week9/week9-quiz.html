@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <title>Week 9 Quiz: Capstone Kickoff - AI Camp 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            margin: -40px -40px 30px -40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .quiz-info {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .question {
+            background: var(--light);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.pass {
+            background: #f0fdf4;
+            border: 2px solid var(--success);
+        }
+
+        .result.fail {
+            background: #fef2f2;
+            border: 2px solid var(--error);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+        }
+
+        .result.pass h2 {
+            color: var(--success);
+        }
+
+        .result.fail h2 {
+            color: var(--error);
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback-item.correct {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+
+        .feedback-item.incorrect {
+            background: #fef2f2;
+            border-left: 4px solid var(--error);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Week 9 Quiz: Capstone Kickoff</h1>
+            <p class="quiz-info">Test your understanding of project planning, architecture design, scope definition, and milestone setting</p>
+        </header>
+
+        <a href="week9.html" class="back-link">← Back to Week 9 Content</a>
+
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-number">Question 1</div>
+                <div class="question-text">What is the key philosophy behind choosing a capstone project according to Week 9?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="a">Build the most ambitious project possible with the newest technologies</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="b">Quality over quantity - a well-executed, focused project beats an ambitious, half-finished one</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="c">Copy existing successful projects to ensure your project works</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q1" value="d">Focus only on features that look good in demos</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 2</div>
+                <div class="question-text">When defining your project scope, what is the purpose of explicitly stating "Non-Goals"?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="a">To make the project look more professional in documentation</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="b">To show what features you couldn't implement</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="c">To prevent scope creep by explicitly defining what you won't build</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q2" value="d">To list features you plan to add later</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 3</div>
+                <div class="question-text">According to Week 9, which of these is a suggested capstone direction?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="a">A mobile game with AI-powered NPCs</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="b">Custom MCP Server solving a real problem</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="c">A blockchain-based social media platform</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q3" value="d">An e-commerce website with payment processing</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 4</div>
+                <div class="question-text">Why is creating an architecture document important before building your capstone?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="a">It's required for GitHub repositories</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="b">An hour of planning saves days of refactoring, and it shows engineering maturity in interviews</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="c">To make the README look more professional</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q4" value="d">It helps pass code reviews faster</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 5</div>
+                <div class="question-text">What should your Week 9 milestone goal be?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="a">Complete the entire project and deploy it</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="b">Write comprehensive documentation for all features</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="c">Complete architecture and setup, implement core data structures, get one end-to-end flow working</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q5" value="d">Research all possible technologies and frameworks</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 6</div>
+                <div class="question-text">Which essential file should you add to .gitignore when setting up your project repository?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="a">README.md</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="b">.env</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="c">requirements.txt</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q6" value="d">ARCHITECTURE.md</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 7</div>
+                <div class="question-text">What should be included in your project specification's "Success Criteria"?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="a">How many GitHub stars you want to get</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="b">How do you know it works and what does "done" look like</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="c">How many lines of code you plan to write</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q7" value="d">How many hours you estimate it will take</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <div class="question-number">Question 8</div>
+                <div class="question-text">According to Week 9, what's the recommended approach for implementation philosophy?</div>
+                <ul class="options">
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="a">Build all features simultaneously to save time</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="b">Start simple, iterate - get one thing working end-to-end, then expand</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="c">Implement the most difficult features first</label>
+                    </li>
+                    <li class="option">
+                        <label><input type="radio" name="q8" value="d">Focus on UI/UX polish before implementing core functionality</label>
+                    </li>
+                </ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <div class="score" id="score"></div>
+            <p id="resultMessage"></p>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'c',
+            q3: 'b',
+            q4: 'b',
+            q5: 'c',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b'
+        };
+
+        const explanations = {
+            q1: "The capstone philosophy emphasizes quality over quantity. A well-executed, focused project that's polished and complete is far more valuable than an ambitious project that's only half-finished. This demonstrates professionalism and ability to deliver.",
+            q2: "Explicitly stating Non-Goals is critical for preventing scope creep. By clearly defining what you won't build, you protect yourself from adding too many features and losing focus on your core value proposition.",
+            q3: "Building a Custom MCP Server is one of the suggested capstone directions because MCP is new and resume-valuable. A well-built server solving a real problem could be used by others and demonstrates understanding of modern AI tooling.",
+            q4: "Architecture documentation is essential because an hour of planning saves days of refactoring. Additionally, in interviews you'll be asked to explain your capstone's design, and a clear architecture shows engineering maturity and systematic thinking.",
+            q5: "Week 9's goal is to complete architecture and setup, implement core data structures, and get one end-to-end flow working (even if minimal). This provides a solid foundation for Week 10's intensive building phase.",
+            q6: "The .env file should always be in .gitignore because it contains environment variables including API keys and secrets. Accidentally committing this file to version control could expose sensitive credentials.",
+            q7: "Success Criteria should define how you know the project works and what 'done' looks like. This provides clear, measurable goals that help you stay focused and know when you've achieved your objectives.",
+            q8: "The recommended implementation philosophy is to start simple and iterate - get one thing working end-to-end first, then expand. This approach ensures you always have a working product and can incrementally add complexity."
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            let feedback = [];
+
+            for (let question in correctAnswers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === correctAnswers[question]) {
+                    score++;
+                    feedback.push({
+                        question: question,
+                        correct: true,
+                        explanation: explanations[question]
+                    });
+                } else {
+                    feedback.push({
+                        question: question,
+                        correct: false,
+                        explanation: explanations[question]
+                    });
+                }
+            }
+
+            const percentage = (score / total) * 100;
+            const passed = percentage >= 70;
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const scoreDiv = document.getElementById('score');
+            const resultMessage = document.getElementById('resultMessage');
+            const feedbackDiv = document.getElementById('feedback');
+
+            resultDiv.className = 'result show ' + (passed ? 'pass' : 'fail');
+            resultTitle.textContent = passed ? 'Congratulations! You Passed!' : 'Keep Learning!';
+            scoreDiv.textContent = `${score} / ${total} (${percentage.toFixed(0)}%)`;
+            resultMessage.textContent = passed
+                ? 'Great job! You understand the key concepts of capstone project planning and architecture.'
+                : 'Review the material and try again. You need 70% to pass.';
+
+            feedbackDiv.innerHTML = '<h3>Answer Explanations:</h3>';
+            feedback.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'feedback-item ' + (item.correct ? 'correct' : 'incorrect');
+                div.innerHTML = `
+                    <strong>Question ${index + 1}: ${item.correct ? '✓ Correct' : '✗ Incorrect'}</strong><br>
+                    ${item.explanation}
+                `;
+                feedbackDiv.appendChild(div);
+            });
+
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>
