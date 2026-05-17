@@ -25,7 +25,3 @@ ENV/
 *.swo
 *~
 
-# StudyTrack
-studytrack/node_modules/
-studytrack/studytrack.db
-studytrack/studytrack.json
